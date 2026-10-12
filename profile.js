@@ -62,4 +62,18 @@ saveButton?.addEventListener("click", async () => {
   }
 });
 
-loadProfile();
+
+async function protectProfilePage() {
+  const { data: { session }, error } =
+    await supabase.auth.getSession();
+
+  if (error || !session) {
+    window.location.replace("./auth.html");
+    return;
+  }
+
+  await loadProfile();
+}
+
+protectProfilePage();
+
