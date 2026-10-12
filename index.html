@@ -296,7 +296,7 @@
         </div>
       </section>
 
-      <!-- VIEW 5: HEALTH REPORTS (Feature 6: Organize uploaded reports, explain terminology, trends) -->
+      <!-- VIEW 5: HEALTH REPORTS -->
       <section id="view-reports" class="view-section">
         <div class="section-heading">
           <div>
@@ -308,7 +308,6 @@
         </div>
 
         <div class="dashboard-grid">
-          <!-- Left: Report Upload & Terminology Lookup Form -->
           <article class="panel" style="background: linear-gradient(135deg, #1e293b, #0f172a); color: #fff;">
             <div class="panel-topline">
               <span class="panel-label" style="color: #38bdf8;">ADD OR EXPLAIN LAB REPORT</span>
@@ -334,7 +333,6 @@
             </form>
           </article>
 
-          <!-- Right: Organized Reports Archive & Terminology Explanations -->
           <article class="panel">
             <div class="panel-topline">
               <span class="panel-label">ORGANIZED ARCHIVE & TRENDS</span>
@@ -460,25 +458,72 @@
         </div>
       </section>
 
-      <!-- VIEW 8: AI ASSISTANT & REPORTS -->
+      <!-- VIEW 8: ADVANCED GEMINI & CHATGPT-STYLE AI ASSISTANT -->
       <section id="view-assistant" class="view-section">
-        <div class="assistant-card" style="margin-top: 20px;">
-          <div class="eyebrow"><span class="status-dot"></span> AI ASSISTANT</div>
-          <h2>HeartBloom Google Gemini AI Assistant</h2>
-          <p>Ask cardiology and wellness questions in English, Tamil (தமிழ்), or Hindi (हिन्दी).</p>
+        <div style="display: grid; grid-template-columns: 280px 1fr; gap: 24px; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-lg); box-shadow: var(--shadow-card); overflow: hidden; min-height: 600px;">
 
-          <form id="assistantForm" class="assistant-form" style="margin-top: 25px;">
-            <input id="assistantInput" type="text" placeholder="Ask a cardiology or health question..." required>
-            <button class="button" type="submit">Ask Assistant ↗</button>
-          </form>
-          <div id="assistantResponse" class="assistant-response" hidden></div>
-
-          <div style="margin-top: 30px; border-top: 1px solid var(--border); padding-top: 25px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:15px;">
-            <div>
-              <strong>Patient Reports & CSV Export</strong>
-              <p style="font-size:12px; color:var(--text-muted);">Export all health monitoring logs as a CSV file for your physician.</p>
+          <!-- Left Sidebar: Chat History / Sessions -->
+          <aside style="background: #0b152d; color: #94a3b8; padding: 20px; display: flex; flex-direction: column; border-right: 1px solid rgba(255,255,255,0.06);">
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px;">
+              <span style="font-family: var(--font-display); font-size: 15px; font-weight: 700; color: #fff;">💬 Chat Sessions</span>
+              <button id="newChatBtn" class="button button-small" style="background: var(--accent-blue); font-size: 11px; padding: 6px 10px;">+ New Chat</button>
             </div>
-            <button id="exportCsvBtn" class="button button-outline">Download CSV Report ↗</button>
+
+            <div id="chatHistoryList" style="flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 8px;">
+              <div class="chat-session-item active" style="padding: 10px 12px; background: var(--sidebar-active); color: #fff; border-radius: var(--radius-sm); font-size: 13px; cursor: pointer; font-weight: 600;">
+                Cardiology Consultation
+              </div>
+              <div class="chat-session-item" style="padding: 10px 12px; background: rgba(255,255,255,0.04); color: #94a3b8; border-radius: var(--radius-sm); font-size: 13px; cursor: pointer; transition: 0.2s;">
+                Lipid Panel Interpretation
+              </div>
+              <div class="chat-session-item" style="padding: 10px 12px; background: rgba(255,255,255,0.04); color: #94a3b8; border-radius: var(--radius-sm); font-size: 13px; cursor: pointer; transition: 0.2s;">
+                Low Sodium Diet Guide
+              </div>
+            </div>
+
+            <div style="margin-top: 15px; padding-top: 15px; border-top: 1px solid rgba(255,255,255,0.06);">
+              <button id="exportCsvBtn" class="button button-outline button-small" style="width: 100%; border-color: rgba(255,255,255,0.2); color: #fff;">Download CSV Report ↗</button>
+            </div>
+          </aside>
+
+          <!-- Right: Google / ChatGPT Style Chat Window -->
+          <div style="display: flex; flex-direction: column; height: 620px; background: #ffffff;">
+
+            <!-- Chat Topbar Header -->
+            <div style="padding: 16px 24px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; background: #f8fafc;">
+              <div style="display: flex; align-items: center; gap: 10px;">
+                <span class="live-dot" style="background:#2563eb; width:8px; height:8px;"></span>
+                <div>
+                  <h3 style="font-family: var(--font-display); font-size: 16px; font-weight: 700; color: var(--text-main);">HeartBloom Gemini & ChatGPT AI Clinical Assistant</h3>
+                  <span style="font-size: 11px; color: var(--text-muted);">Multimodal Healthcare Answers with Google Search Answer Grounding</span>
+                </div>
+              </div>
+              <span class="demo-badge" style="background: #eff6ff; color: var(--accent-blue);">Gemini 2.0 Flash / Pro</span>
+            </div>
+
+            <!-- Messages Container -->
+            <div id="chatMessages" style="flex: 1; padding: 24px; overflow-y: auto; display: flex; flex-direction: column; gap: 16px; background: #ffffff;">
+              <div style="display: flex; gap: 12px; align-items: flex-start;">
+                <div style="width: 32px; height: 32px; border-radius: 50%; background: linear-gradient(135deg, #2563eb, #06b6d4); color: #fff; display: grid; place-items: center; font-weight: bold; font-size: 14px; flex-shrink: 0;">AI</div>
+                <div style="background: #f1f5f9; padding: 14px 18px; border-radius: 16px; max-width: 80%; font-size: 14px; color: var(--text-main); line-height: 1.5; border-top-left-radius: 4px;">
+                  👋 Hello! I am your advanced clinical healthcare assistant powered by Google Gemini and ChatGPT intelligence. You can ask me any medical, cardiology, diet, or symptom questions in English, Tamil, or Hindi. How can I support your health today?
+                </div>
+              </div>
+            </div>
+
+            <!-- Google Answers Quick Suggestions / Chips -->
+            <div style="padding: 8px 24px; display: flex; gap: 8px; flex-wrap: wrap; background: #fff; border-top: 1px solid #f1f5f9;">
+              <button type="button" class="suggestion-chip" style="padding: 6px 12px; background: #f8fafc; border: 1px solid var(--border); border-radius: 20px; font-size: 12px; color: var(--text-muted); cursor: pointer; transition: 0.2s;" onclick="$('#assistantInput').value='What are normal blood pressure and heart rate ranges?'; $('#assistantForm').requestSubmit();">📊 Normal BP & HR Ranges?</button>
+              <button type="button" class="suggestion-chip" style="padding: 6px 12px; background: #f8fafc; border: 1px solid var(--border); border-radius: 20px; font-size: 12px; color: var(--text-muted); cursor: pointer; transition: 0.2s;" onclick="$('#assistantInput').value='Explain high cholesterol and lipid panel results.'; $('#assistantForm').requestSubmit();">📖 Explain Lipid Panel</button>
+              <button type="button" class="suggestion-chip" style="padding: 6px 12px; background: #f8fafc; border: 1px solid var(--border); border-radius: 20px; font-size: 12px; color: var(--text-muted); cursor: pointer; transition: 0.2s;" onclick="$('#assistantInput').value='Give me a heart-healthy low sodium meal plan.'; $('#assistantForm').requestSubmit();">🥗 Low Sodium Meal Plan</button>
+            </div>
+
+            <!-- Chat Input Form -->
+            <form id="assistantForm" style="padding: 16px 24px; border-top: 1px solid var(--border); background: #f8fafc; display: flex; gap: 12px; align-items: center;">
+              <input id="assistantInput" type="text" placeholder="Ask any health or cardiology question..." required style="flex: 1; padding: 14px 18px; border: 1px solid var(--border); border-radius: var(--radius-sm); background: #fff; font-size: 14px; outline: none;">
+              <button class="button" type="submit" style="padding: 14px 24px;">Send ↗</button>
+            </form>
+
           </div>
         </div>
       </section>

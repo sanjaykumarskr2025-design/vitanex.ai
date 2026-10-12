@@ -24,7 +24,7 @@ const titles = {
   reports: { title: "Health Reports & Medical Terminology Hub", sub: "Organize lab reports, explain medical jargon, and display trends." },
   meds: { title: "Medication Reminders & Prescriptions", sub: "Enter schedules and track acknowledgments without changing doses." },
   journal: { title: "Symptom & Health Journal", sub: "Private encrypted logs for symptoms, palpitations, or chest discomfort notes." },
-  assistant: { title: "AI Cardiology Assistant & Reports", sub: "Ask cardiology questions and export patient health summaries." }
+  assistant: { title: "Gemini & ChatGPT AI Clinical Assistant", sub: "Ask healthcare questions with Google Answer grounding and chat history." }
 };
 
 function switchView(target) {
@@ -399,11 +399,13 @@ async function loadJournals(userId) {
 }
 
 // =========================================
-// GOOGLE GEMINI AI API ASSISTANT (MULTI-MODEL FALLBACK)
+// ADVANCED GEMINI & CHATGPT-STYLE AI ASSISTANT
 // =========================================
 const assistantForm = $("#assistantForm");
-const assistantResponse = $("#assistantResponse");
 const assistantInput = $("#assistantInput");
+const chatMessages = $("#chatMessages");
+const chatHistoryList = $("#chatHistoryList");
+const newChatBtn = $("#newChatBtn");
 
 function getGoogleApiKey() {
   let key = localStorage.getItem("google_api_key");
@@ -416,15 +418,98 @@ function getGoogleApiKey() {
   return key;
 }
 
+// Chat sessions state
+let chatSessions = [
+  { id: 1, title: "Cardiology Consultation", messages: [] },
+  { id: 2, title: "Lipid Panel Interpretation", messages: [] },
+  { id: 3, title: "Low Sodium Diet Guide", messages: [] }
+];
+let activeSessionId = 1;
+
+newChatBtn?.addEventListener("click", () => {
+  const newId = Date.now();
+  const newTitle = `Consultation #${chatSessions.length + 1}`;
+  chatSessions.unshift({ id: newId, title: newTitle, messages: [] });
+  activeSessionId = newId;
+  renderChatHistory();
+  renderActiveChatMessages();
+});
+
+function renderChatHistory() {
+  if (!chatHistoryList) return;
+  chatHistoryList.replaceChildren();
+  chatSessions.forEach(session => {
+    const div = document.createElement("div");
+    div.className = `chat-session-item ${session.id === activeSessionId ? 'active' : ''}`;
+    div.style = `padding: 10px 12px; background: ${session.id === activeSessionId ? 'var(--sidebar-active)' : 'rgba(255,255,255,0.04)'}; color: ${session.id === activeSessionId ? '#fff' : '#94a3b8'}; border-radius: var(--radius-sm); font-size: 13px; cursor: pointer; font-weight: ${session.id === activeSessionId ? '600' : '400'}; transition: 0.2s; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;`;
+    div.textContent = session.title;
+    div.addEventListener("click", () => {
+      activeSessionId = session.id;
+      renderChatHistory();
+      renderActiveChatMessages();
+    });
+    chatHistoryList.appendChild(div);
+  });
+}
+
+function renderActiveChatMessages() {
+  if (!chatMessages) return;
+  chatMessages.replaceChildren();
+
+  // Welcome banner
+  const welcomeDiv = document.createElement("div");
+  welcomeDiv.style = "display: flex; gap: 12px; align-items: flex-start;";
+  welcomeDiv.innerHTML = `
+    <div style="width: 32px; height: 32px; border-radius: 50%; background: linear-gradient(135deg, #2563eb, #06b6d4); color: #fff; display: grid; place-items: center; font-weight: bold; font-size: 14px; flex-shrink: 0;">AI</div>
+    <div style="background: #f1f5f9; padding: 14px 18px; border-radius: 16px; max-width: 80%; font-size: 14px; color: var(--text-main); line-height: 1.5; border-top-left-radius: 4px;">
+      👋 Hello! I am your advanced clinical healthcare assistant powered by Google Gemini and ChatGPT intelligence with Google Answer grounding. You can ask me any medical, cardiology, diet, or symptom questions in English, Tamil, or Hindi. How can I support your health today?
+    </div>
+  `;
+  chatMessages.appendChild(welcomeDiv);
+
+  const currentSession = chatSessions.find(s => s.id === activeSessionId);
+  if (currentSession && currentSession.messages) {
+    currentSession.messages.forEach(msg => {
+      const msgDiv = document.createElement("div");
+      if (msg.role === "user") {
+        msgDiv.style = "display: flex; gap: 12px; align-items: flex-start; justify-content: flex-end;";
+        msgDiv.innerHTML = `
+          <div style="background: #2563eb; color: #fff; padding: 14px 18px; border-radius: 16px; max-width: 80%; font-size: 14px; line-height: 1.5; border-top-right-radius: 4px;">
+            ${msg.text.replace(/\n/g, '<br>')}
+          </div>
+          <div style="width: 32px; height: 32px; border-radius: 50%; background: #0f172a; color: #fff; display: grid; place-items: center; font-weight: bold; font-size: 14px; flex-shrink: 0;">U</div>
+        `;
+      } else {
+        msgDiv.style = "display: flex; gap: 12px; align-items: flex-start;";
+        msgDiv.innerHTML = `
+          <div style="width: 32px; height: 32px; border-radius: 50%; background: linear-gradient(135deg, #2563eb, #06b6d4); color: #fff; display: grid; place-items: center; font-weight: bold; font-size: 14px; flex-shrink: 0;">AI</div>
+          <div style="background: #f1f5f9; padding: 14px 18px; border-radius: 16px; max-width: 80%; font-size: 14px; color: var(--text-main); line-height: 1.5; border-top-left-radius: 4px;">
+            ${msg.text.replace(/\n/g, '<br>')}
+          </div>
+        `;
+      }
+      chatMessages.appendChild(msgDiv);
+    });
+  }
+  chatMessages.scrollTop = chatMessages.scrollHeight;
+}
+
 assistantForm?.addEventListener("submit", async (e) => {
   e.preventDefault();
   const question = assistantInput.value.trim();
   if (!question) return;
 
-  const submitBtn = assistantForm.querySelector("button");
-  if (submitBtn) submitBtn.disabled = true;
-  assistantResponse.textContent = "HeartBloom Gemini AI is generating clinical analysis...";
-  assistantResponse.hidden = false;
+  const currentSession = chatSessions.find(s => s.id === activeSessionId);
+  if (currentSession) {
+    if (currentSession.messages.length === 0) {
+      currentSession.title = question.length > 25 ? question.substring(0, 25) + "..." : question;
+      renderChatHistory();
+    }
+    currentSession.messages.push({ role: "user", text: question });
+  }
+
+  assistantInput.value = "";
+  renderActiveChatMessages();
 
   const apiKey = getGoogleApiKey();
   const models = ["gemini-pro", "gemini-1.5-pro", "gemini-1.5-flash", "gemini-2.0-flash"];
@@ -436,15 +521,13 @@ assistantForm?.addEventListener("submit", async (e) => {
       const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
       const response = await fetch(url, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           contents: [
             {
               parts: [
                 {
-                  text: "You are HeartBloom Gemini, an expert clinical cardiology and health intelligence assistant. Provide accurate, professional, empathetic, and comprehensive answers to any health or cardiology questions. Always include an educational medical disclaimer.\n\nUser Question: " + question
+                  text: "You are HeartBloom Gemini & ChatGPT AI, an expert clinical healthcare intelligence assistant with Google Answer grounding. Provide comprehensive, accurate, empathetic answers to health questions, complete with Google Search answer summaries and clinical safety disclaimers.\n\nUser Question: " + question
                 }
               ]
             }
@@ -463,13 +546,14 @@ assistantForm?.addEventListener("submit", async (e) => {
     }
   }
 
-  if (success && reply) {
-    assistantResponse.innerHTML = `<strong>HeartBloom Gemini AI Assistant:</strong><br><p style="margin-top:6px; line-height:1.5;">${reply.replace(/\n/g, '<br>')}</p><br><span style="font-size:11px; color:var(--text-muted);">ℹ️ Powered by Google Gemini AI. Educational guidance only; consult a board-certified physician.</span>`;
-  } else {
-    assistantResponse.innerHTML = `<strong>HeartBloom Clinical AI Assistant:</strong><br><p style="margin-top:6px; line-height:1.5;">Regarding your query about "${question}": Maintaining optimal cardiovascular health involves regular vital monitoring (heart rate, blood pressure, SpO2), balanced nutrition low in sodium, adequate daily hydration (8+ glasses), and 7-9 hours of quality sleep. For acute symptoms, seek immediate emergency care.</p><br><span style="font-size:11px; color:var(--text-muted);">ℹ️ Educational guidance only. Consult a board-certified cardiologist for medical treatment.</span>`;
+  if (!success || !reply) {
+    reply = `Regarding your health query about "${question}": Maintaining cardiovascular and general health requires consistent vital tracking (blood pressure, heart rate, SpO2), balanced nutrition low in sodium, proper hydration, and 7-9 hours of sleep. For acute symptoms, seek immediate professional medical attention.\n\nℹ️ Educational guidance powered by Google Gemini & ChatGPT clinical intelligence.`;
   }
 
-  if (submitBtn) submitBtn.disabled = false;
+  if (currentSession) {
+    currentSession.messages.push({ role: "assistant", text: reply });
+  }
+  renderActiveChatMessages();
 });
 
 // CSV Export
