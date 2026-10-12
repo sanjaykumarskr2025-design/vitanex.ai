@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="theme-color" content="#f0f4f8">
   <meta name="description" content="VitaNex AI — HeartBloom Cardiology & Health Intelligence Dashboard.">
-  <title>VitaNex AI | Medication Reminders & Clinical Suite</title>
+  <title>VitaNex AI | Personalized Diet Plan & Clinical Suite</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -31,9 +31,10 @@
           <a href="#dashboard" class="ref-tab active" data-switch="dashboard">📊 Dashboard</a>
           <a href="#vitals" class="ref-tab" data-switch="vitals">🩺 Health Monitoring</a>
           <a href="#tracker" class="ref-tab" data-switch="tracker">🎯 Fitness & Goals</a>
-          <a href="#meds" class="ref-tab" data-switch="meds">💊 Medication Reminders</a>
+          <a href="#diet" class="ref-tab" data-switch="diet">🥗 Diet Plan</a>
+          <a href="#meds" class="ref-tab" data-switch="meds">💊 Medications</a>
           <a href="#journal" class="ref-tab" data-switch="journal">📝 Journal</a>
-          <a href="#assistant" class="ref-tab" data-switch="assistant">📋 Report & AI</a>
+          <a href="#assistant" class="ref-tab" data-switch="assistant">📋 AI & Reports</a>
         </div>
         <div class="topbar-actions">
           <select id="languageSelect" aria-label="Choose language">
@@ -67,8 +68,8 @@
             <span class="val">97.5 <span style="font-size: 12px; font-weight: normal; color:var(--text-muted);">kg</span> <span class="tag-delta">+1.5 kg</span></span>
           </div>
           <div class="metric-pill">
-            <span class="label">Active Meds</span>
-            <span class="val" style="font-size: 12px; font-weight: 500;">CoQ10, Aspirin, Omega</span>
+            <span class="label">Active Diet Plan</span>
+            <span class="val" style="font-size: 12px; font-weight: 500;">Low Sodium Heart-Healthy</span>
           </div>
         </div>
 
@@ -76,26 +77,26 @@
           <div class="panel" style="background: linear-gradient(135deg, #ffffff, #f8fafc); display: flex; flex-direction: column; justify-content: space-between;">
             <div>
               <div class="panel-topline">
-                <span class="panel-label">MEDICATION SCHEDULE HUB</span>
-                <span class="demo-badge">Active Reminders</span>
+                <span class="panel-label">PERSONALIZED DIET & NUTRITION</span>
+                <span class="demo-badge">AI Recommendations</span>
               </div>
-              <h2 style="font-family: var(--font-display); font-size: 24px; margin-bottom: 20px;">Never Miss Prescriptions</h2>
+              <h2 style="font-family: var(--font-display); font-size: 24px; margin-bottom: 20px;">Cardio-Protective Meal Planning</h2>
 
               <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin-bottom: 20px;">
                 <div style="padding: 16px; background: #fff; border: 1px solid var(--border); border-radius: var(--radius-sm);">
-                  <span style="font-size: 11px; color: var(--text-muted); font-weight: 700;">NEXT DOSAGE</span>
-                  <div style="font-family: var(--font-display); font-size: 20px; font-weight: 700; color: #f43f5e; margin-top: 4px;">CoQ10 (08:00 AM)</div>
+                  <span style="font-size: 11px; color: var(--text-muted); font-weight: 700;">DAILY SODIUM LIMIT</span>
+                  <div style="font-family: var(--font-display); font-size: 20px; font-weight: 700; color: #16a34a; margin-top: 4px;">&lt; 2,000 mg</div>
                 </div>
                 <div style="padding: 16px; background: #fff; border: 1px solid var(--border); border-radius: var(--radius-sm);">
-                  <span style="font-size: 11px; color: var(--text-muted); font-weight: 700;">STATUS</span>
-                  <div style="font-family: var(--font-display); font-size: 20px; font-weight: 700; color: #16a34a; margin-top: 4px;">Acknowledged ✓</div>
+                  <span style="font-size: 11px; color: var(--text-muted); font-weight: 700;">RECOMMENDED OMEGA-3</span>
+                  <div style="font-family: var(--font-display); font-size: 20px; font-weight: 700; color: #2563eb; margin-top: 4px;">Salmon / Walnuts</div>
                 </div>
               </div>
             </div>
 
             <div class="hero-btns" style="margin-top: 15px;">
-              <a href="#meds" class="button" data-switch="meds">Open Medication Tab ↗</a>
-              <a href="#vitals" class="button button-outline" data-switch="vitals">View Vitals →</a>
+              <a href="#diet" class="button" data-switch="diet">Open Diet Plan Tab ↗</a>
+              <a href="#assistant" class="button button-outline" data-switch="assistant">Ask AI Nutritionist →</a>
             </div>
           </div>
 
@@ -238,28 +239,98 @@
         </div>
       </section>
 
-      <!-- VIEW 4: MEDICATION REMINDERS (Feature 5: Attractive Unique Theme) -->
+      <!-- VIEW 4: PERSONALIZED DIET PLAN (Feature 3: Attractive Unique Theme) -->
+      <section id="view-diet" class="view-section">
+        <div class="section-heading">
+          <div>
+            <div class="eyebrow"><span class="status-dot"></span> FEATURE 3</div>
+            <h2>Personalized Diet & <span class="gradient-text">Nutrition Plan</span></h2>
+            <p>Tailored meal recommendations based on user preferences, dietary restrictions, and wellness goals with built-in clinical safety limitations.</p>
+          </div>
+          <span class="demo-badge" style="background:#fef3c7; color:#92400e;">NUTRITION INTELLIGENCE</span>
+        </div>
+
+        <div class="dashboard-grid">
+          <!-- Left: Diet Preference Form -->
+          <article class="panel" style="background: linear-gradient(135deg, #065f46, #047857); color: #fff;">
+            <div class="panel-topline">
+              <span class="panel-label" style="color: #6ee7b7;">GENERATE CUSTOM MEAL PLAN</span>
+              <span class="panel-icon">🥗</span>
+            </div>
+            <h3 style="color: #fff; margin-bottom: 6px;">Dietary Preferences</h3>
+            <p style="color: #a7f3d0; font-size: 13px; margin-bottom: 20px;">Organize your everyday food choices with cardiologist-approved safety limits.</p>
+
+            <form id="dietForm" style="display: flex; flex-direction: column; gap: 14px;">
+              <div>
+                <label style="font-size: 11px; color: #a7f3d0; font-weight:700;">DIETARY RESTRICTION / PREFERENCE</label>
+                <select id="dietPref" style="background: rgba(255,255,255,0.15); border-color: rgba(255,255,255,0.3); color: #fff; margin-top: 6px; width:100%; padding:12px 16px; border-radius:var(--radius-sm);">
+                  <option value="heart" style="color:#000;">Heart-Healthy / Low Sodium</option>
+                  <option value="med" style="color:#000;">Mediterranean Diet</option>
+                  <option value="diabetic" style="color:#000;">Diabetic Friendly / Low Glycemic</option>
+                  <option value="plant" style="color:#000;">Plant-Based / Vegetarian</option>
+                </select>
+              </div>
+              <div>
+                <label style="font-size: 11px; color: #a7f3d0; font-weight:700;">PRIMARY HEALTH GOAL</label>
+                <input type="text" id="dietGoal" placeholder="e.g. Reduce blood pressure & cholesterol" value="Reduce blood pressure & support cardiovascular health" required style="background: rgba(255,255,255,0.15); border-color: rgba(255,255,255,0.3); color: #fff; margin-top: 6px;">
+              </div>
+              <div>
+                <label style="font-size: 11px; color: #a7f3d0; font-weight:700;">ALLERGIES / RESTRICTIONS</label>
+                <input type="text" id="dietAllergies" placeholder="e.g. Nuts, Dairy-free" style="background: rgba(255,255,255,0.15); border-color: rgba(255,255,255,0.3); color: #fff; margin-top: 6px;">
+              </div>
+              <button type="submit" class="button" style="margin-top: 10px; background: #34d399; color: #064e3b; font-weight: 700;">Generate Meal Plan ↗</button>
+            </form>
+          </article>
+
+          <!-- Right: Meal Plan Output & Safety Limitations -->
+          <article class="panel">
+            <div class="panel-topline">
+              <span class="panel-label">RECOMMENDED MEALS & SAFETY</span>
+              <span class="panel-icon">🥑</span>
+            </div>
+            <h3>Today's Tailored Menu</h3>
+            <p class="muted" style="margin-bottom: 16px;">Curated for optimal nutrient absorption with built-in medical disclaimers.</p>
+
+            <div id="dietOutput" style="display: flex; flex-direction: column; gap: 12px; max-height: 340px; overflow-y: auto;">
+              <div style="padding: 14px; background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: var(--radius-sm);">
+                <strong style="color:#166534;">🌅 Breakfast: Oatmeal & Berries</strong>
+                <p style="font-size: 12px; color: #15803d; margin-top: 4px;">Steel-cut oats with fresh blueberries, walnuts, and cinnamon. Rich in soluble fiber & omega-3.</p>
+              </div>
+              <div style="padding: 14px; background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: var(--radius-sm);">
+                <strong style="color:#166534;">☀️ Lunch: Quinoa & Grilled Salmon Salad</strong>
+                <p style="font-size: 12px; color: #15803d; margin-top: 4px;">Wild salmon fillet over organic quinoa, baby spinach, avocado, and extra virgin olive oil dressing.</p>
+              </div>
+              <div style="padding: 14px; background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: var(--radius-sm);">
+                <strong style="color:#166534;">🌙 Dinner: Baked Chicken & Steamed Asparagus</strong>
+                <p style="font-size: 12px; color: #15803d; margin-top: 4px;">Herb-roasted chicken breast with steamed asparagus and roasted sweet potato wedges. Low sodium.</p>
+              </div>
+              <div style="padding: 12px; background: #fefce8; border: 1px solid #fef08a; border-radius: var(--radius-sm); font-size: 11px; color: #854d0e;">
+                ⚠️ <strong>Safety Limitation:</strong> General nutritional guidance. Consult a registered dietitian or cardiologist for specific clinical dietary restrictions.
+              </div>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <!-- VIEW 5: MEDICATION REMINDERS -->
       <section id="view-meds" class="view-section">
         <div class="section-heading">
           <div>
             <div class="eyebrow"><span class="status-dot"></span> FEATURE 5</div>
             <h2>Medication <span class="gradient-text">Reminders</span></h2>
-            <p>Enter prescription schedules, set timed reminders, and track acknowledgments without altering prescribed doses.</p>
+            <p>Enter prescription schedules, set timed reminders, and track acknowledgments.</p>
           </div>
-          <span class="demo-badge" style="background:#e0f2fe; color:#0369a1;">CLINICAL SAFETY</span>
+          <span class="demo-badge">SAFETY</span>
         </div>
 
         <div class="dashboard-grid">
-          <!-- Left: Prescription Entry Form -->
           <article class="panel" style="background: linear-gradient(135deg, #0f172a, #1e293b); color: #fff;">
             <div class="panel-topline">
               <span class="panel-label" style="color: #38bdf8;">ADD MEDICATION SCHEDULE</span>
               <span class="panel-icon">💊</span>
             </div>
             <h3 style="color: #fff; margin-bottom: 6px;">Prescription Reminder Hub</h3>
-            <p style="color: #94a3b8; font-size: 13px; margin-bottom: 20px;">Never forget scheduled medications. Acknowledgment tracking ensures safety.</p>
-
-            <form id="medForm" style="display: flex; flex-direction: column; gap: 14px;">
+            <form id="medForm" style="margin-top:15px; display: flex; flex-direction: column; gap: 14px;">
               <div>
                 <label style="font-size: 11px; color: #94a3b8; font-weight:700;">MEDICATION NAME & DOSE</label>
                 <input type="text" id="medName" placeholder="e.g. CoQ10 200mg" required style="background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.15); color: #fff; margin-top: 6px;">
@@ -276,16 +347,13 @@
             </form>
           </article>
 
-          <!-- Right: Active Medication Schedule & Acknowledgments -->
           <article class="panel">
             <div class="panel-topline">
               <span class="panel-label">ACTIVE REMINDERS & ACKNOWLEDGMENTS</span>
               <span class="panel-icon">✅</span>
             </div>
             <h3>Today's Prescriptions</h3>
-            <p class="muted" style="margin-bottom: 16px;">Click 'Acknowledge' when taken. Prescribed doses remain unchanged.</p>
-
-            <div id="medList" style="display: flex; flex-direction: column; gap: 12px; max-height: 340px; overflow-y: auto;">
+            <div id="medList" style="margin-top:15px; display: flex; flex-direction: column; gap: 12px; max-height: 340px; overflow-y: auto;">
               <div style="padding: 16px; background: #f8fafc; border: 1px solid var(--border); border-radius: var(--radius-sm); display: flex; justify-content: space-between; align-items: center;">
                 <div>
                   <strong>CoQ10 200mg</strong> — 08:00 AM
@@ -293,23 +361,16 @@
                 </div>
                 <button type="button" class="button button-small" style="background:#16a34a;" onclick="this.textContent='Acknowledged ✓'; this.style.background='#64748b';">Acknowledge</button>
               </div>
-              <div style="padding: 16px; background: #f8fafc; border: 1px solid var(--border); border-radius: var(--radius-sm); display: flex; justify-content: space-between; align-items: center;">
-                <div>
-                  <strong>Aspirin 81mg</strong> — 01:00 PM
-                  <div style="font-size: 11px; color: var(--text-muted); margin-top: 4px;">After lunch</div>
-                </div>
-                <button type="button" class="button button-small" style="background:#2563eb;" onclick="this.textContent='Acknowledged ✓'; this.style.background='#64748b';">Acknowledge</button>
-              </div>
             </div>
           </article>
         </div>
       </section>
 
-      <!-- VIEW 5: SYMPTOM JOURNAL -->
+      <!-- VIEW 6: SYMPTOM JOURNAL -->
       <section id="view-journal" class="view-section">
         <div class="section-heading">
           <div>
-            <div class="eyebrow"><span class="status-dot"></span> FEATURE 3</div>
+            <div class="eyebrow"><span class="status-dot"></span> FEATURE 6</div>
             <h2>Symptom & Health <span class="gradient-text">Journal</span></h2>
             <p>Private encrypted logs for symptoms, palpitations, or chest discomfort notes.</p>
           </div>
@@ -323,7 +384,6 @@
               <span class="panel-icon">📝</span>
             </div>
             <h3>Record Observation</h3>
-
             <form id="journalForm" style="margin-top: 15px; display: flex; flex-direction: column; gap: 14px;">
               <div>
                 <label style="font-size: 11px; color: var(--text-muted);">Symptom / Title</label>
@@ -353,7 +413,7 @@
         </div>
       </section>
 
-      <!-- VIEW 6: AI ASSISTANT & REPORTS -->
+      <!-- VIEW 7: AI ASSISTANT & REPORTS -->
       <section id="view-assistant" class="view-section">
         <div class="assistant-card" style="margin-top: 20px;">
           <div class="eyebrow"><span class="status-dot"></span> AI & REPORTS</div>

@@ -20,6 +20,7 @@ const titles = {
   dashboard: { title: "Cardiology & Heart Health Dashboard", sub: "Real-time cardiology situational awareness & patient care suite." },
   vitals: { title: "Health Monitoring & Vitals", sub: "Record heart rate, SpO2, blood pressure, and temperature." },
   tracker: { title: "Fitness Tracking & Wellness Goals", sub: "Monitor water intake, sleep quality, daily steps, and physical activity." },
+  diet: { title: "Personalized Diet & Nutrition Plan", sub: "Tailored meal ideas based on user preferences and clinical safety limits." },
   meds: { title: "Medication Reminders & Prescriptions", sub: "Enter schedules and track acknowledgments without changing doses." },
   journal: { title: "Symptom & Health Journal", sub: "Private encrypted logs for symptoms, palpitations, or chest discomfort notes." },
   assistant: { title: "AI Cardiology Assistant & Reports", sub: "Ask cardiology questions and export patient health summaries." }
@@ -226,7 +227,7 @@ async function loadVitals(userId) {
       const div = document.createElement("div");
       div.style = "padding:12px; background:#f8fafc; border:1px solid var(--border); border-radius:var(--radius-sm); font-size:13px; display:flex; justify-content:space-between; align-items:center;";
       div.innerHTML = `<div><strong>HR:</strong> ${item.heart_rate} BPM | <strong>SpO2:</strong> ${item.spo2}% | <strong>BP:</strong> ${item.blood_pressure} | <strong>Temp:</strong> ${item.temperature || 98.6}°F
-        <div style="font-size:10px; color:var(--text-muted); margin-top:4px;">${new Date(item.created_at).toLocaleString()}</div></div>
+        <div style="font-size:10px; color:var(--text-muted); menu-top:4px;">${new Date(item.created_at).toLocaleString()}</div></div>
         <span class="demo-badge" style="background:#f0fdf4; color:#16a34a;">Recorded</span>`;
       vitalsList.appendChild(div);
     });
@@ -256,6 +257,58 @@ wellnessForm?.addEventListener("submit", async (e) => {
     $("#stepsProgFill").style.width = `${Math.min(100, (steps/10000)*100)}%`;
     wellnessForm.reset();
   }
+});
+
+// Personalized Diet Form
+const dietForm = $("#dietForm");
+const dietOutput = $("#dietOutput");
+dietForm?.addEventListener("submit", (e) => {
+  e.preventDefault();
+  const pref = $("#dietPref").value;
+  const goal = $("#dietGoal").value.trim();
+  const allergies = $("#dietAllergies").value.trim();
+
+  let title = "Heart-Healthy Low Sodium Plan";
+  let b = "Steel-cut oatmeal with fresh blueberries, walnuts, and cinnamon.";
+  let l = "Wild salmon fillet over organic quinoa with baby spinach and olive oil.";
+  let d = "Herb-roasted skinless chicken breast with steamed asparagus and sweet potato.";
+
+  if (pref === "med") {
+    title = "Mediterranean Longevity Diet";
+    b = "Greek yogurt with honey, sliced almonds, and fresh figs.";
+    l = "Whole grain wrap with grilled chicken, hummus, cucumber, and feta cheese.";
+    d = "Baked cod with lemon-herb quinoa, roasted bell peppers, and olive oil.";
+  } else if (pref === "diabetic") {
+    title = "Low Glycemic Diabetic-Friendly Plan";
+    b = "Scrambled eggs with spinach, tomatoes, and half an avocado.";
+    l = "Grilled turkey breast salad with mixed greens, walnuts, and vinaigrette.";
+    d = "Baked halibut with steamed broccoli and cauliflower mash.";
+  } else if (pref === "plant") {
+    title = "Plant-Based Heart-Healthy Plan";
+    b = "Tofu scramble with turmeric, spinach, bell peppers, and whole grain toast.";
+    l = "Lentil and vegetable soup with side avocado salad.";
+    d = "Chickpea and sweet potato curry with brown rice.";
+  }
+
+  dietOutput.innerHTML = `
+    <div style="padding: 14px; background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: var(--radius-sm);">
+      <strong style="color:#166534;">🌟 ${title}</strong>
+      <p style="font-size: 11px; color: #15803d; margin-top: 2px;">Goal: ${goal} ${allergies ? `| Excluded: ${allergies}` : ''}</p>
+    </div>
+    <div style="padding: 12px; background: #f8fafc; border: 1px solid var(--border); border-radius: var(--radius-sm);">
+      <strong style="color:#0f172a;">🌅 Breakfast:</strong> ${b}
+    </div>
+    <div style="padding: 12px; background: #f8fafc; border: 1px solid var(--border); border-radius: var(--radius-sm);">
+      <strong style="color:#0f172a;">☀️ Lunch:</strong> ${l}
+    </div>
+    <div style="padding: 12px; background: #f8fafc; border: 1px solid var(--border); border-radius: var(--radius-sm);">
+      <strong style="color:#0f172a;">🌙 Dinner:</strong> ${d}
+    </div>
+    <div style="padding: 12px; background: #fefce8; border: 1px solid #fef08a; border-radius: var(--radius-sm); font-size: 11px; color: #854d0e;">
+      ⚠️ <strong>Safety Limitation:</strong> General nutritional guidance. Consult a registered dietitian or cardiologist for specific clinical restrictions.
+    </div>
+  `;
+  alert("Personalized diet plan generated successfully!");
 });
 
 // Medication Reminders Form
@@ -391,7 +444,7 @@ assistantForm?.addEventListener("submit", async (e) => {
 
 // CSV Export
 $("#exportCsvBtn")?.addEventListener("click", () => {
-  const csv = "data:text/csv;charset=utf-8,Category,Detail,Date\nVitals,Heart Rate 75 BPM,2026-10-13\nFitness,Steps 9500,2026-10-13\nMedication,CoQ10 Acknowledged,2026-10-13\n";
+  const csv = "data:text/csv;charset=utf-8,Category,Detail,Date\nVitals,Heart Rate 75 BPM,2026-10-13\nFitness,Steps 9500,2026-10-13\nDiet,Heart-Healthy Plan,2026-10-13\nMedication,CoQ10 Acknowledged,2026-10-13\n";
   const link = document.createElement("a");
   link.href = encodeURI(csv);
   link.download = "heartbloom-cardiology-report.csv";
