@@ -1,25 +1,25 @@
 /* =========================================
-   VITANEX.AI — HEARTBLOOM V2 CARDIOLOGY THEME
+   VITANEX.AI — HEARTBLOOM V2 LIGHT BLUE THEME
    ========================================= */
 
 :root {
-  --bg: #f8fafc;
+  --bg: #f0f7ff;
   --bg-card: #ffffff;
-  --bg-glass: rgba(255, 255, 255, 0.95);
-  --sidebar-bg: #0f172a;
-  --sidebar-text: #94a3b8;
-  --sidebar-hover: #1e293b;
-  --sidebar-active: #2563eb;
+  --bg-glass: rgba(255, 255, 255, 0.96);
+  --sidebar-bg: #0284c7;
+  --sidebar-text: #e0f2fe;
+  --sidebar-hover: #0369a1;
+  --sidebar-active: #0284c7;
   --text-main: #0f172a;
-  --text-muted: #64748b;
-  --border: #e2e8f0;
-  --accent-cyan: #06b6d4;
-  --accent-blue: #2563eb;
+  --text-muted: #475569;
+  --border: #bae6fd;
+  --accent-cyan: #0284c7;
+  --accent-blue: #0284c7;
   --accent-rose: #f43f5e;
   --accent-emerald: #10b981;
   --radius-lg: 24px;
   --radius-sm: 12px;
-  --shadow-card: 0 12px 35px rgba(15, 23, 42, 0.06), 0 1px 3px rgba(15, 23, 42, 0.04);
+  --shadow-card: 0 12px 35px rgba(2, 132, 199, 0.08), 0 1px 3px rgba(2, 132, 199, 0.04);
   --font-sans: "Plus Jakarta Sans", "Inter", sans-serif;
   --font-display: "Space Grotesk", sans-serif;
 }
@@ -83,24 +83,24 @@ body {
   border-radius: 10px;
   font-size: 13px;
   font-weight: 600;
-  color: var(--text-muted);
-  background: #f1f5f9;
-  border: 1px solid var(--border);
+  color: #0369a1;
+  background: #e0f2fe;
+  border: 1px solid #bae6fd;
   text-decoration: none;
   transition: all 0.2s ease;
 }
 
 .ref-tab:hover {
-  background: #e2e8f0;
-  color: var(--text-main);
+  background: #bae6fd;
+  color: #0c4a6e;
   transform: translateY(-1px);
 }
 
 .ref-tab.active, .ref-tab.active-pill {
-  background: #0f172a;
+  background: #0284c7;
   color: #ffffff;
-  border-color: #0f172a;
-  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.15);
+  border-color: #0284c7;
+  box-shadow: 0 4px 12px rgba(2, 132, 199, 0.25);
 }
 
 .topbar-actions {
@@ -157,7 +157,7 @@ body {
 
 .metric-pill:hover {
   transform: translateY(-2px);
-  box-shadow: 0 16px 35px rgba(15, 23, 42, 0.08);
+  box-shadow: 0 16px 35px rgba(2, 132, 199, 0.12);
 }
 
 .metric-pill .label {
@@ -183,8 +183,8 @@ body {
   font-weight: 600;
   padding: 3px 8px;
   border-radius: 8px;
-  background: #f0fdf4;
-  color: var(--accent-emerald);
+  background: #e0f2fe;
+  color: #0284c7;
 }
 
 /* Hero & Cardiology Grid */
@@ -286,7 +286,7 @@ body {
 }
 
 .panel:hover {
-  border-color: #cbd5e1;
+  border-color: #38bdf8;
 }
 
 .panel-topline {
@@ -320,6 +320,7 @@ body {
   padding: 14px 18px;
   border: 1px solid var(--border);
   border-radius: var(--radius-sm);
+  background: #f0fdf4; /* Light clean field */
   background: #f8fafc;
   color: var(--text-main);
   font-size: 14px;
@@ -330,7 +331,7 @@ body {
 .panel input:focus, .panel textarea:focus, .panel select:focus {
   border-color: var(--accent-blue);
   background: #fff;
-  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+  box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.15);
 }
 
 .button {
@@ -346,13 +347,13 @@ body {
   font-weight: 600;
   font-size: 14px;
   cursor: pointer;
-  box-shadow: 0 4px 14px rgba(37, 99, 235, 0.3);
+  box-shadow: 0 4px 14px rgba(2, 132, 199, 0.3);
   transition: all 0.2s ease;
   text-decoration: none;
 }
 
 .button:hover {
-  background: #1d4ed8;
+  background: #0369a1;
   transform: translateY(-1px);
 }
 
@@ -364,8 +365,8 @@ body {
 }
 
 .button-outline:hover {
-  background: #f1f5f9;
-  border-color: #cbd5e1;
+  background: #e0f2fe;
+  border-color: #38bdf8;
 }
 
 .button-small { padding: 8px 16px; font-size: 12px; }
@@ -373,14 +374,14 @@ body {
 .progress-track {
   height: 10px;
   width: 100%;
-  background: #e2e8f0;
+  background: #e0f2fe;
   border-radius: 6px;
   overflow: hidden;
 }
 
 .progress-fill {
   height: 100%;
-  background: linear-gradient(90deg, var(--accent-cyan), var(--accent-blue));
+  background: linear-gradient(90deg, #38bdf8, #0284c7);
   border-radius: inherit;
 }
 
@@ -391,8 +392,8 @@ body {
   margin-bottom: 14px;
   padding: 6px 14px;
   border-radius: 20px;
-  background: #eff6ff;
-  color: var(--accent-blue);
+  background: #e0f2fe;
+  color: #0284c7;
   font-size: 11px;
   font-weight: 700;
   letter-spacing: 0.8px;
@@ -402,14 +403,14 @@ body {
   width: 6px;
   height: 6px;
   border-radius: 50%;
-  background: var(--accent-blue);
+  background: #0284c7;
 }
 
 .demo-badge {
   padding: 6px 14px;
   border-radius: 20px;
-  background: #eff6ff;
-  color: var(--accent-blue);
+  background: #e0f2fe;
+  color: #0284c7;
   font-size: 11px;
   font-weight: 700;
 }
@@ -435,7 +436,7 @@ body {
 }
 
 .gradient-text {
-  background: linear-gradient(135deg, #2563eb, #06b6d4);
+  background: linear-gradient(135deg, #0284c7, #38bdf8);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
