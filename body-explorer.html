@@ -1,0 +1,359 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#07111f">
+  <title>3D Body Explorer | VitaNex AI</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #07111f;
+      color: #ecf7ff;
+    }
+    header {
+      padding: 22px 5%;
+      border-bottom: 1px solid #244055;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+    a { color: #66e4dc; text-decoration: none; }
+    main { max-width: 1200px; margin: auto; padding: 28px 5%; }
+    h1 { margin-bottom: 8px; font-size: clamp(28px, 5vw, 44px); }
+    .intro { color: #aac0d4; line-height: 1.6; }
+    .layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1.5fr) minmax(260px, 1fr);
+      gap: 20px;
+      margin-top: 24px;
+    }
+    .panel {
+      background: #0d1d2d;
+      border: 1px solid #25465b;
+      border-radius: 18px;
+      padding: 20px;
+      min-width: 0;
+    }
+    #bodyCanvas {
+      height: 440px;
+      width: 100%;
+      overflow: hidden;
+      border-radius: 14px;
+      background: radial-gradient(ellipse, #163b50, #081422 72%);
+      touch-action: pan-y;
+    }
+    #bodyCanvas canvas { display: block; width: 100%; height: 100%; }
+    .hint { color: #aac0d4; font-size: 13px; line-height: 1.6; }
+    .organ-buttons { display: flex; flex-wrap: wrap; gap: 8px; margin: 18px 0; }
+    button, select {
+      border: 1px solid #376078;
+      background: #102a3b;
+      color: #effaff;
+      border-radius: 10px;
+      padding: 11px 13px;
+      cursor: pointer;
+      font: inherit;
+    }
+    button:hover, button:focus-visible, button[aria-pressed="true"] {
+      background: #176b78;
+      outline: 2px solid #66e4dc;
+      outline-offset: 2px;
+    }
+    #organTitle { color: #66e4dc; }
+    #organFacts { line-height: 1.8; padding-left: 20px; }
+    .disclaimer {
+      margin-top: 20px;
+      padding: 13px;
+      border-left: 3px solid #e8bb61;
+      background: #292719;
+      color: #f4e6bd;
+      line-height: 1.6;
+      font-size: 13px;
+    }
+    .error { color: #ffb9b9; }
+    @media (max-width: 760px) {
+      .layout { grid-template-columns: 1fr; }
+      #bodyCanvas { height: 380px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { scroll-behavior: auto !important; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <strong>💠 VitaNex AI</strong>
+    <a href="index.html">← Back to Home</a>
+  </header>
+
+  <main>
+    <h1>Interactive 3D Body Explorer</h1>
+    <p class="intro">
+      Explore a simplified educational model of the human body.
+      Select an organ to learn what it does.
+    </p>
+
+    <div class="layout">
+      <section class="panel">
+        <h2>Explore the body</h2>
+        <div id="bodyCanvas" aria-label="Interactive 3D human body model"></div>
+        <p class="hint">
+          Drag to rotate · Scroll to zoom · Select an organ below.
+          You can also click a highlighted organ on the model.
+        </p>
+        <div class="organ-buttons" id="organButtons">
+          <button type="button" data-organ="brain">🧠 Brain</button>
+          <button type="button" data-organ="heart">❤️ Heart</button>
+          <button type="button" data-organ="lungs">🫁 Lungs</button>
+          <button type="button" data-organ="liver">Liver</button>
+          <button type="button" data-organ="stomach">Stomach</button>
+          <button type="button" data-organ="kidneys">Kidneys</button>
+        </div>
+        <p class="hint">This is a simplified illustrative model, not a precise anatomical reference.</p>
+      </section>
+
+      <section class="panel" aria-live="polite">
+        <h2>Organ facts</h2>
+        <h3 id="organTitle">❤️ Heart</h3>
+        <p id="organDescription">The heart pumps blood around the body.</p>
+        <h3>What it does</h3>
+        <ul id="organFacts">
+          <li>Moves blood through the circulatory system.</li>
+          <li>Delivers oxygen and nutrients to tissues.</li>
+          <li>Helps carry waste products away from tissues.</li>
+        </ul>
+        <div class="disclaimer">
+          Educational visualization only. This tool cannot diagnose conditions
+          or replace advice from a qualified healthcare professional.
+          For a medical emergency, contact your local emergency service.
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <script type="module">
+    const canvasHost = document.getElementById("bodyCanvas");
+    const title = document.getElementById("organTitle");
+    const description = document.getElementById("organDescription");
+    const facts = document.getElementById("organFacts");
+    const buttons = [...document.querySelectorAll("[data-organ]")];
+
+    const organs = {
+      brain: {
+        title: "🧠 Brain",
+        description: "The brain is the body's main control center.",
+        facts: [
+          "Processes information from the senses.",
+          "Helps control movement, memory and learning.",
+          "Regulates many essential body functions."
+        ],
+        color: 0xe6a5ff
+      },
+      heart: {
+        title: "❤️ Heart",
+        description: "The heart is a muscular organ that pumps blood.",
+        facts: [
+          "Moves blood through the circulatory system.",
+          "Helps deliver oxygen and nutrients to tissues.",
+          "Helps transport carbon dioxide and other waste products."
+        ],
+        color: 0xff657e
+      },
+      lungs: {
+        title: "🫁 Lungs",
+        description: "The lungs exchange gases when you breathe.",
+        facts: [
+          "Take oxygen into the body.",
+          "Remove carbon dioxide when you breathe out.",
+          "Work with the respiratory system."
+        ],
+        color: 0x70d7ff
+      },
+      liver: {
+        title: "Liver",
+        description: "The liver performs many important processing functions.",
+        facts: [
+          "Processes nutrients absorbed from food.",
+          "Produces bile to help digest fats.",
+          "Processes many substances in the blood."
+        ],
+        color: 0xffc66d
+      },
+      stomach: {
+        title: "Stomach",
+        description: "The stomach helps break down food.",
+        facts: [
+          "Mixes food with digestive juices.",
+          "Begins digestion of proteins.",
+          "Passes partially digested food to the small intestine."
+        ],
+        color: 0xffa76b
+      },
+      kidneys: {
+        title: "Kidneys",
+        description: "The kidneys filter blood and help regulate fluid balance.",
+        facts: [
+          "Remove waste products by making urine.",
+          "Help balance water and electrolytes.",
+          "Help regulate blood pressure."
+        ],
+        color: 0x9d9aff
+      }
+    };
+
+    function selectOrgan(key) {
+      const organ = organs[key];
+      if (!organ) return;
+      title.textContent = organ.title;
+      description.textContent = organ.description;
+      facts.replaceChildren();
+      organ.facts.forEach(text => {
+        const li = document.createElement("li");
+        li.textContent = text;
+        facts.appendChild(li);
+      });
+      buttons.forEach(button => {
+        button.setAttribute("aria-pressed", String(button.dataset.organ === key));
+      });
+      if (window.highlightOrgan) window.highlightOrgan(key);
+    }
+
+    buttons.forEach(button => {
+      button.addEventListener("click", () => selectOrgan(button.dataset.organ));
+    });
+
+    try {
+      const THREE = await import(
+        "https://cdn.jsdelivr.net/npm/three@0.179.1/build/three.module.js"
+      );
+
+      const scene = new THREE.Scene();
+      scene.background = new THREE.Color(0x081422);
+
+      const camera = new THREE.PerspectiveCamera(40, 1, 0.1, 100);
+      camera.position.set(0, 1.5, 8);
+
+      const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false });
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+      canvasHost.appendChild(renderer.domElement);
+
+      scene.add(new THREE.HemisphereLight(0xbbeaff, 0x18243b, 2.2));
+      const light = new THREE.DirectionalLight(0xffffff, 2.4);
+      light.position.set(4, 6, 8);
+      scene.add(light);
+
+      const body = new THREE.Group();
+      scene.add(body);
+
+      const material = new THREE.MeshStandardMaterial({
+        color: 0x74b9c8,
+        roughness: 0.42,
+        metalness: 0.12
+      });
+      const organMaterials = {};
+      Object.entries(organs).forEach(([key, organ]) => {
+        organMaterials[key] = new THREE.MeshStandardMaterial({
+          color: organ.color, emissive: organ.color,
+          emissiveIntensity: 0.12, roughness: 0.35
+        });
+      });
+
+      const sphere = (parent, x, y, z, sx, sy, sz, mat, key) => {
+        const mesh = new THREE.Mesh(new THREE.SphereGeometry(1, 32, 24), mat);
+        mesh.position.set(x, y, z);
+        mesh.scale.set(sx, sy, sz);
+        mesh.userData.organ = key || "";
+        parent.add(mesh);
+        return mesh;
+      };
+
+      // Stylized educational body silhouette, not a medical-grade anatomical model.
+      sphere(body, 0, 2.15, 0, 0.46, 0.52, 0.38, material); // head
+      sphere(body, 0, 1.15, 0, 0.72, 0.95, 0.36, material); // torso
+      sphere(body, 0, 0.05, 0, 0.55, 0.52, 0.34, material); // pelvis
+      sphere(body, -0.83, 1.2, 0, 0.19, 0.78, 0.2, material); // arm
+      sphere(body, 0.83, 1.2, 0, 0.19, 0.78, 0.2, material); // arm
+      sphere(body, -0.28, -0.95, 0, 0.23, 1.05, 0.25, material); // leg
+      sphere(body, 0.28, -0.95, 0, 0.23, 1.05, 0.25, material); // leg
+
+      const organMeshes = {};
+      organMeshes.brain = sphere(body, 0, 2.25, 0.34, 0.3, 0.25, 0.19, organMaterials.brain, "brain");
+      organMeshes.heart = sphere(body, -0.16, 1.35, 0.39, 0.17, 0.22, 0.13, organMaterials.heart, "heart");
+      organMeshes.lungs = sphere(body, 0.12, 1.37, 0.34, 0.36, 0.34, 0.12, organMaterials.lungs, "lungs");
+      organMeshes.liver = sphere(body, 0.22, 0.82, 0.35, 0.29, 0.15, 0.12, organMaterials.liver, "liver");
+      organMeshes.stomach = sphere(body, -0.18, 0.72, 0.36, 0.19, 0.22, 0.12, organMaterials.stomach, "stomach");
+      const leftKidney = sphere(body, -0.32, 0.65, 0.15, 0.1, 0.16, 0.1, organMaterials.kidneys, "kidneys");
+      sphere(body, 0.32, 0.65, 0.15, 0.1, 0.16, 0.1, organMaterials.kidneys, "kidneys");
+      organMeshes.kidneys = leftKidney;
+
+      let selected = "heart";
+      window.highlightOrgan = key => {
+        selected = key;
+        Object.entries(organMeshes).forEach(([name, mesh]) => {
+          mesh.material.emissiveIntensity = name === key ? 0.7 : 0.12;
+        });
+        leftKidney.material.emissiveIntensity = key === "kidneys" ? 0.7 : 0.12;
+      };
+
+      const raycaster = new THREE.Raycaster();
+      const pointer = new THREE.Vector2();
+      renderer.domElement.addEventListener("click", event => {
+        const rect = renderer.domElement.getBoundingClientRect();
+        pointer.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
+        pointer.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
+        raycaster.setFromCamera(pointer, camera);
+        const hit = raycaster.intersectObjects(body.children, false)
+          .find(item => item.object.userData.organ);
+        if (hit) selectOrgan(hit.object.userData.organ);
+      });
+
+      let dragging = false, previousX = 0, previousY = 0;
+      renderer.domElement.addEventListener("pointerdown", event => {
+        dragging = true; previousX = event.clientX; previousY = event.clientY;
+        renderer.domElement.setPointerCapture(event.pointerId);
+      });
+      renderer.domElement.addEventListener("pointerup", () => dragging = false);
+      renderer.domElement.addEventListener("pointercancel", () => dragging = false);
+      renderer.domElement.addEventListener("pointermove", event => {
+        if (!dragging) return;
+        body.rotation.y += (event.clientX - previousX) * 0.009;
+        body.rotation.x += (event.clientY - previousY) * 0.005;
+        body.rotation.x = Math.max(-0.5, Math.min(0.5, body.rotation.x));
+        previousX = event.clientX; previousY = event.clientY;
+      });
+
+      renderer.domElement.addEventListener("wheel", event => {
+        event.preventDefault();
+        camera.position.z = Math.max(5, Math.min(11, camera.position.z + event.deltaY * 0.008));
+      }, { passive: false });
+
+      function resize() {
+        const width = canvasHost.clientWidth;
+        const height = canvasHost.clientHeight;
+        if (!width || !height) return;
+        camera.aspect = width / height;
+        camera.updateProjectionMatrix();
+        renderer.setSize(width, height, false);
+      }
+      new ResizeObserver(resize).observe(canvasHost);
+      resize();
+
+      const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      renderer.setAnimationLoop(() => {
+        if (!reduceMotion && !dragging) body.rotation.y += 0.0015;
+        renderer.render(scene, camera);
+      });
+      selectOrgan("heart");
+    } catch (error) {
+      console.error(error);
+      canvasHost.innerHTML = '<p class="error">The 3D model could not load. Please check your internet connection and enable WebGL in your browser.</p>';
+    }
+  </script>
+</body>
+</html>
