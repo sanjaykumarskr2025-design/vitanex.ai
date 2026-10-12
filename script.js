@@ -70,7 +70,7 @@ logoutButton?.addEventListener("click", async () => {
 // SUPABASE BACKEND PERSISTENCE & FEATURE LOGIC
 // =========================================
 
-// 1. Health Monitoring Vitals Form
+// 1. Health Monitoring Vitals Form & Clinical Health Response Evaluation
 const vitalsForm = $("#vitalsForm");
 const vitalsList = $("#vitalsList");
 
@@ -83,6 +83,25 @@ vitalsForm?.addEventListener("submit", async (e) => {
   const bp = $("#vitalsBp").value.trim();
   const temp = Number($("#vitalsTemp")?.value || 98.6);
 
+  // Evaluate clinical status & risk response
+  let clinicalStatus = "Optimal (Normal Range)";
+  let badgeColor = "#10b981"; // emerald
+  let advice = "Your vitals are within healthy parameters. Maintain regular hydration and balanced nutrition.";
+
+  // Simple clinical rules evaluation for blood pressure & heart rate
+  const bpParts = bp.split('/');
+  const sys = bpParts[0] ? parseInt(bpParts[0]) : 120;
+
+  if (sys >= 140 || hr > 100) {
+    clinicalStatus = "Elevated Risk / Hypertension Alert";
+    badgeColor = "#f43f5e"; // rose
+    advice = "Your blood pressure or heart rate is elevated. Consider 10 minutes of resting breathwork, reduce sodium intake, and consult your cardiologist if symptoms persist.";
+  } else if (sys >= 130 || (hr < 60 && hr > 0)) {
+    clinicalStatus = "Pre-Hypertension / Watchful Monitoring";
+    badgeColor = "#f59e0b"; // amber
+    advice = "Slightly elevated readings noted. Monitor daily and maintain low sodium intake.";
+  }
+
   const record = {
     user_id: user ? user.id : "anonymous-user",
     heart_rate: hr,
@@ -90,6 +109,8 @@ vitalsForm?.addEventListener("submit", async (e) => {
     blood_pressure: bp,
     temperature: temp,
     entry_type: "manual",
+    clinical_status: clinicalStatus,
+    clinical_advice: advice,
     created_at: new Date().toISOString()
   };
 
@@ -106,7 +127,7 @@ vitalsForm?.addEventListener("submit", async (e) => {
     console.log("Supabase anonymous insert notice:", error.message);
   }
 
-  alert("Health monitoring vital recorded successfully under your credentials!");
+  alert(`Health monitoring vital recorded successfully!\n\nClinical Evaluation: ${clinicalStatus}\nAdvice: ${advice}`);
   vitalsForm.reset();
   renderVitalsList(existing);
 });
@@ -139,12 +160,26 @@ function renderVitalsList(items) {
     vitalsList.innerHTML = `<div style="padding: 14px; background: #f0f7ff; border: 1px solid var(--border); border-radius: var(--radius-sm); color: var(--text-muted);">No vitals recorded yet. Input your reading on the left!</div>`;
     return;
   }
-  vitalsList.innerHTML = items.map(v => `
-    <div style="padding: 14px; background: #f0f7ff; border: 1px solid var(--border); border-radius: var(--radius-sm); margin-bottom: 8px;">
-      <strong>Heart Rate:</strong> ${v.heart_rate} BPM | <strong>SpO2:</strong> ${v.spo2}% | <strong>BP:</strong> ${v.blood_pressure} | <strong>Temp:</strong> ${v.temperature || 98.6}°F
-      <div style="font-size: 10px; color: var(--text-muted); margin-top: 4px;">${new Date(v.created_at || Date.now()).toLocaleString()}</div>
-    </div>
-  `).join("");
+  vitalsList.innerHTML = items.map(v => {
+    const status = v.clinical_status || "Optimal (Normal Range)";
+    const advice = v.clinical_advice || "Vitals within healthy parameters.";
+    const isElevated = status.includes("Alert") || status.includes("Risk");
+    const badgeBg = isElevated ? "#fee2e2" : "#e0f2fe";
+    const badgeColor = isElevated ? "#991b1b" : "#0369a1";
+
+    return `
+      <div style="padding: 16px; background: #f0f7ff; border: 1px solid var(--border); border-radius: var(--radius-sm); margin-bottom: 10px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 6px;">
+          <strong>Heart Rate:</strong> ${v.heart_rate} BPM | <strong>SpO2:</strong> ${v.spo2}% | <strong>BP:</strong> ${v.blood_pressure}
+          <span style="font-size:10px; font-weight:700; padding:3px 8px; border-radius:6px; background:${badgeBg}; color:${badgeColor};">${status}</span>
+        </div>
+        <div style="font-size: 12px; color: var(--text-main); margin-top: 4px; line-height: 1.4;">
+          🩺 <strong>AI Response & Guidance:</strong> ${advice}
+        </div>
+        <div style="font-size: 10px; color: var(--text-muted); margin-top: 6px;">${new Date(v.created_at || Date.now()).toLocaleString()}</div>
+      </div>
+    `;
+  }).join("");
 }
 
 // 2. Fitness & Wellness Goals Form
