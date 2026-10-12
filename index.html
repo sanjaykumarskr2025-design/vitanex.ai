@@ -11,6 +11,18 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
+  <style>
+    /* 3D Glassmorphism Card Depth Effect */
+    .hero-visual-card-3d {
+      perspective: 1000px;
+      transform-style: preserve-3d;
+      transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s ease;
+    }
+    .hero-visual-card-3d:hover {
+      transform: translateY(-6px) rotateX(2deg) rotateY(-2deg);
+      box-shadow: 0 25px 50px -12px rgba(2, 132, 199, 0.25), 0 0 30px rgba(56, 189, 248, 0.3);
+    }
+  </style>
 </head>
 
 <body>
@@ -66,7 +78,7 @@
           </div>
         </div>
 
-        <div class="hero-card-grid" style="grid-template-columns: 1.2fr 1fr; gap: 28px;">
+        <div class="hero-card-grid" style="grid-template-columns: 1.2fr 0.9fr; gap: 28px; align-items: center;">
           <!-- Left: Overview Panel -->
           <div class="panel" style="display: flex; flex-direction: column; justify-content: space-between; background: linear-gradient(135deg, #ffffff, #f0f7ff);">
             <div>
@@ -95,16 +107,16 @@
             </div>
           </div>
 
-          <!-- Right: Static 3D Realistic Vascular Human Model (download (2).jpg) -->
-          <div class="hero-visual-card" style="height: 100%; min-height: 380px; background: #000000; position: relative; overflow: hidden; border-radius: var(--radius-lg); border: 1px solid #38bdf8; display: flex; align-items: center; justify-content: center;">
-            <div class="visual-label" style="position: absolute; top: 16px; left: 20px; z-index: 10; pointer-events: none; display: flex; align-items: center; gap: 8px; font-size: 10px; font-weight: 700; color: #38bdf8; letter-spacing: 1px;">
-              <span class="live-dot" style="background:#0284c7;"></span> 3D REALISTIC VASCULAR TELEMETRY
+          <!-- Right: Compact, 3D Depth-Enhanced Vascular Image Card -->
+          <div class="hero-visual-card-3d" style="height: 340px; background: #000000; position: relative; overflow: hidden; border-radius: 20px; border: 2px solid rgba(56, 189, 248, 0.4); box-shadow: 0 15px 35px rgba(2, 132, 199, 0.15); display: flex; align-items: center; justify-content: center;">
+            <div class="visual-label" style="position: absolute; top: 14px; left: 16px; z-index: 10; pointer-events: none; display: flex; align-items: center; gap: 8px; font-size: 10px; font-weight: 700; color: #38bdf8; letter-spacing: 1px; background: rgba(0,0,0,0.7); padding: 4px 10px; border-radius: 6px; backdrop-filter: blur(4px);">
+              <span class="live-dot" style="background:#0284c7;"></span> 3D VASCULAR TELEMETRY
             </div>
 
-            <img src="./download (2).jpg" alt="3D Realistic Vascular Human Model" style="width: 100%; height: 100%; object-fit: cover; object-position: center; display: block;" onerror="this.src='./download-2.jpg'">
+            <img src="./download (2).jpg" alt="3D Realistic Vascular Model" style="width: 85%; height: 85%; object-fit: contain; object-position: center; display: block; filter: drop-shadow(0 10px 20px rgba(56, 189, 248, 0.3)); transition: transform 0.3s ease;" onerror="this.src='./download-2.jpg'">
 
-            <div class="visual-caption" style="position: absolute; bottom: 12px; right: 20px; color: #38bdf8; font-weight: 700; letter-spacing: 1px; font-size: 10px; pointer-events: none; background: rgba(0,0,0,0.85); padding: 5px 12px; border-radius: 6px; border: 1px solid rgba(56,189,248,0.4);">
-              3D VASCULAR ANATOMY ARCHIVE
+            <div class="visual-caption" style="position: absolute; bottom: 12px; right: 16px; color: #38bdf8; font-weight: 700; letter-spacing: 1px; font-size: 9px; pointer-events: none; background: rgba(0,0,0,0.85); padding: 4px 10px; border-radius: 6px; border: 1px solid rgba(56,189,248,0.4);">
+              HEARTBLOOM V2 3D ARCHIVE
             </div>
           </div>
         </div>
