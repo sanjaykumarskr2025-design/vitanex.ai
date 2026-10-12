@@ -1,10 +1,9 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>My Profile | VitaNex AI</title>
+  <title>My Profile & Settings | VitaNex AI</title>
   <style>
     body {
       margin: 0;
@@ -14,19 +13,19 @@
       color: #edfdfb;
     }
     main {
-      max-width: 440px;
-      margin: 50px auto;
+      max-width: 480px;
+      margin: 40px auto;
       padding: 28px;
       border: 1px solid #285158;
       border-radius: 20px;
       background: #0c1f26;
     }
-    label { display: block; margin-top: 20px; }
+    label { display: block; margin-top: 18px; font-size: 13px; color: #8ee9db; }
     input, select, button {
       box-sizing: border-box;
       width: 100%;
       padding: 12px;
-      margin-top: 8px;
+      margin-top: 6px;
       border-radius: 9px;
     }
     input, select {
@@ -37,32 +36,39 @@
     button {
       margin-top: 24px;
       background: #6be5d1;
+      color: #07151b;
       border: 0;
       font-weight: bold;
       cursor: pointer;
     }
-    a { color: #6be5d1; }
+    button:hover { background: #4bc9b5; }
+    a { color: #6be5d1; display: inline-block; margin-top: 20px; text-decoration: none; }
+    a:hover { text-decoration: underline; }
   </style>
 </head>
 <body>
   <main>
-    <h1>My VitaNex Profile</h1>
-    <p>Manage your personal preferences.</p>
+    <h1>My VitaNex Profile & AI Settings</h1>
+    <p style="font-size: 13px; color: #a5c7cb;">Manage your personal preferences and OpenAI API key.</p>
 
-    <label for="profileName">Your name</label>
+    <label for="profileName">Your Name</label>
     <input id="profileName" maxlength="80" placeholder="Enter your name">
 
-    <label for="profileLanguage">Preferred language</label>
+    <label for="profileLanguage">Preferred Language</label>
     <select id="profileLanguage">
       <option value="en">English</option>
       <option value="ta">தமிழ்</option>
       <option value="hi">हिन्दी</option>
     </select>
 
-    <button id="saveProfile" type="button">Save Profile</button>
-    <p id="profileStatus" role="status"></p>
+    <label for="openaiApiKey">OpenAI API Key (GPT-4o Integration)</label>
+    <input id="openaiApiKey" type="password" placeholder="sk-..." autocomplete="off">
+    <p style="font-size: 11px; color: #7cb8b0; margin-top: 4px;">Stored locally in your browser to power live GPT-4o medical assistant queries.</p>
 
-    <a href="./index.html">← Back to home</a>
+    <button id="saveProfile" type="button">Save Profile & API Key</button>
+    <p id="profileStatus" role="status" style="margin-top: 12px; font-size: 13px; color: #6be5d1;"></p>
+
+    <a href="./index.html">← Back to Cardiology Dashboard</a>
   </main>
 
   <script type="module" src="./profile.js"></script>

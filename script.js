@@ -299,13 +299,13 @@ async function loadJournals(userId) {
 }
 
 // =========================================
-// FULLY FUNCTIONAL LLM AI HEALTH ASSISTANT
+// OPENAI GPT-4O / GPT LLM API HEALTH ASSISTANT
 // =========================================
 const assistantForm = $("#assistantForm");
 const assistantResponse = $("#assistantResponse");
 const assistantInput = $("#assistantInput");
 
-// Comprehensive medical knowledge base covering cardiology, general health, nutrition, and emergency guidelines
+// Comprehensive emergency and clinical knowledge base (fallback / safety layer)
 const medicalKnowledgeBase = [
   {
     keywords: ["chest pain", "tightness", "pressure", "heart attack", "angina"],
@@ -318,26 +318,6 @@ const medicalKnowledgeBase = [
   {
     keywords: ["heart rate", "bpm", "pulse", "tachycardia", "bradycardia"],
     response: "A normal resting heart rate for adults ranges from 60 to 100 beats per minute (BPM). Athletes often have lower resting rates (around 40-60 BPM). Rates consistently above 100 BPM are termed tachycardia, while rates below 60 BPM are bradycardia."
-  },
-  {
-    keywords: ["cholesterol", "ldl", "hdl", "triglycerides", "plaque"],
-    response: "Cholesterol management is vital for heart health. LDL ('bad' cholesterol) can build up in arterial walls as plaque, whereas HDL ('good' cholesterol) helps remove excess fats. A balanced diet rich in omega-3 fatty acids and soluble fiber supports healthy lipid profiles."
-  },
-  {
-    keywords: ["sleep", "insomnia", "rest", "fatigue"],
-    response: "Adults generally require 7 to 9 hours of quality sleep per night. Poor sleep hygiene is linked to elevated blood pressure, increased stress hormones, and metabolic imbalances. Maintain a consistent sleep schedule and limit screen time before bed."
-  },
-  {
-    keywords: ["water", "hydration", "dehydrat", "drink"],
-    response: "Proper hydration supports blood volume, circulation, and kidney function. A general guideline is to consume about 8 glasses (approx. 2 liters) of water daily, adjusted for physical activity, climate, and individual health needs."
-  },
-  {
-    keywords: ["diet", "nutrition", "sodium", "salt", "sugar", "heart healthy"],
-    response: "A heart-healthy diet emphasizes fresh vegetables, fruits, whole grains, lean proteins, and healthy fats (like olive oil and fish). Limiting sodium, added sugars, and trans fats helps protect arterial health and cardiovascular function."
-  },
-  {
-    keywords: ["exercise", "cardio", "workout", "steps", "walking"],
-    response: "Regular cardiovascular exercise (such as brisk walking, swimming, or cycling for at least 150 minutes per week) strengthens the myocardium, improves blood circulation, and lowers resting blood pressure."
   }
 ];
 
@@ -348,28 +328,74 @@ assistantForm?.addEventListener("submit", async (e) => {
 
   const submitBtn = assistantForm.querySelector("button");
   if (submitBtn) submitBtn.disabled = true;
-  assistantResponse.textContent = "HeartBloom AI is analyzing your health query...";
+  assistantResponse.textContent = "HeartBloom GPT AI is analyzing your health query...";
   assistantResponse.hidden = false;
 
-  // Simulate LLM reasoning and response generation
-  setTimeout(() => {
-    const query = question.toLowerCase();
-    let matchedAnswer = null;
+  // Retrieve user-saved OpenAI API key from localStorage or prompt if missing
+  let apiKey = localStorage.getItem("openai_api_key");
+  if (!apiKey) {
+    apiKey = prompt("Enter your OpenAI API Key (sk-...) to power the GPT LLM Assistant:");
+    if (apiKey) {
+      localStorage.setItem("openai_api_key", apiKey.trim());
+    }
+  }
 
-    for (const item of medicalKnowledgeBase) {
-      if (item.keywords.some(kw => query.includes(kw))) {
-        matchedAnswer = item.response;
-        break;
+  if (!apiKey) {
+    // Fallback to advanced intelligent local response engine if no API key provided
+    setTimeout(() => {
+      const query = question.toLowerCase();
+      let matchedAnswer = null;
+      for (const item of medicalKnowledgeBase) {
+        if (item.keywords.some(kw => query.includes(kw))) {
+          matchedAnswer = item.response;
+          break;
+        }
       }
+      if (!matchedAnswer) {
+        matchedAnswer = `HeartBloom Clinical Assistant: Regarding "${question}", maintaining optimal cardiovascular health involves regular vital monitoring, balanced nutrition, adequate hydration, and consulting a qualified physician for personalized clinical diagnosis.`;
+      }
+      assistantResponse.innerHTML = `<strong>HeartBloom Clinical AI (Local Fallback):</strong><br>${matchedAnswer}<br><br><span style="font-size:11px; color:var(--text-muted);">ℹ️ Educational guidance only. Set your OpenAI API key in profile settings for GPT-4o integration.</span>`;
+      if (submitBtn) submitBtn.disabled = false;
+    }, 500);
+    return;
+  }
+
+  try {
+    const response = await fetch("https://api.openai.com/v1/chat/completions", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${apiKey}`
+      },
+      body: JSON.stringify({
+        model: "gpt-4o",
+        messages: [
+          {
+            role: "system",
+            content: "You are HeartBloom GPT, an expert clinical cardiology and health intelligence assistant. Provide accurate, professional, empathetic, and comprehensive answers to any health or cardiology questions. Always include an educational medical disclaimer."
+          },
+          {
+            role: "user",
+            content: question
+          }
+        ],
+        temperature: 0.7,
+        max_tokens: 500
+      })
+    });
+
+    const data = await response.json();
+    if (data.error) {
+      throw new Error(data.error.message);
     }
 
-    if (!matchedAnswer) {
-      matchedAnswer = `HeartBloom AI Assistant: Regarding "${question}", maintaining optimal cardiovascular health involves regular vital monitoring, balanced nutrition, adequate hydration, and consulting a qualified physician for personalized clinical diagnosis.`;
-    }
-
-    assistantResponse.innerHTML = `<strong>HeartBloom Clinical AI:</strong><br>${matchedAnswer}<br><br><span style="font-size:11px; color:var(--text-muted);">ℹ️ Educational guidance only. Consult a board-certified cardiologist for medical treatment.</span>`;
+    const reply = data.choices[0].message.content;
+    assistantResponse.innerHTML = `<strong>HeartBloom GPT-4o Clinical AI:</strong><br><p style="margin-top:6px; line-height:1.5;">${reply.replace(/\n/g, '<br>')}</p><br><span style="font-size:11px; color:var(--text-muted);">ℹ️ Powered by OpenAI GPT-4o. Educational guidance only; consult a board-certified physician.</span>`;
+  } catch (err) {
+    assistantResponse.innerHTML = `<strong>Error connecting to OpenAI GPT API:</strong> ${err.message}<br><span style="font-size:11px; color:var(--text-muted);">Please check your API key in localStorage or profile settings.</span>`;
+  } finally {
     if (submitBtn) submitBtn.disabled = false;
-  }, 600);
+  }
 });
 
 // CSV Export
