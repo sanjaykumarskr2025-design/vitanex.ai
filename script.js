@@ -77,43 +77,76 @@ window.addEventListener("DOMContentLoaded", () => {
 });
 
 // =========================================
-// REAL 3D ANATOMICAL HEART BEATING SCENE (THREE.JS)
+// HYPER-REALISTIC 3D MULTI-CHAMBER HUMAN HEART (THREE.JS)
 // =========================================
 const sceneContainer = $("#scene-container");
 let scene, camera, renderer, heartGroup, animationFrame;
 
-function createAnatomicalHeartGeometry() {
-  const points = [];
-  const indices = [];
-  const uSegments = 90;
-  const vSegments = 70;
+function createMultiChamberHeartGeometry() {
+  // Construct a detailed multi-lobe anatomical heart group (Ventricles + Atria + Aorta Arch)
+  const group = new THREE.Group();
 
-  for (let i = 0; i <= uSegments; i++) {
-    const u = (i / uSegments) * Math.PI * 2;
-    for (let j = 0; j <= vSegments; j++) {
-      const v = (j / vSegments) * Math.PI * 2;
-      // Parametric cardioid heart equation with superior vena cava / aorta contour
-      const x = 16 * Math.pow(Math.sin(u), 3);
-      const y = 13 * Math.cos(u) - 5 * Math.cos(2 * u) - 2 * Math.cos(3 * u) - Math.cos(4 * u) + (v > Math.PI ? 2 : 0);
-      const z = Math.sin(v) * 2.5;
-      points.push((x / 16) * 1.6, (y / 16) * 1.6, z * 0.75);
-    }
-  }
+  // 1. Left/Right Ventricle Main Body (Cone/Ellipsoid blend)
+  const ventGeo = new THREE.SphereGeometry(1.2, 32, 32);
+  ventGeo.scale(1, 1.3, 0.9);
+  const heartMat = new THREE.MeshPhysicalMaterial({
+    color: 0xe11d48,
+    roughness: 0.25,
+    metalness: 0.15,
+    clearcoat: 0.9,
+    clearcoatRoughness: 0.1,
+    emissive: 0x881337,
+    emissiveIntensity: 0.4
+  });
+  const ventricle = new THREE.Mesh(ventGeo, heartMat);
+  ventricle.position.set(0, -0.2, 0);
+  group.add(ventricle);
 
-  for (let i = 0; i < uSegments; i++) {
-    for (let j = 0; j < vSegments; j++) {
-      const a = i * (vSegments + 1) + j;
-      const b = a + vSegments + 1;
-      indices.push(a, b, a + 1);
-      indices.push(b, b + 1, a + 1);
-    }
-  }
+  // 2. Left Atrium
+  const atAtriumGeo = new THREE.SphereGeometry(0.65, 24, 24);
+  const atriumMat = new THREE.MeshPhysicalMaterial({
+    color: 0xf43f5e,
+    roughness: 0.3,
+    metalness: 0.1,
+    clearcoat: 0.8
+  });
+  const leftAtrium = new THREE.Mesh(atAtriumGeo, atriumMat);
+  leftAtrium.position.set(0.6, 0.9, -0.1);
+  group.add(leftAtrium);
 
-  const geometry = new THREE.BufferGeometry();
-  geometry.setAttribute("position", new THREE.Float32BufferAttribute(points, 3));
-  geometry.setIndex(indices);
-  geometry.computeVertexNormals();
-  return geometry;
+  // 3. Right Atrium
+  const rightAtrium = new THREE.Mesh(atAtriumGeo, atriumMat);
+  rightAtrium.position.set(-0.6, 0.8, 0.1);
+  group.add(rightAtrium);
+
+  // 4. Aorta Arch (Torus curve)
+  const aortaGeo = new THREE.TorusGeometry(0.5, 0.18, 16, 48, Math.PI * 1.2);
+  const aortaMat = new THREE.MeshStandardMaterial({
+    color: 0xfca5a5,
+    roughness: 0.2,
+    metalness: 0.4
+  });
+  const aorta = new THREE.Mesh(aortaGeo, aortaMat);
+  aorta.position.set(0.1, 1.3, 0);
+  aorta.rotation.x = Math.PI / 2;
+  aorta.rotation.z = Math.PI / 4;
+  group.add(aorta);
+
+  // 5. Superior Vena Cava & Pulmonary Artery tubes (Cylinders)
+  const tubeGeo = new THREE.CylinderGeometry(0.18, 0.18, 0.9, 16);
+  const vesselMat = new THREE.MeshStandardMaterial({ color: 0x93c5fd, roughness: 0.3 });
+
+  const venaCava = new THREE.Mesh(tubeGeo, vesselMat);
+  venaCava.position.set(-0.5, 1.4, -0.3);
+  venaCava.rotation.z = -0.2;
+  group.add(venaCava);
+
+  const pulmArtery = new THREE.Mesh(tubeGeo, vesselMat);
+  pulmArtery.position.set(-0.2, 1.3, 0.4);
+  pulmArtery.rotation.x = 0.3;
+  group.add(pulmArtery);
+
+  return group;
 }
 
 function initCardiologyScene() {
@@ -131,62 +164,49 @@ function initCardiologyScene() {
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     sceneContainer.appendChild(renderer.domElement);
 
-    heartGroup = new THREE.Group();
-    const geo = createAnatomicalHeartGeometry();
+    const controls = new OrbitControls(camera, renderer.domElement);
+    controls.enableDamping = true;
+    controls.dampingFactor = 0.05;
+    controls.autoRotate = true;
+    controls.autoRotateSpeed = 1.0;
 
-    const mat = new THREE.MeshPhysicalMaterial({
-      color: 0xf43f5e,
-      roughness: 0.2,
-      metalness: 0.1,
-      clearcoat: 1.0,
-      clearcoatRoughness: 0.1,
-      emissive: 0x991b1b,
-      emissiveIntensity: 0.5,
-      side: THREE.DoubleSide
-    });
-
-    const heartMesh = new THREE.Mesh(geo, mat);
-    heartMesh.scale.set(0.65, 0.65, 0.65);
-    heartMesh.rotation.z = Math.PI;
-    heartGroup.add(heartMesh);
-
-    // Inner wireframe glow
-    const wire = new THREE.Mesh(geo, new THREE.MeshBasicMaterial({ color: 0xfca5a5, wireframe: true, transparent: true, opacity: 0.25 }));
-    wire.scale.set(0.67, 0.67, 0.67);
-    wire.rotation.copy(heartMesh.rotation);
-    heartGroup.add(wire);
-
+    heartGroup = createMultiChamberHeartGeometry();
     scene.add(heartGroup);
 
     scene.add(new THREE.AmbientLight(0xffffff, 1.8));
-    const pLight1 = new THREE.PointLight(0xff3366, 30, 20);
-    pLight1.position.set(3, 4, 4);
+    const pLight1 = new THREE.PointLight(0xff3366, 45, 25);
+    pLight1.position.set(4, 5, 4);
     scene.add(pLight1);
 
-    const pLight2 = new THREE.PointLight(0x38bdf8, 20, 20);
-    pLight2.position.set(-3, -2, 3);
+    const pLight2 = new THREE.PointLight(0x38bdf8, 30, 25);
+    pLight2.position.set(-4, -3, 4);
     scene.add(pLight2);
 
     const fallback = $("#sceneFallback");
     if (fallback) fallback.style.display = "none";
 
-    animateHeart();
+    animateHeart(controls);
   } catch (e) {
     console.error("Three.js error:", e);
   }
 }
 
-function animateHeart() {
-  animationFrame = requestAnimationFrame(animateHeart);
+function animateHeart(controls) {
+  animationFrame = requestAnimationFrame(() => animateHeart(controls));
   const time = performance.now() * 0.001;
 
   if (heartGroup) {
-    heartGroup.rotation.y = time * 0.4;
-    // Realistic dual-phase systole/diastole heartbeat pulse curve
-    const beat = Math.sin(time * 7) * 0.09 + Math.sin(time * 14) * 0.04;
-    const scaleVal = 1 + Math.max(0, beat);
-    heartGroup.scale.setScalar(scaleVal);
+    // Realistic dual-phase lub-dub heartbeat contraction (systole/diastole)
+    const t = time * 7;
+    const cycle = t % (Math.PI * 2);
+    const lub = Math.max(0, Math.sin(cycle * 2) * Math.exp(- (cycle % 1.5)));
+    const dub = Math.max(0, Math.sin(cycle * 2 + 0.8) * Math.exp(- ((cycle + 0.5) % 1.5)));
+    const pulse = 1 + (lub * 0.12 + dub * 0.08);
+
+    heartGroup.scale.set(0.9 * pulse, 1.05 * pulse, 0.9 * pulse);
   }
+
+  if (controls) controls.update();
   renderer.render(scene, camera);
 }
 
