@@ -1,0 +1,98 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AI Health Assistant | VitaNex AI</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      padding: 20px;
+      min-height: 100vh;
+      background: #07151b;
+      color: #edfdfb;
+      font-family: Arial, sans-serif;
+    }
+    main {
+      max-width: 760px;
+      margin: auto;
+    }
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    a { color: #6be5d1; }
+    #messages {
+      height: 60vh;
+      min-height: 300px;
+      overflow-y: auto;
+      margin: 20px 0;
+      padding: 18px;
+      border: 1px solid #285158;
+      border-radius: 16px;
+      background: #0c1f26;
+    }
+    .message {
+      padding: 12px 14px;
+      margin: 10px 0;
+      border-radius: 12px;
+      line-height: 1.5;
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+    }
+    .user { background: #16443f; margin-left: 12%; }
+    .assistant { background: #142e38; margin-right: 12%; }
+    form { display: flex; gap: 10px; }
+    input {
+      flex: 1;
+      min-width: 0;
+      padding: 14px;
+      color: white;
+      background: #0c1f26;
+      border: 1px solid #34555b;
+      border-radius: 10px;
+    }
+    button {
+      padding: 12px 16px;
+      border: 0;
+      border-radius: 10px;
+      background: #6be5d1;
+      color: #071b1c;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    button:disabled { opacity: .6; }
+    #status { color: #a5c2c5; min-height: 22px; }
+    .note { color: #a5c2c5; font-size: 13px; line-height: 1.5; }
+  </style>
+</head>
+<body>
+  <main>
+    <header>
+      <h2>💚 VitaNex AI Assistant</h2>
+      <a href="./index.html">Back to Home</a>
+    </header>
+
+    <p class="note">
+      Health information is general guidance, not a medical diagnosis.
+      Avoid entering passwords or highly sensitive medical information.
+    </p>
+
+    <div id="messages" aria-live="polite"></div>
+    <p id="status" role="status"></p>
+
+    <form id="chatForm">
+      <input id="chatInput" maxlength="5000"
+             placeholder="Ask a health question..." required>
+      <button id="sendButton" type="submit">Send</button>
+    </form>
+  </main>
+
+  <script type="module" src="./chat.js"></script>
+</body>
+</html>
