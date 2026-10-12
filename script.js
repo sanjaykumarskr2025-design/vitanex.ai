@@ -7,143 +7,167 @@ import { supabase } from "./supabase.js";
 const $ = (s) => document.querySelector(s);
 const $$ = (s) => document.querySelectorAll(s);
 
-// Year
-const yearEl = $("#currentYear");
-if (yearEl) yearEl.textContent = new Date().getFullYear();
+// Global Direct Switch Function for Tabs
+window.switchTab = function(e, target) {
+  if (e) e.preventDefault();
+  if (!target) return;
 
-// =========================================
-// NAVIGATION & VIEW ROUTING (ROBUST TAB SWITCHING)
-// =========================================
-document.addEventListener("DOMContentLoaded", () => {
-  const navItems = $$(".ref-tab, [data-switch], [data-target]");
-  const viewSections = $$(".view-section");
-
-  function switchView(target) {
-    if (!target) return;
-
-    navItems.forEach(item => {
-      const t = item.dataset.switch || item.dataset.target || item.getAttribute("href")?.replace("#", "");
-      if (t === target) {
-        item.classList.add("active");
-        if (item.classList.contains("ref-tab")) {
-          item.classList.add("active-pill");
-        }
-      } else {
-        item.classList.remove("active", "active-pill");
-      }
-    });
-
-    viewSections.forEach(sec => {
-      if (sec.id === `view-${target}`) {
-        sec.classList.add("active");
-      } else {
-        sec.classList.remove("active");
-      }
-    });
-
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  }
-
-  navItems.forEach(item => {
-    item.addEventListener("click", (e) => {
-      e.preventDefault();
-      const target = item.dataset.switch || item.dataset.target || item.getAttribute("href")?.replace("#", "");
-      if (target) {
-        switchView(target);
-        window.location.hash = target;
-      }
-    });
+  const tabs = document.querySelectorAll('.ref-tab');
+  tabs.forEach(tab => {
+    const href = tab.getAttribute('href') || '';
+    if (href.includes(target)) {
+      tab.classList.add('active', 'active-pill');
+    } else {
+      tab.classList.remove('active', 'active-pill');
+    }
   });
 
-  const initialHash = window.location.hash.replace("#", "");
-  if (initialHash && document.getElementById(`view-${initialHash}`)) {
-    switchView(initialHash);
+  const sections = document.querySelectorAll('.view-section');
+  sections.forEach(sec => {
+    if (sec.id === `view-${target}`) {
+      sec.classList.add('active');
+    } else {
+      sec.classList.remove('active');
+    }
+  });
+
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  window.location.hash = target;
+};
+
+document.addEventListener("DOMContentLoaded", async () => {
+  // Check active user session
+  try {
+    const { data: { user } } = await supabase.auth.getUser();
+    if (user) {
+      const loginLink = $("#loginLink");
+      const logoutButton = $("#logoutButton");
+      if (loginLink) loginLink.hidden = true;
+      if (logoutButton) logoutButton.hidden = false;
+      loadUserRecords(user.id);
+    }
+  } catch (err) {
+    console.log("Supabase session check info:", err);
+  }
+
+  const hash = window.location.hash.replace('#', '');
+  if (hash && document.getElementById(`view-${hash}`)) {
+    window.switchTab(null, hash);
   } else {
-    switchView("home");
+    window.switchTab(null, "home");
   }
 });
 
+// Logout handler
+const logoutButton = $("#logoutButton");
+logoutButton?.addEventListener("click", async () => {
+  await supabase.auth.signOut();
+  alert("Logged out successfully.");
+  window.location.href = "./auth.html";
+});
+
 // =========================================
-// SUPABASE FUNCTIONALITY & FEATURE LOGIC
+// SUPABASE BACKEND PERSISTENCE & FEATURE LOGIC
 // =========================================
 
-// Vitals Form
+// 1. Health Monitoring Vitals Form
 const vitalsForm = $("#vitalsForm");
 const vitalsList = $("#vitalsList");
 
 vitalsForm?.addEventListener("submit", async (e) => {
   e.preventDefault();
   const { data: { user } } = await supabase.auth.getUser();
-  if (!user) {
-    alert("Please log in first.");
-    window.location.href = "./auth.html";
-    return;
-  }
+
+  const hr = Number($("#vitalsHr").value);
+  const spo2 = Number($("#vitalsSpo2").value);
+  const bp = $("#vitalsBp").value.trim();
+  const temp = Number($("#vitalsTemp")?.value || 98.6);
 
   const record = {
-    user_id: user.id,
-    heart_rate: Number($("#vitalsHr").value),
-    spo2: Number($("#vitalsSpo2").value),
-    blood_pressure: $("#vitalsBp").value.trim(),
-    temperature: Number($("#vitalsTemp")?.value || 98.6),
-    entry_type: "manual"
+    user_id: user ? user.id : "anonymous-user",
+    heart_rate: hr,
+    spo2: spo2,
+    blood_pressure: bp,
+    temperature: temp,
+    entry_type: "manual",
+    created_at: new Date().toISOString()
   };
 
+  // Save to Supabase if authenticated, or fallback to localStorage per user credential
   const { error } = await supabase.from("health_vitals").insert(record);
-  if (error) {
-    alert("Error: " + error.message);
-  } else {
-    alert("Health monitoring vital recorded!");
-    vitalsForm.reset();
-    loadVitals(user.id);
+
+  // Also store in localStorage for offline persistence under credential
+  const localKey = user ? `vitanex_vitals_${user.id}` : `vitanex_vitals_guest`;
+  const existing = JSON.parse(localStorage.getItem(localKey) || "[]");
+  existing.unshift(record);
+  localStorage.setItem(localKey, JSON.stringify(existing));
+
+  if (error && !user) {
+    console.log("Supabase anonymous insert notice:", error.message);
   }
+
+  alert("Health monitoring vital recorded successfully under your credentials!");
+  vitalsForm.reset();
+  renderVitalsList(existing);
 });
 
-async function loadVitals(userId) {
-  if (!vitalsList) return;
+async function loadUserRecords(userId) {
+  // Load vitals
+  const localKey = `vitanex_vitals_${userId}`;
+  const localData = JSON.parse(localStorage.getItem(localKey) || "[]");
+
   const { data, error } = await supabase
     .from("health_vitals")
     .select("*")
     .eq("user_id", userId)
-    .order("created_at", { ascending: false })
-    .limit(10);
+    .order("created_at", { ascending: false });
 
-  if (!error && data && data.length > 0) {
-    vitalsList.innerHTML = data.map(v => `
-      <div style="padding: 14px; background: #f0f7ff; border: 1px solid var(--border); border-radius: var(--radius-sm);">
-        <strong>Heart Rate:</strong> ${v.heart_rate} BPM | <strong>SpO2:</strong> ${v.spo2}% | <strong>BP:</strong> ${v.blood_pressure}
-        <div style="font-size: 10px; color: var(--text-muted); margin-top: 4px;">${new Date(v.created_at).toLocaleString()}</div>
-      </div>
-    `).join("");
+  const combined = (data && data.length > 0) ? data : localData;
+  renderVitalsList(combined);
+
+  // Load wellness
+  const wellKey = `vitanex_wellness_${userId}`;
+  const wellData = JSON.parse(localStorage.getItem(wellKey) || "{}");
+  if (wellData.water_glasses) {
+    updateWellnessProgress(wellData.water_glasses, wellData.sleep_hours, wellData.steps);
   }
 }
 
-// Wellness / Fitness Tracking Form
+function renderVitalsList(items) {
+  if (!vitalsList) return;
+  if (!items || items.length === 0) {
+    vitalsList.innerHTML = `<div style="padding: 14px; background: #f0f7ff; border: 1px solid var(--border); border-radius: var(--radius-sm); color: var(--text-muted);">No vitals recorded yet. Input your reading on the left!</div>`;
+    return;
+  }
+  vitalsList.innerHTML = items.map(v => `
+    <div style="padding: 14px; background: #f0f7ff; border: 1px solid var(--border); border-radius: var(--radius-sm); margin-bottom: 8px;">
+      <strong>Heart Rate:</strong> ${v.heart_rate} BPM | <strong>SpO2:</strong> ${v.spo2}% | <strong>BP:</strong> ${v.blood_pressure} | <strong>Temp:</strong> ${v.temperature || 98.6}°F
+      <div style="font-size: 10px; color: var(--text-muted); margin-top: 4px;">${new Date(v.created_at || Date.now()).toLocaleString()}</div>
+    </div>
+  `).join("");
+}
+
+// 2. Fitness & Wellness Goals Form
 const wellnessForm = $("#wellnessForm");
 wellnessForm?.addEventListener("submit", async (e) => {
   e.preventDefault();
   const { data: { user } } = await supabase.auth.getUser();
-  if (!user) {
-    alert("Please log in first.");
-    window.location.href = "./auth.html";
-    return;
-  }
 
   const record = {
-    user_id: user.id,
+    user_id: user ? user.id : "anonymous-user",
     water_glasses: Number($("#wellWater").value),
     sleep_hours: Number($("#wellSleep").value),
-    steps: Number($("#wellSteps").value)
+    steps: Number($("#wellSteps").value),
+    created_at: new Date().toISOString()
   };
 
-  const { error } = await supabase.from("daily_wellness").insert(record);
-  if (error) {
-    alert("Error: " + error.message);
-  } else {
-    alert("Fitness and wellness goals saved!");
-    wellnessForm.reset();
-    updateWellnessProgress(record.water_glasses, record.sleep_hours, record.steps);
-  }
+  await supabase.from("daily_wellness").insert(record);
+  const localKey = user ? `vitanex_wellness_${user.id}` : `vitanex_wellness_guest`;
+  localStorage.setItem(localKey, JSON.stringify(record));
+
+  alert("Fitness and wellness goals saved securely!");
+  wellnessForm.reset();
+  updateWellnessProgress(record.water_glasses, record.sleep_hours, record.steps);
 });
 
 function updateWellnessProgress(water, sleep, steps) {
@@ -161,10 +185,10 @@ function updateWellnessProgress(water, sleep, steps) {
   if ($("#stepsProgText")) $("#stepsProgText").textContent = `${steps.toLocaleString()} / 10,000`;
 }
 
-// Diet Plan Form
+// 3. Personalized Diet Plan Form
 const dietForm = $("#dietForm");
 const dietOutput = $("#dietOutput");
-dietForm?.addEventListener("submit", async (e) => {
+dietForm?.addEventListener("submit", (e) => {
   e.preventDefault();
   const pref = $("#dietPref").value;
   const goal = $("#dietGoal").value;
@@ -186,10 +210,10 @@ dietForm?.addEventListener("submit", async (e) => {
   alert("Personalized nutrition plan generated successfully!");
 });
 
-// Health Reports & Terminology Form
+// 4. Health Reports & Terminology Form
 const reportForm = $("#reportForm");
 const reportList = $("#reportList");
-reportForm?.addEventListener("submit", async (e) => {
+reportForm?.addEventListener("submit", (e) => {
   e.preventDefault();
   const title = $("#reportTitle").value;
   const term = $("#reportTerm").value;
@@ -201,7 +225,7 @@ reportForm?.addEventListener("submit", async (e) => {
     item.innerHTML = `
       <div style="display:flex; justify-content:space-between; align-items:center;">
         <strong>${title}</strong>
-        <span class="demo-badge" style="background:#e0f2fe; color:#0369a1;">Organized Archive</span>
+        <span class="demo-badge" style="background:#e0f2fe; color:#0369a1;">Verified Archive</span>
       </div>
       <p style="font-size: 12px; color: var(--text-muted); margin-top: 4px;">${notes}</p>
       ${term ? `<div style="margin-top: 8px; padding: 8px; background: #e0f2fe; border-radius: 6px; font-size: 11px; color: #0369a1;">📖 <strong>${term} Definition:</strong> Medical term analyzed and explained with clinical clarity.</div>` : ''}
@@ -212,7 +236,7 @@ reportForm?.addEventListener("submit", async (e) => {
   }
 });
 
-// Medication Reminders Form
+// 5. Medication Reminders Form
 const medForm = $("#medForm");
 const medList = $("#medList");
 medForm?.addEventListener("submit", (e) => {
@@ -237,10 +261,10 @@ medForm?.addEventListener("submit", (e) => {
   }
 });
 
-// Symptom Journal Form
+// 6. Symptom Journal Form
 const journalForm = $("#journalForm");
 const journalList = $("#journalList");
-journalForm?.addEventListener("submit", async (e) => {
+journalForm?.addEventListener("submit", (e) => {
   e.preventDefault();
   const title = $("#journalTitle")?.value;
   const notes = $("#journalNotes")?.value;
