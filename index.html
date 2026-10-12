@@ -11,15 +11,6 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
-
-  <script type="importmap">
-  {
-    "imports": {
-      "three": "https://cdn.jsdelivr.net/npm/three@0.179.1/build/three.module.js",
-      "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.179.1/examples/jsm/"
-    }
-  }
-  </script>
 </head>
 
 <body>
@@ -80,41 +71,79 @@
           <div class="panel" style="display: flex; flex-direction: column; justify-content: space-between; background: linear-gradient(135deg, #ffffff, #f0f7ff);">
             <div>
               <div class="panel-topline">
-                <span class="panel-label">HEARTBLOOM V2 — HEALTH & NUTRITION INTELLIGENCE</span>
+                <span class="panel-label">HEARTBLOOM V2 — TELEMETRY & VASCULAR SUITE</span>
                 <span class="demo-badge">Clinical Suite</span>
               </div>
-              <h2 style="font-family: var(--font-display); font-size: 24px; margin-bottom: 12px; color: var(--text-main);">Comprehensive Holographic Health Telemetry</h2>
-              <p class="muted" style="margin-bottom: 20px; line-height: 1.6;">Designed with cutting-edge 3D holographic human modeling and orbiting energy & nutrition streams to provide instant situational awareness for care teams and patients.</p>
+              <h2 style="font-family: var(--font-display); font-size: 24px; margin-bottom: 12px; color: var(--text-main);">Cardiovascular & Vascular Hologram Intelligence</h2>
+              <p class="muted" style="margin-bottom: 20px; line-height: 1.6;">Designed for cardiologists and care teams to give instant situational awareness. Featuring realistic anatomical vascular mapping and glowing central heart telemetry.</p>
 
               <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; margin-bottom: 20px;">
                 <div style="padding: 16px; background: #fff; border: 1px solid var(--border); border-radius: var(--radius-sm);">
-                  <span style="font-size: 11px; color: var(--text-muted); font-weight: 700;">HOLOGRAPHIC RHYTHM</span>
-                  <div><span id="ecgStatus" style="font-family: var(--font-display); font-size: 16px; font-weight: 700; color: #16a34a;">Active Synced</span></div>
+                  <span style="font-size: 11px; color: var(--text-muted); font-weight: 700;">VASCULAR LOAD</span>
+                  <div><span id="ecgStatus" style="font-family: var(--font-display); font-size: 16px; font-weight: 700; color: #0284c7;">LOAD: 85% (Optimal)</span></div>
                 </div>
                 <div style="padding: 16px; background: #fff; border: 1px solid var(--border); border-radius: var(--radius-sm);">
-                  <span style="font-size: 11px; color: var(--text-muted); font-weight: 700;">NUTRITION FLOW</span>
-                  <div style="font-family: var(--font-display); font-size: 16px; font-weight: 700; color: #0284c7;">Active Orbit</div>
+                  <span style="font-size: 11px; color: var(--text-muted); font-weight: 700;">FLOW RATE</span>
+                  <div style="font-family: var(--font-display); font-size: 16px; font-weight: 700; color: #16a34a;">FLOW: 12.4 L/min</div>
                 </div>
               </div>
             </div>
 
             <div class="hero-btns" style="display: flex; gap: 12px;">
               <a href="#dashboard" class="button" data-switch="dashboard" style="flex: 1;">Open Cardiology Dashboard ↗</a>
-              <a href="#tracker" class="button button-outline" data-switch="tracker" style="flex: 1;">View Fitness Goals →</a>
+              <a href="#reports" class="button button-outline" data-switch="reports" style="flex: 1;">View ECG Reports →</a>
             </div>
           </div>
 
-          <!-- Right: Holographic Wireframe Human Body with Orbiting Ribbons (Three.js) -->
-          <div class="hero-visual-card" style="height: 100%; min-height: 380px; background: #0f172a; position: relative; overflow: hidden; border-radius: var(--radius-lg);">
-            <div class="visual-label" style="position: absolute; top: 20px; left: 24px; z-index: 10; pointer-events: none;">
-              <span class="live-dot"></span> 3D HOLOGRAPHIC HUMAN & NUTRITION STREAM
+          <!-- Right: Realistic 3D Vascular & Central Heart Telemetry Visual Card (Matching Reference download (2).jpg) -->
+          <div class="hero-visual-card" style="height: 100%; min-height: 380px; background: #020617; position: relative; overflow: hidden; border-radius: var(--radius-lg); border: 1px solid #38bdf8;">
+            <div class="visual-label" style="position: absolute; top: 16px; left: 20px; z-index: 10; pointer-events: none; display: flex; align-items: center; gap: 8px; font-size: 10px; font-weight: 700; color: #38bdf8; letter-spacing: 1px;">
+              <span class="live-dot"></span> VASCULAR TELEMETRY — LOAD: 85%
             </div>
-            <div id="scene-container" style="width: 100%; height: 100%; cursor: grab;">
-              <div class="scene-fallback" id="sceneFallback">
-                <div class="fallback-core">🧍</div>
-              </div>
+
+            <!-- Realistic 3D Vascular & Central Heart Visual Display -->
+            <div style="width: 100%; height: 100%; display: grid; place-items: center; position: relative;">
+              <div style="position: absolute; inset: 0; background: radial-gradient(circle at center, rgba(56,189,248,0.15) 0%, rgba(2,6,23,0.95) 80%);"></div>
+
+              <!-- SVG Realistic 3D Vascular Human & Glowing Central Heart Illustration -->
+              <svg viewBox="0 0 400 450" width="100%" height="100%" style="position: relative; z-index: 2; max-height: 390px;">
+                <!-- Glowing Grid & HUD background markers -->
+                <line x1="40" y1="50" x2="80" y2="50" stroke="#38bdf8" stroke-width="1" opacity="0.4"/>
+                <line x1="40" y1="50" x2="40" y2="90" stroke="#38bdf8" stroke-width="1" opacity="0.4"/>
+                <text x="45" y="42" fill="#38bdf8" font-size="9" font-family="monospace">LOAD: 85%</text>
+
+                <line x1="320" y1="50" x2="360" y2="50" stroke="#38bdf8" stroke-width="1" opacity="0.4"/>
+                <line x1="360" y1="50" x2="360" y2="90" stroke="#38bdf8" stroke-width="1" opacity="0.4"/>
+                <text x="315" y="42" fill="#38bdf8" font-size="9" font-family="monospace">FLOW: 12.4 L/min</text>
+
+                <!-- Head Silhouette Outline -->
+                <path d="M200,60 C185,60 175,75 175,95 C175,115 185,135 200,140 C215,135 225,115 225,95 C225,75 215,60 200,60 Z" fill="none" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="3,3" opacity="0.6"/>
+
+                <!-- Shoulders & Torso Outline -->
+                <path d="M140,200 C130,160 150,145 175,145 L225,145 C250,145 270,160 260,200 C280,240 290,320 280,380 L120,380 C110,320 120,240 140,200 Z" fill="none" stroke="#64748b" stroke-width="1.5" opacity="0.5"/>
+
+                <!-- Complex Vascular Tree (Blue veins & Orange/Red arteries) -->
+                <path d="M200,140 L200,210 M200,165 C180,165 150,180 130,220 M200,165 C220,165 250,180 270,220 M200,210 C170,230 140,280 130,350 M200,210 C230,230 260,280 270,350" fill="none" stroke="#38bdf8" stroke-width="2" opacity="0.85"/>
+                <path d="M200,150 C185,170 160,200 140,240 M200,150 C215,170 240,200 260,240 M200,220 L200,380" fill="none" stroke="#f97316" stroke-width="1.5" opacity="0.75"/>
+
+                <!-- Glowing Central Heart -->
+                <g transform="translate(200, 235) scale(1.1)">
+                  <path d="M0,-25 C-20,-45 -55,-15 0,35 C55,-15 20,-45 0,-25 Z" fill="rgba(6,182,212,0.3)" stroke="#38bdf8" stroke-width="2.5" filter="drop-shadow(0 0 10px #38bdf8)"/>
+                  <path d="M0,-15 C-12,-28 -35,-10 0,20 C35,-10 12,-28 0,-15 Z" fill="#38bdf8" opacity="0.8"/>
+                </g>
+
+                <!-- HUD Data Callouts -->
+                <rect x="25" y="180" width="85" height="25" rx="4" fill="rgba(15,23,42,0.8)" stroke="#38bdf8" stroke-width="1"/>
+                <text x="32" y="196" fill="#38bdf8" font-size="10" font-family="monospace">FLOW: 12.4</text>
+
+                <rect x="290" y="280" width="85" height="25" rx="4" fill="rgba(15,23,42,0.8)" stroke="#f97316" stroke-width="1"/>
+                <text x="298" y="296" fill="#f97316" font-size="10" font-family="monospace">LOAD: 110%</text>
+              </svg>
             </div>
-            <div class="visual-caption" style="position: absolute; bottom: 16px; right: 24px; color: #38bdf8; font-weight: 700; letter-spacing: 1px; font-size: 11px; pointer-events: none;">DRAG TO ROTATE 3D HOLOGRAPHIC MODEL</div>
+
+            <div class="visual-caption" style="position: absolute; bottom: 12px; right: 20px; color: #38bdf8; font-weight: 700; letter-spacing: 1px; font-size: 10px; pointer-events: none; background: rgba(15,23,42,0.8); padding: 4px 10px; border-radius: 6px; border: 1px solid rgba(56,189,248,0.3);">
+              3D VASCULAR TELEMETRY ARCHIVE
+            </div>
           </div>
         </div>
       </section>
