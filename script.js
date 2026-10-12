@@ -162,7 +162,7 @@ function initializeThreeScene() {
     });
 
     const heartMesh = new THREE.Mesh(heartGeometry, heartMaterial);
-    heartMesh.scale.set(0.15, 0.15, 0.15);
+    heartMesh.scale.set(0.5, 0.5, 0.5);
     heartMesh.rotation.z = Math.PI;
     heartMesh.rotation.x = -0.13;
     heartGroup.add(heartMesh);
@@ -177,7 +177,7 @@ function initializeThreeScene() {
       })
     );
 
-    wireframe.scale.set(0.153, 0.153, 0.153);
+    wireframe.scale.set(0.51, 0.51, 0.51);
     wireframe.rotation.copy(heartMesh.rotation);
     heartGroup.add(wireframe);
 
@@ -765,3 +765,4 @@ reducedMotion.addEventListener?.(
 );
 
 console.info("VitaNex AI frontend initialized.");
+scene.add(heartGroup);
