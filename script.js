@@ -77,74 +77,95 @@ window.addEventListener("DOMContentLoaded", () => {
 });
 
 // =========================================
-// HYPER-REALISTIC 3D MULTI-CHAMBER HUMAN HEART (THREE.JS)
+// ULTRA-REALISTIC 3D PROCEDURAL ANATOMICAL HEART (THREE.JS)
 // =========================================
 const sceneContainer = $("#scene-container");
 let scene, camera, renderer, heartGroup, animationFrame;
 
-function createMultiChamberHeartGeometry() {
-  // Construct a detailed multi-lobe anatomical heart group (Ventricles + Atria + Aorta Arch)
+function createUltraRealisticHeart() {
   const group = new THREE.Group();
 
-  // 1. Left/Right Ventricle Main Body (Cone/Ellipsoid blend)
-  const ventGeo = new THREE.SphereGeometry(1.2, 32, 32);
-  ventGeo.scale(1, 1.3, 0.9);
-  const heartMat = new THREE.MeshPhysicalMaterial({
-    color: 0xe11d48,
-    roughness: 0.25,
-    metalness: 0.15,
-    clearcoat: 0.9,
-    clearcoatRoughness: 0.1,
-    emissive: 0x881337,
+  // 1. Main Myocardium Ventricular Mass (Organic Blob / Rounded Merged Geometry)
+  const bodyGeo = new THREE.IcosahedronGeometry(1.1, 4);
+  const posAttr = bodyGeo.attributes.position;
+
+  // Deform icosahedron into a natural anatomical heart shape (heart contour)
+  for (let i = 0; i < posAttr.count; i++) {
+    let x = posAttr.getX(i);
+    let y = posAttr.getY(i);
+    let z = posAttr.getZ(i);
+
+    // Taper bottom apex, bulge middle ventricles, curve top atria
+    y += 0.3;
+    if (y < 0) {
+      x *= (1.2 - y * 0.3);
+      z *= (1.1 - y * 0.3);
+    } else {
+      x *= 0.85;
+      z *= 0.85;
+      y *= 0.95;
+    }
+    posAttr.setXYZ(i, x, y, z);
+  }
+  bodyGeo.computeVertexNormals();
+
+  const heartMaterial = new THREE.MeshPhysicalMaterial({
+    color: 0xef4444,
+    roughness: 0.18,
+    metalness: 0.1,
+    clearcoat: 1.0,
+    clearcoatRoughness: 0.05,
+    transmission: 0.12,
+    ior: 1.45,
+    emissive: 0x991b1b,
     emissiveIntensity: 0.4
   });
-  const ventricle = new THREE.Mesh(ventGeo, heartMat);
-  ventricle.position.set(0, -0.2, 0);
-  group.add(ventricle);
 
-  // 2. Left Atrium
-  const atAtriumGeo = new THREE.SphereGeometry(0.65, 24, 24);
-  const atriumMat = new THREE.MeshPhysicalMaterial({
-    color: 0xf43f5e,
-    roughness: 0.3,
-    metalness: 0.1,
-    clearcoat: 0.8
+  const heartMesh = new THREE.Mesh(bodyGeo, heartMaterial);
+  heartMesh.scale.set(1.1, 1.35, 1.0);
+  group.add(heartMesh);
+
+  // 2. Glowing High-Tech Wireframe Overlay (Antigravity UI/UX Pro Max Vibe)
+  const wireGeo = bodyGeo.clone();
+  const wireMaterial = new THREE.MeshBasicMaterial({
+    color: 0x38bdf8,
+    wireframe: true,
+    transparent: true,
+    opacity: 0.35
   });
-  const leftAtrium = new THREE.Mesh(atAtriumGeo, atriumMat);
-  leftAtrium.position.set(0.6, 0.9, -0.1);
-  group.add(leftAtrium);
+  const wireMesh = new THREE.Mesh(wireGeo, wireMaterial);
+  wireMesh.scale.set(1.13, 1.38, 1.03);
+  group.add(wireMesh);
 
-  // 3. Right Atrium
-  const rightAtrium = new THREE.Mesh(atAtriumGeo, atriumMat);
-  rightAtrium.position.set(-0.6, 0.8, 0.1);
-  group.add(rightAtrium);
-
-  // 4. Aorta Arch (Torus curve)
-  const aortaGeo = new THREE.TorusGeometry(0.5, 0.18, 16, 48, Math.PI * 1.2);
-  const aortaMat = new THREE.MeshStandardMaterial({
+  // 3. Aortic Arch (Curved Tube)
+  const curve = new THREE.CubicBezierCurve3(
+    new THREE.Vector3(0, 0.8, 0),
+    new THREE.Vector3(0.2, 1.6, 0.3),
+    new THREE.Vector3(0.7, 1.5, -0.2),
+    new THREE.Vector3(0.8, 0.6, -0.4)
+  );
+  const aortaGeo = new THREE.TubeGeometry(curve, 32, 0.22, 16, false);
+  const vesselMat = new THREE.MeshPhysicalMaterial({
     color: 0xfca5a5,
     roughness: 0.2,
-    metalness: 0.4
+    metalness: 0.3,
+    clearcoat: 0.5
   });
-  const aorta = new THREE.Mesh(aortaGeo, aortaMat);
-  aorta.position.set(0.1, 1.3, 0);
-  aorta.rotation.x = Math.PI / 2;
-  aorta.rotation.z = Math.PI / 4;
+  const aorta = new THREE.Mesh(aortaGeo, vesselMat);
   group.add(aorta);
 
-  // 5. Superior Vena Cava & Pulmonary Artery tubes (Cylinders)
-  const tubeGeo = new THREE.CylinderGeometry(0.18, 0.18, 0.9, 16);
-  const vesselMat = new THREE.MeshStandardMaterial({ color: 0x93c5fd, roughness: 0.3 });
-
-  const venaCava = new THREE.Mesh(tubeGeo, vesselMat);
-  venaCava.position.set(-0.5, 1.4, -0.3);
-  venaCava.rotation.z = -0.2;
+  // 4. Superior Vena Cava & Pulmonary Trunk
+  const venaGeo = new THREE.CylinderGeometry(0.18, 0.18, 0.9, 16);
+  const venaCava = new THREE.Mesh(venaGeo, vesselMat);
+  venaCava.position.set(-0.5, 1.2, 0.2);
+  venaCava.rotation.z = -0.3;
   group.add(venaCava);
 
-  const pulmArtery = new THREE.Mesh(tubeGeo, vesselMat);
-  pulmArtery.position.set(-0.2, 1.3, 0.4);
-  pulmArtery.rotation.x = 0.3;
-  group.add(pulmArtery);
+  const pulmGeo = new THREE.CylinderGeometry(0.16, 0.16, 0.8, 16);
+  const pulmTrunk = new THREE.Mesh(pulmGeo, vesselMat);
+  pulmTrunk.position.set(-0.2, 1.1, 0.5);
+  pulmTrunk.rotation.x = 0.4;
+  group.add(pulmTrunk);
 
   return group;
 }
@@ -157,7 +178,7 @@ function initCardiologyScene() {
 
     scene = new THREE.Scene();
     camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 100);
-    camera.position.set(0, 0, 7.5);
+    camera.position.set(0, 0, 7.0);
 
     renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
     renderer.setSize(width, height);
@@ -168,19 +189,25 @@ function initCardiologyScene() {
     controls.enableDamping = true;
     controls.dampingFactor = 0.05;
     controls.autoRotate = true;
-    controls.autoRotateSpeed = 1.0;
+    controls.autoRotateSpeed = 1.2;
 
-    heartGroup = createMultiChamberHeartGeometry();
+    heartGroup = createUltraRealisticHeart();
     scene.add(heartGroup);
 
-    scene.add(new THREE.AmbientLight(0xffffff, 1.8));
-    const pLight1 = new THREE.PointLight(0xff3366, 45, 25);
-    pLight1.position.set(4, 5, 4);
-    scene.add(pLight1);
+    // Studio Lighting setup
+    scene.add(new THREE.AmbientLight(0xffffff, 2.2));
 
-    const pLight2 = new THREE.PointLight(0x38bdf8, 30, 25);
-    pLight2.position.set(-4, -3, 4);
-    scene.add(pLight2);
+    const keyLight = new THREE.PointLight(0xff3366, 50, 30);
+    keyLight.position.set(4, 5, 5);
+    scene.add(keyLight);
+
+    const fillLight = new THREE.PointLight(0x06b6d4, 35, 30);
+    fillLight.position.set(-4, -4, 4);
+    scene.add(fillLight);
+
+    const rimLight = new THREE.PointLight(0xffffff, 20, 20);
+    rimLight.position.set(0, 5, -5);
+    scene.add(rimLight);
 
     const fallback = $("#sceneFallback");
     if (fallback) fallback.style.display = "none";
@@ -196,14 +223,17 @@ function animateHeart(controls) {
   const time = performance.now() * 0.001;
 
   if (heartGroup) {
-    // Realistic dual-phase lub-dub heartbeat contraction (systole/diastole)
-    const t = time * 7;
+    // Ultra-realistic dual-phase heartbeat (Systole / Diastole "Lub-Dub" rhythm)
+    const t = time * 7.5;
     const cycle = t % (Math.PI * 2);
-    const lub = Math.max(0, Math.sin(cycle * 2) * Math.exp(- (cycle % 1.5)));
-    const dub = Math.max(0, Math.sin(cycle * 2 + 0.8) * Math.exp(- ((cycle + 0.5) % 1.5)));
-    const pulse = 1 + (lub * 0.12 + dub * 0.08);
 
-    heartGroup.scale.set(0.9 * pulse, 1.05 * pulse, 0.9 * pulse);
+    // Primary systole contraction & secondary diastolic rebound
+    const lub = Math.max(0, Math.sin(cycle * 2) * Math.exp(- (cycle % 1.5)));
+    const dub = Math.max(0, Math.sin(cycle * 2 + 0.9) * Math.exp(- ((cycle + 0.4) % 1.5)));
+    const pulse = 1 + (lub * 0.14 + dub * 0.08);
+
+    heartGroup.scale.set(0.95 * pulse, 1.12 * pulse, 0.95 * pulse);
+    heartGroup.rotation.y = time * 0.4;
   }
 
   if (controls) controls.update();
@@ -581,7 +611,7 @@ assistantForm?.addEventListener("submit", async (e) => {
   }
 
   if (!success || !reply) {
-    reply = `Regarding your health query about "${question}": Maintaining cardiovascular and general health requires consistent vital tracking (blood pressure, heart rate, SpO2), balanced nutrition low in sodium, proper hydration, and 7-9 hours of sleep. For acute symptoms, seek immediate professional medical attention.\n\nℹ️ Educational guidance powered by vitanex.ai clinical intelligence.`;
+    reply = `Regarding your health query about "${question}": Maintaining cardiovascular and general health requires consistent vital tracking (blood pressure, health monitoring, SpO2), balanced nutrition low in sodium, proper hydration, and 7-9 hours of sleep. For acute symptoms, seek immediate professional medical attention.\n\nℹ️ Educational guidance powered by vitanex.ai clinical intelligence.`;
   }
 
   if (currentSession) {
