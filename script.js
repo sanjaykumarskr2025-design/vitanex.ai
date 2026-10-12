@@ -3,8 +3,6 @@
 // =========================================
 
 import { supabase } from "./supabase.js";
-import * as THREE from "three";
-import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 
 const $ = (s) => document.querySelector(s);
 const $$ = (s) => document.querySelectorAll(s);
@@ -14,12 +12,10 @@ const yearEl = $("#currentYear");
 if (yearEl) yearEl.textContent = new Date().getFullYear();
 
 // =========================================
-// SIDEBAR NAVIGATION & VIEW ROUTING
+// NAVIGATION & VIEW ROUTING (ROBUST TAB SWITCHING)
 // =========================================
-const navItems = $$(".sidebar-nav .nav-item, .ref-tab");
+const navItems = $$(".ref-tab, .sidebar-nav .nav-item");
 const viewSections = $$(".view-section");
-const pageTitle = $("#pageTitle");
-const pageSubtitle = $("#pageSubtitle");
 
 const titles = {
   home: { title: "vitanex.ai Personal Health Dashboard", sub: "Interactive biometric body map and organ telemetry overview." },
@@ -34,8 +30,11 @@ const titles = {
 };
 
 function switchView(target) {
+  if (!target) return;
+
   navItems.forEach(item => {
-    if (item.dataset.switch === target || item.dataset.target === target) {
+    const t = item.dataset.switch || item.dataset.target || item.getAttribute("href")?.replace("#", "");
+    if (t === target) {
       item.classList.add("active");
     } else {
       item.classList.remove("active");
@@ -50,18 +49,13 @@ function switchView(target) {
     }
   });
 
-  if (titles[target]) {
-    if (pageTitle) pageTitle.textContent = titles[target].title;
-    if (pageSubtitle) pageSubtitle.textContent = titles[target].sub;
-  }
-
   window.scrollTo({ top: 0, behavior: "smooth" });
 }
 
 navItems.forEach(item => {
   item.addEventListener("click", (e) => {
     e.preventDefault();
-    const target = item.dataset.switch || item.dataset.target;
+    const target = item.dataset.switch || item.dataset.target || item.getAttribute("href")?.replace("#", "");
     if (target) {
       switchView(target);
       window.location.hash = target;
@@ -73,153 +67,10 @@ window.addEventListener("DOMContentLoaded", () => {
   const hash = window.location.hash.replace("#", "");
   if (titles[hash]) {
     switchView(hash);
+  } else {
+    switchView("home");
   }
 });
-
-// =========================================
-// 3D HOLOGRAPHIC WIREFRAME HUMAN BODY WITH ORBITING ENERGY & NUTRITION RIBBONS (THREE.JS)
-// =========================================
-const sceneContainer = $("#scene-container");
-let scene, camera, renderer, bodyGroup, ribbons = [], animationFrame;
-
-function createHolographicHumanModel() {
-  const group = new THREE.Group();
-
-  // Shared Glowing Cyan Wireframe Material
-  const wireMat = new THREE.MeshBasicMaterial({
-    color: 0x38bdf8,
-    wireframe: true,
-    transparent: true,
-    opacity: 0.45
-  });
-
-  // 1. Head
-  const headGeo = new THREE.SphereGeometry(0.32, 24, 24);
-  const head = new THREE.Mesh(headGeo, wireMat);
-  head.position.set(0, 1.35, 0);
-  group.add(head);
-
-  // 2. Torso
-  const torsoGeo = new THREE.CylinderGeometry(0.32, 0.22, 1.25, 24);
-  const torso = new THREE.Mesh(torsoGeo, wireMat);
-  torso.position.set(0, 0.4, 0);
-  group.add(torso);
-
-  // Glowing Core Organ / Heart in Chest
-  const coreGeo = new THREE.SphereGeometry(0.12, 16, 16);
-  const coreMat = new THREE.MeshBasicMaterial({ color: 0xf43f5e });
-  const coreHeart = new THREE.Mesh(coreGeo, coreMat);
-  coreHeart.position.set(0.05, 0.55, 0.1);
-  group.add(coreHeart);
-
-  // 3. Arms
-  const armGeo = new THREE.CylinderGeometry(0.09, 0.07, 1.1, 16);
-  const leftArm = new THREE.Mesh(armGeo, wireMat);
-  leftArm.position.set(-0.55, 0.6, 0);
-  leftArm.rotation.z = 0.25;
-  group.add(leftArm);
-
-  const rightArm = new THREE.Mesh(armGeo, wireMat);
-  rightArm.position.set(0.55, 0.6, 0);
-  rightArm.rotation.z = -0.25;
-  group.add(rightArm);
-
-  // 4. Legs
-  const legGeo = new THREE.CylinderGeometry(0.12, 0.09, 1.3, 16);
-  const leftLeg = new THREE.Mesh(legGeo, wireMat);
-  leftLeg.position.set(-0.24, -0.75, 0);
-  group.add(leftLeg);
-
-  const rightLeg = new THREE.Mesh(legGeo, wireMat);
-  rightLeg.position.set(0.24, -0.75, 0);
-  group.add(rightLeg);
-
-  // 5. Orbiting Glowing Energy & Nutrition Ribbons
-  const ribbonCurve1 = new THREE.EllipseCurve(0, 0, 1.4, 0.8, 0, 2 * Math.PI, false, 0);
-  const points1 = ribbonCurve1.getPoints(60);
-  const geom1 = new THREE.BufferGeometry().setFromPoints(points1.map(p => new THREE.Vector3(p.x, p.y - 0.2, Math.sin(p.x) * 0.8)));
-  const ribbonMat1 = new THREE.LineBasicMaterial({ color: 0xf59e0b, linewidth: 3, transparent: true, opacity: 0.9 });
-  const ribbon1 = new THREE.Line(geom1, ribbonMat1);
-  group.add(ribbon1);
-  ribbons.push({ obj: ribbon1, speed: 1.2, axis: 'y' });
-
-  const ribbonCurve2 = new THREE.EllipseCurve(0, 0, 1.2, 1.4, 0, 2 * Math.PI, true, 0);
-  const points2 = ribbonCurve2.getPoints(60);
-  const geom2 = new THREE.BufferGeometry().setFromPoints(points2.map(p => new THREE.Vector3(Math.cos(p.y) * 0.9, p.x - 0.5, p.y * 0.5)));
-  const ribbonMat2 = new THREE.LineBasicMaterial({ color: 0x10b981, linewidth: 3, transparent: true, opacity: 0.85 });
-  const ribbon2 = new THREE.Line(geom2, ribbonMat2);
-  group.add(ribbon2);
-  ribbons.push({ obj: ribbon2, speed: -1.0, axis: 'x' });
-
-  return group;
-}
-
-function initCardiologyScene() {
-  if (!sceneContainer) return;
-  try {
-    const width = sceneContainer.clientWidth || 400;
-    const height = sceneContainer.clientHeight || 380;
-
-    scene = new THREE.Scene();
-    camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 100);
-    camera.position.set(0, 0, 5.2);
-
-    renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
-    renderer.setSize(width, height);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-    sceneContainer.innerHTML = '';
-    sceneContainer.appendChild(renderer.domElement);
-
-    const controls = new OrbitControls(camera, renderer.domElement);
-    controls.enableDamping = true;
-    controls.dampingFactor = 0.05;
-    controls.autoRotate = true;
-    controls.autoRotateSpeed = 1.0;
-
-    bodyGroup = createHolographicHumanModel();
-    scene.add(bodyGroup);
-
-    // Studio Lighting setup
-    scene.add(new THREE.AmbientLight(0xffffff, 2.0));
-
-    const keyLight = new THREE.PointLight(0x38bdf8, 40, 25);
-    keyLight.position.set(3, 4, 4);
-    scene.add(keyLight);
-
-    const fillLight = new THREE.PointLight(0xf59e0b, 30, 25);
-    fillLight.position.set(-3, -3, 3);
-    scene.add(fillLight);
-
-    const fallback = $("#sceneFallback");
-    if (fallback) fallback.style.display = "none";
-
-    animateScene(controls);
-  } catch (e) {
-    console.error("Three.js error:", e);
-  }
-}
-
-function animateScene(controls) {
-  animationFrame = requestAnimationFrame(() => animateScene(controls));
-  const time = performance.now() * 0.001;
-
-  if (bodyGroup) {
-    const breath = 1 + Math.sin(time * 3) * 0.035;
-    bodyGroup.scale.set(breath, breath, breath);
-
-    ribbons.forEach((r) => {
-      if (r.axis === 'y') r.obj.rotation.y = time * r.speed;
-      else r.obj.rotation.z = time * r.speed;
-    });
-  }
-
-  if (controls) controls.update();
-  renderer.render(scene, camera);
-}
-
-if (sceneContainer) {
-  initCardiologyScene();
-}
 
 // =========================================
 // SUPABASE FUNCTIONALITY & FEATURE LOGIC
@@ -425,16 +276,8 @@ const assistantInput = $("#assistantInput");
 const chatMessages = $("#chatMessages");
 
 async function callGoogleGeminiAI(promptText) {
-  // Retrieve Google AI API Key dynamically from localStorage or secure configuration
   const apiKey = localStorage.getItem("googleApiKey") || "";
-
-  // Multi-model fallback sequence
-  const models = [
-    "gemini-2.0-flash",
-    "gemini-1.5-flash",
-    "gemini-1.5-pro",
-    "gemini-pro"
-  ];
+  const models = ["gemini-2.0-flash", "gemini-1.5-flash", "gemini-1.5-pro", "gemini-pro"];
 
   for (const model of models) {
     try {
@@ -457,7 +300,6 @@ async function callGoogleGeminiAI(promptText) {
     }
   }
 
-  // Clinical fallback response if network or API quota limits
   return `Based on clinical guidelines for vitanex.ai: "${promptText}" relates to personal biometric monitoring and cardiovascular care. Ensure you maintain regular blood pressure logs (target <120/80 mmHg), hydrate adequately (8+ glasses daily), and consult your cardiologist for definitive lab interpretations.`;
 }
 
@@ -466,17 +308,14 @@ assistantForm?.addEventListener("submit", async (e) => {
   const query = assistantInput?.value.trim();
   if (!query) return;
 
-  // Append user message
   appendChatMessage("You", query, "user");
   assistantInput.value = "";
 
-  // Show typing indicator
   const typingId = "typing-" + Date.now();
   appendChatMessage("AI Assistant", "Searching medical knowledge & Google Answer grounding...", "ai", typingId);
 
   const aiReply = await callGoogleGeminiAI(query);
 
-  // Remove typing indicator & show response
   const typingEl = document.getElementById(typingId);
   if (typingEl) typingEl.remove();
 
