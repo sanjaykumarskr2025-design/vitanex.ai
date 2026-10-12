@@ -8,7 +8,7 @@ const status = document.getElementById("profileStatus");
 
 async function loadProfile() {
   if (apiKeyInput) {
-    apiKeyInput.value = localStorage.getItem("google_api_key") || "";
+    apiKeyInput.value = localStorage.getItem("google_api_key") || localStorage.getItem("googleApiKey") || "";
   }
 
   const { data: { user }, error: userError } =
@@ -45,8 +45,10 @@ saveButton?.addEventListener("click", async () => {
     const key = apiKeyInput.value.trim();
     if (key) {
       localStorage.setItem("google_api_key", key);
+      localStorage.setItem("googleApiKey", key);
     } else {
       localStorage.removeItem("google_api_key");
+      localStorage.removeItem("googleApiKey");
     }
   }
 
