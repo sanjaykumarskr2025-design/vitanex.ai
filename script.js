@@ -11,22 +11,23 @@ if (yearEl) yearEl.textContent = new Date().getFullYear();
 // =========================================
 // SIDEBAR NAVIGATION & VIEW ROUTING
 // =========================================
-const navItems = $$(".sidebar-nav .nav-item");
+const navItems = $$(".sidebar-nav .nav-item, .ref-tab");
 const viewSections = $$(".view-section");
 const pageTitle = $("#pageTitle");
 const pageSubtitle = $("#pageSubtitle");
 
 const titles = {
   dashboard: { title: "Cardiology & Heart Health Dashboard", sub: "Real-time cardiology situational awareness & patient care suite." },
-  vitals: { title: "Vitals & Heart Monitor", sub: "Record heart rate, SpO2, blood pressure, and ECG rhythm notes." },
-  tracker: { title: "Daily Wellness Tracker", sub: "Monitor water intake, sleep quality, daily steps, and fitness goals." },
+  vitals: { title: "Health Monitoring & Vitals", sub: "Record heart rate, SpO2, blood pressure, and temperature." },
+  tracker: { title: "Fitness Tracking & Wellness Goals", sub: "Monitor water intake, sleep quality, daily steps, and physical activity." },
+  meds: { title: "Medication Reminders & Prescriptions", sub: "Enter schedules and track acknowledgments without changing doses." },
   journal: { title: "Symptom & Health Journal", sub: "Private encrypted logs for symptoms, palpitations, or chest discomfort notes." },
   assistant: { title: "AI Cardiology Assistant & Reports", sub: "Ask cardiology questions and export patient health summaries." }
 };
 
 function switchView(target) {
   navItems.forEach(item => {
-    if (item.dataset.target === target) {
+    if (item.dataset.switch === target || item.dataset.target === target) {
       item.classList.add("active");
     } else {
       item.classList.remove("active");
@@ -52,18 +53,11 @@ function switchView(target) {
 navItems.forEach(item => {
   item.addEventListener("click", (e) => {
     e.preventDefault();
-    const target = item.dataset.target;
-    switchView(target);
-    window.location.hash = target;
-  });
-});
-
-$$("[data-switch]").forEach(btn => {
-  btn.addEventListener("click", (e) => {
-    e.preventDefault();
-    const target = btn.dataset.switch;
-    switchView(target);
-    window.location.hash = target;
+    const target = item.dataset.switch || item.dataset.target;
+    if (target) {
+      switchView(target);
+      window.location.hash = target;
+    }
   });
 });
 
@@ -214,7 +208,7 @@ vitalsForm?.addEventListener("submit", async (e) => {
   if (error) {
     alert("Error: " + error.message);
   } else {
-    alert("Cardiology vital recorded!");
+    alert("Health monitoring vital recorded!");
     vitalsForm.reset();
     loadVitals(user.id);
   }
@@ -253,7 +247,7 @@ wellnessForm?.addEventListener("submit", async (e) => {
   const { error } = await supabase.from("daily_wellness").insert({ user_id: user.id, water_glasses: water, sleep_hours: sleep, steps: steps });
   if (error) alert("Error: " + error.message);
   else {
-    alert("Wellness logged!");
+    alert("Fitness & Wellness logged!");
     $("#waterProgText").textContent = `${water} / 8`;
     $("#waterProgFill").style.width = `${Math.min(100, (water/8)*100)}%`;
     $("#sleepProgText").textContent = `${sleep} / 8 hrs`;
@@ -262,6 +256,28 @@ wellnessForm?.addEventListener("submit", async (e) => {
     $("#stepsProgFill").style.width = `${Math.min(100, (steps/10000)*100)}%`;
     wellnessForm.reset();
   }
+});
+
+// Medication Reminders Form
+const medForm = $("#medForm");
+const medList = $("#medList");
+medForm?.addEventListener("submit", (e) => {
+  e.preventDefault();
+  const name = $("#medName").value.trim();
+  const time = $("#medTime").value;
+  const freq = $("#medFreq").value.trim();
+  if (!name || !time) return;
+
+  const div = document.createElement("div");
+  div.style = "padding: 16px; background: #f8fafc; border: 1px solid var(--border); border-radius: var(--radius-sm); display: flex; justify-content: space-between; align-items: center;";
+  div.innerHTML = `<div>
+    <strong>${name}</strong> — ${time}
+    <div style="font-size: 11px; color: var(--text-muted); margin-top: 4px;">${freq}</div>
+  </div>
+  <button type="button" class="button button-small" style="background:#16a34a;" onclick="this.textContent='Acknowledged ✓'; this.style.background='#64748b';">Acknowledge</button>`;
+  medList?.prepend(div);
+  alert("Medication reminder added!");
+  medForm.reset();
 });
 
 // Journal Form
@@ -367,8 +383,7 @@ assistantForm?.addEventListener("submit", async (e) => {
   if (success && reply) {
     assistantResponse.innerHTML = `<strong>HeartBloom Gemini AI Assistant:</strong><br><p style="margin-top:6px; line-height:1.5;">${reply.replace(/\n/g, '<br>')}</p><br><span style="font-size:11px; color:var(--text-muted);">ℹ️ Powered by Google Gemini AI. Educational guidance only; consult a board-certified physician.</span>`;
   } else {
-    // Intelligent clinical fallback if model endpoints require a different key scope or version
-    assistantResponse.innerHTML = `<strong>HeartBloom Clinical AI Assistant:</strong><br><p style="margin-top:6px; line-height:1.5;">Regarding your query about "${question}": Maintaining optimal cardiovascular health involves regular vital monitoring (heart rate, blood pressure, SpO2), balanced nutrition low in sodium, adequate daily hydration (8+ glasses), and 7-9 hours of quality sleep. For chest pain or acute cardiac symptoms, seek immediate emergency care.</p><br><span style="font-size:11px; color:var(--text-muted);">ℹ️ Educational guidance only. Consult a board-certified cardiologist for medical treatment.</span>`;
+    assistantResponse.innerHTML = `<strong>HeartBloom Clinical AI Assistant:</strong><br><p style="margin-top:6px; line-height:1.5;">Regarding your query about "${question}": Maintaining optimal cardiovascular health involves regular vital monitoring (heart rate, blood pressure, SpO2), balanced nutrition low in sodium, adequate daily hydration (8+ glasses), and 7-9 hours of quality sleep. For acute symptoms, seek immediate emergency care.</p><br><span style="font-size:11px; color:var(--text-muted);">ℹ️ Educational guidance only. Consult a board-certified cardiologist for medical treatment.</span>`;
   }
 
   if (submitBtn) submitBtn.disabled = false;
@@ -376,7 +391,7 @@ assistantForm?.addEventListener("submit", async (e) => {
 
 // CSV Export
 $("#exportCsvBtn")?.addEventListener("click", () => {
-  const csv = "data:text/csv;charset=utf-8,Category,Detail,Date\nVitals,Heart Rate 74 BPM,2026-10-12\nWellness,Water 8 Glasses,2026-10-12\n";
+  const csv = "data:text/csv;charset=utf-8,Category,Detail,Date\nVitals,Heart Rate 75 BPM,2026-10-13\nFitness,Steps 9500,2026-10-13\nMedication,CoQ10 Acknowledged,2026-10-13\n";
   const link = document.createElement("a");
   link.href = encodeURI(csv);
   link.download = "heartbloom-cardiology-report.csv";

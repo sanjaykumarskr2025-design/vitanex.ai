@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="theme-color" content="#f0f4f8">
   <meta name="description" content="VitaNex AI — HeartBloom Cardiology & Health Intelligence Dashboard.">
-  <title>VitaNex AI | Fitness Tracking & Wellness Goals</title>
+  <title>VitaNex AI | Medication Reminders & Clinical Suite</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -31,6 +31,7 @@
           <a href="#dashboard" class="ref-tab active" data-switch="dashboard">📊 Dashboard</a>
           <a href="#vitals" class="ref-tab" data-switch="vitals">🩺 Health Monitoring</a>
           <a href="#tracker" class="ref-tab" data-switch="tracker">🎯 Fitness & Goals</a>
+          <a href="#meds" class="ref-tab" data-switch="meds">💊 Medication Reminders</a>
           <a href="#journal" class="ref-tab" data-switch="journal">📝 Journal</a>
           <a href="#assistant" class="ref-tab" data-switch="assistant">📋 Report & AI</a>
         </div>
@@ -66,8 +67,8 @@
             <span class="val">97.5 <span style="font-size: 12px; font-weight: normal; color:var(--text-muted);">kg</span> <span class="tag-delta">+1.5 kg</span></span>
           </div>
           <div class="metric-pill">
-            <span class="label">Recent Actions</span>
-            <span class="val" style="font-size: 12px; font-weight: 500;">CoQ10, Omega-3</span>
+            <span class="label">Active Meds</span>
+            <span class="val" style="font-size: 12px; font-weight: 500;">CoQ10, Aspirin, Omega</span>
           </div>
         </div>
 
@@ -75,25 +76,25 @@
           <div class="panel" style="background: linear-gradient(135deg, #ffffff, #f8fafc); display: flex; flex-direction: column; justify-content: space-between;">
             <div>
               <div class="panel-topline">
-                <span class="panel-label">FITNESS & WELLNESS GOALS</span>
-                <span class="demo-badge">Active Sync</span>
+                <span class="panel-label">MEDICATION SCHEDULE HUB</span>
+                <span class="demo-badge">Active Reminders</span>
               </div>
-              <h2 style="font-family: var(--font-display); font-size: 24px; margin-bottom: 20px;">Daily Habit & Fitness Hub</h2>
+              <h2 style="font-family: var(--font-display); font-size: 24px; margin-bottom: 20px;">Never Miss Prescriptions</h2>
 
               <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin-bottom: 20px;">
                 <div style="padding: 16px; background: #fff; border: 1px solid var(--border); border-radius: var(--radius-sm);">
-                  <span style="font-size: 11px; color: var(--text-muted); font-weight: 700;">DAILY STEPS GOAL</span>
-                  <div style="font-family: var(--font-display); font-size: 22px; font-weight: 700; color: #2563eb; margin-top: 4px;">8,500 <span style="font-size: 11px; color: var(--text-muted);">/ 10k</span></div>
+                  <span style="font-size: 11px; color: var(--text-muted); font-weight: 700;">NEXT DOSAGE</span>
+                  <div style="font-family: var(--font-display); font-size: 20px; font-weight: 700; color: #f43f5e; margin-top: 4px;">CoQ10 (08:00 AM)</div>
                 </div>
                 <div style="padding: 16px; background: #fff; border: 1px solid var(--border); border-radius: var(--radius-sm);">
-                  <span style="font-size: 11px; color: var(--text-muted); font-weight: 700;">HYDRATION & SLEEP</span>
-                  <div style="font-family: var(--font-display); font-size: 22px; font-weight: 700; color: #10b981; margin-top: 4px;">8 Gl | 7.5h</div>
+                  <span style="font-size: 11px; color: var(--text-muted); font-weight: 700;">STATUS</span>
+                  <div style="font-family: var(--font-display); font-size: 20px; font-weight: 700; color: #16a34a; margin-top: 4px;">Acknowledged ✓</div>
                 </div>
               </div>
             </div>
 
             <div class="hero-btns" style="margin-top: 15px;">
-              <a href="#tracker" class="button" data-switch="tracker">Open Fitness Tracking Tab ↗</a>
+              <a href="#meds" class="button" data-switch="meds">Open Medication Tab ↗</a>
               <a href="#vitals" class="button button-outline" data-switch="vitals">View Vitals →</a>
             </div>
           </div>
@@ -167,54 +168,48 @@
         </div>
       </section>
 
-      <!-- VIEW 3: FITNESS TRACKING & WELLNESS GOALS (Feature 4 Enhanced) -->
+      <!-- VIEW 3: FITNESS TRACKING -->
       <section id="view-tracker" class="view-section">
         <div class="section-heading">
           <div>
             <div class="eyebrow"><span class="status-dot"></span> FEATURE 4</div>
             <h2>Fitness Tracking & <span class="gradient-text">Wellness Goals</span></h2>
-            <p>Record steps, sleep, water intake, and physical activity. Solve inconsistent wellness habits with daily goals and weekly progress rings.</p>
+            <p>Record steps, sleep, water intake, and physical activity.</p>
           </div>
-          <span class="demo-badge">ATTRACTIVE UNIQUE THEME</span>
+          <span class="demo-badge">HABITS</span>
         </div>
 
         <div class="dashboard-grid">
-          <!-- Left: Attractive Fitness Logging Hub -->
           <article class="panel" style="background: linear-gradient(135deg, #0b152d, #1e293b); color: #fff;">
             <div class="panel-topline">
               <span class="panel-label" style="color: #38bdf8;">LOG DAILY FITNESS & HABITS</span>
               <span class="panel-icon">⚡</span>
             </div>
             <h3 style="color: #fff; margin-bottom: 6px;">Record Activity</h3>
-            <p style="color: #94a3b8; font-size: 13px; margin-bottom: 20px;">Consistency builds longevity and cardiovascular resilience.</p>
-
             <form id="wellnessForm" style="display: flex; flex-direction: column; gap: 16px;">
               <div>
-                <label style="font-size: 11px; color: #94a3b8; font-weight:700; letter-spacing:0.5px;">WATER INTAKE (GLASSES)</label>
+                <label style="font-size: 11px; color: #94a3b8; font-weight:700;">WATER INTAKE (GLASSES)</label>
                 <input type="number" id="wellWater" placeholder="e.g. 8" required style="background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.15); color: #fff; margin-top: 6px;">
               </div>
               <div>
-                <label style="font-size: 11px; color: #94a3b8; font-weight:700; letter-spacing:0.5px;">SLEEP DURATION (HOURS)</label>
+                <label style="font-size: 11px; color: #94a3b8; font-weight:700;">SLEEP DURATION (HOURS)</label>
                 <input type="number" step="0.5" id="wellSleep" placeholder="e.g. 7.5" required style="background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.15); color: #fff; margin-top: 6px;">
               </div>
               <div>
-                <label style="font-size: 11px; color: #94a3b8; font-weight:700; letter-spacing:0.5px;">DAILY STEPS</label>
+                <label style="font-size: 11px; color: #94a3b8; font-weight:700;">DAILY STEPS</label>
                 <input type="number" id="wellSteps" placeholder="e.g. 9500" required style="background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.15); color: #fff; margin-top: 6px;">
               </div>
               <button type="submit" class="button" style="margin-top: 10px; background: #38bdf8; color: #0b152d; font-weight: 700;">Save Fitness & Goals ↗</button>
             </form>
           </article>
 
-          <!-- Right: Visual Weekly Progress Rings & Targets -->
           <article class="panel">
             <div class="panel-topline">
               <span class="panel-label">WEEKLY PROGRESS & GOALS</span>
               <span class="panel-icon">🎯</span>
             </div>
             <h3>Target Completion Dashboard</h3>
-            <p class="muted" style="margin-bottom: 20px;">Real-time sync with Supabase habit database.</p>
-
-            <div style="display: flex; flex-direction: column; gap: 20px;">
+            <div style="display: flex; flex-direction: column; gap: 20px; margin-top: 15px;">
               <div style="padding: 16px; background: #f8fafc; border: 1px solid var(--border); border-radius: var(--radius-sm);">
                 <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
                   <span style="font-weight: 700; font-size: 13px;">💧 Hydration Goal (8 Glasses)</span>
@@ -243,7 +238,74 @@
         </div>
       </section>
 
-      <!-- VIEW 4: SYMPTOM JOURNAL -->
+      <!-- VIEW 4: MEDICATION REMINDERS (Feature 5: Attractive Unique Theme) -->
+      <section id="view-meds" class="view-section">
+        <div class="section-heading">
+          <div>
+            <div class="eyebrow"><span class="status-dot"></span> FEATURE 5</div>
+            <h2>Medication <span class="gradient-text">Reminders</span></h2>
+            <p>Enter prescription schedules, set timed reminders, and track acknowledgments without altering prescribed doses.</p>
+          </div>
+          <span class="demo-badge" style="background:#e0f2fe; color:#0369a1;">CLINICAL SAFETY</span>
+        </div>
+
+        <div class="dashboard-grid">
+          <!-- Left: Prescription Entry Form -->
+          <article class="panel" style="background: linear-gradient(135deg, #0f172a, #1e293b); color: #fff;">
+            <div class="panel-topline">
+              <span class="panel-label" style="color: #38bdf8;">ADD MEDICATION SCHEDULE</span>
+              <span class="panel-icon">💊</span>
+            </div>
+            <h3 style="color: #fff; margin-bottom: 6px;">Prescription Reminder Hub</h3>
+            <p style="color: #94a3b8; font-size: 13px; margin-bottom: 20px;">Never forget scheduled medications. Acknowledgment tracking ensures safety.</p>
+
+            <form id="medForm" style="display: flex; flex-direction: column; gap: 14px;">
+              <div>
+                <label style="font-size: 11px; color: #94a3b8; font-weight:700;">MEDICATION NAME & DOSE</label>
+                <input type="text" id="medName" placeholder="e.g. CoQ10 200mg" required style="background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.15); color: #fff; margin-top: 6px;">
+              </div>
+              <div>
+                <label style="font-size: 11px; color: #94a3b8; font-weight:700;">SCHEDULED TIME</label>
+                <input type="time" id="medTime" required style="background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.15); color: #fff; margin-top: 6px; width:100%; padding:12px 16px; border-radius:var(--radius-sm); border:1px solid rgba(255,255,255,0.15);">
+              </div>
+              <div>
+                <label style="font-size: 11px; color: #94a3b8; font-weight:700;">FREQUENCY / INSTRUCTIONS</label>
+                <input type="text" id="medFreq" placeholder="e.g. Daily with breakfast" required style="background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.15); color: #fff; margin-top: 6px;">
+              </div>
+              <button type="submit" class="button" style="margin-top: 10px; background: #06b6d4; color: #0b152d; font-weight: 700;">Set Medication Reminder ↗</button>
+            </form>
+          </article>
+
+          <!-- Right: Active Medication Schedule & Acknowledgments -->
+          <article class="panel">
+            <div class="panel-topline">
+              <span class="panel-label">ACTIVE REMINDERS & ACKNOWLEDGMENTS</span>
+              <span class="panel-icon">✅</span>
+            </div>
+            <h3>Today's Prescriptions</h3>
+            <p class="muted" style="margin-bottom: 16px;">Click 'Acknowledge' when taken. Prescribed doses remain unchanged.</p>
+
+            <div id="medList" style="display: flex; flex-direction: column; gap: 12px; max-height: 340px; overflow-y: auto;">
+              <div style="padding: 16px; background: #f8fafc; border: 1px solid var(--border); border-radius: var(--radius-sm); display: flex; justify-content: space-between; align-items: center;">
+                <div>
+                  <strong>CoQ10 200mg</strong> — 08:00 AM
+                  <div style="font-size: 11px; color: var(--text-muted); margin-top: 4px;">Daily with breakfast</div>
+                </div>
+                <button type="button" class="button button-small" style="background:#16a34a;" onclick="this.textContent='Acknowledged ✓'; this.style.background='#64748b';">Acknowledge</button>
+              </div>
+              <div style="padding: 16px; background: #f8fafc; border: 1px solid var(--border); border-radius: var(--radius-sm); display: flex; justify-content: space-between; align-items: center;">
+                <div>
+                  <strong>Aspirin 81mg</strong> — 01:00 PM
+                  <div style="font-size: 11px; color: var(--text-muted); margin-top: 4px;">After lunch</div>
+                </div>
+                <button type="button" class="button button-small" style="background:#2563eb;" onclick="this.textContent='Acknowledged ✓'; this.style.background='#64748b';">Acknowledge</button>
+              </div>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <!-- VIEW 5: SYMPTOM JOURNAL -->
       <section id="view-journal" class="view-section">
         <div class="section-heading">
           <div>
@@ -291,10 +353,10 @@
         </div>
       </section>
 
-      <!-- VIEW 5: AI ASSISTANT & REPORTS -->
+      <!-- VIEW 6: AI ASSISTANT & REPORTS -->
       <section id="view-assistant" class="view-section">
         <div class="assistant-card" style="margin-top: 20px;">
-          <div class="eyebrow"><span class="status-dot"></span> FEATURE 4 & 5</div>
+          <div class="eyebrow"><span class="status-dot"></span> AI & REPORTS</div>
           <h2>HeartBloom Google Gemini AI Assistant</h2>
           <p>Ask cardiology and wellness questions in English, Tamil (தமிழ்), or Hindi (हिन्दी).</p>
 
