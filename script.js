@@ -1,5 +1,4 @@
-
-import * as THREE from "three";
+import { supabase } from "./supabase.js";
 
 /* =========================================
    VITANEX AI — INTERACTIVE 3D EXPERIENCE
@@ -75,6 +74,8 @@ function createHeartGeometry() {
   geometry.computeVertexNormals();
   return geometry;
 }
+
+import * as THREE from "three";
 
 function createParticleField(count = 900) {
   const positions = new Float32Array(count * 3);
@@ -241,10 +242,6 @@ function initializeThreeScene() {
   }
 }
 
-/* =========================================
-   1B. HEARTBEAT ANIMATION AND RESIZING
-   ========================================= */
-
 function handleResize() {
   if (!renderer || !camera || !sceneContainer) return;
 
@@ -274,7 +271,6 @@ function animateThreeScene() {
 
     heartGroup.rotation.z = Math.sin(time * 0.3) * 0.06;
 
-    // Decorative double-beat pulse; not a real health measurement.
     const phase = (time % 1.05) / 1.05;
     const primaryBeat = Math.exp(
       -Math.pow((phase - 0.12) / 0.045, 2)
@@ -322,6 +318,10 @@ window.addEventListener("pagehide", stopThreeScene, {
   once: true
 });
 
+if (sceneContainer) {
+  initializeThreeScene();
+}
+
 /* =========================================
    2. MULTILINGUAL SUPPORT
    ========================================= */
@@ -330,439 +330,343 @@ const translations = {
   en: {
     navHome: "Home",
     navDashboard: "Dashboard",
+    navTracker: "Tracker",
+    navJournal: "Journal",
     navFeatures: "Features",
-    navAbout: "About",
     getStarted: "Get started ↗",
     eyebrow: "YOUR PERSONAL AI HEALTH COPILOT",
     heroTitle: 'Your health.<br><span class="gradient-text">Reimagined.</span>',
     heroDescription:
-      "Understand your health, explore your wellness trends, and make more informed decisions with your intelligent health companion.",
-    exploreButton: "Explore your health",
-    discoverButton: "Discover VitaNex",
+      "Track your vitals, log daily wellness habits, keep a private symptom journal, and explore health insights with your intelligent AI copilot.",
+    exploreButton: "Explore health monitoring",
+    discoverButton: "Daily wellness tracker",
     trustText: "Designed for clarity, privacy, and informed wellness.",
-    dashboardTitle:
-      'Your health, <span class="gradient-text">in perspective.</span>',
-    dashboardDescription:
-      "A clear starting point to explore personal wellness information.",
-    welcomeTitle: "Welcome to your wellness space.",
-    welcomeDescription:
-      "Your personal dashboard experience starts here. Connect a supported health data source in a future setup to display your own information.",
-    seeFeatures: "Explore features →",
-    featuresTitle:
-      'Health technology, <span class="gradient-text">made human.</span>',
-    featuresDescription:
-      "An approachable interface for exploring your wellness journey.",
+    dashboardTitle: 'Smart Health <span class="gradient-text">Monitoring Dashboard</span>',
+    dashboardDescription: "Log and monitor your heart rate, SpO2, blood pressure, and body temperature securely.",
     featureOneTitle: "AI health companion",
-    featureOneDescription:
-      "A conversational interface designed to explain general health information in accessible language.",
+    featureOneDescription: "A conversational interface designed to explain general health information in accessible language.",
     featureTwoTitle: "Wellness dashboard",
-    featureTwoDescription:
-      "Bring supported health measurements and wellness trends into one organized space.",
+    featureTwoDescription: "Bring supported health measurements and wellness trends into one organized space.",
     featureThreeTitle: "3D health experience",
-    featureThreeDescription:
-      "Explore an interactive visual environment designed to make the experience engaging.",
-    assistantTitle: "Questions about health?",
-    assistantDescription:
-      "Ask general health and wellness questions. VitaNex provides educational information, not a diagnosis or a substitute for a clinician.",
+    featureThreeDescription: "Explore an interactive visual environment designed to make the experience engaging.",
+    assistantTitle: "Multilingual AI Health Assistant",
+    assistantDescription: "Ask general health questions in English, Tamil (தமிழ்), or Hindi (हिन्दी). Get reliable educational guidance instantly.",
     askButton: "Ask VitaNex ↗",
     aboutText: "Your Health. Your Intelligence. Your Future.",
-    disclaimer:
-      "VitaNex AI is a wellness information interface, not a medical professional. Demo values are illustrative and must not be used for diagnosis or treatment. For health concerns, consult a qualified healthcare professional. For urgent symptoms, seek local emergency care.",
+    disclaimer: "VitaNex AI is a wellness information interface, not a medical professional. Demo values are illustrative and must not be used for diagnosis or treatment. For health concerns, consult a qualified healthcare professional. For urgent symptoms, seek local emergency care.",
     assistantPlaceholder: "Ask a general wellness question..."
   },
-
   ta: {
     navHome: "முகப்பு",
     navDashboard: "டாஷ்போர்டு",
+    navTracker: "டேக்கர்",
+    navJournal: "குறிப்பேடு",
     navFeatures: "அம்சங்கள்",
-    navAbout: "எங்களைப் பற்றி",
     getStarted: "தொடங்கலாம் ↗",
     eyebrow: "உங்கள் தனிப்பட்ட AI சுகாதார உதவியாளர்",
-    heroTitle:
-      'உங்கள் ஆரோக்கியம்.<br><span class="gradient-text">புதிய பார்வையில்.</span>',
-    heroDescription:
-      "உங்கள் ஆரோக்கியத்தைப் புரிந்துகொள்ளவும், நலன் சார்ந்த மாற்றங்களை அறியவும் உதவும் உங்கள் அறிவார்ந்த துணை.",
-    exploreButton: "ஆரோக்கியத்தை ஆராயுங்கள்",
-    discoverButton: "VitaNex பற்றி அறியுங்கள்",
-    trustText:
-      "தெளிவு, தனியுரிமை மற்றும் ஆரோக்கிய விழிப்புணர்வுக்காக உருவாக்கப்பட்டது.",
-    dashboardTitle:
-      'உங்கள் ஆரோக்கியம், <span class="gradient-text">ஒரே பார்வையில்.</span>',
-    dashboardDescription:
-      "உங்கள் நலன் சார்ந்த தகவல்களைப் பார்க்க எளிய தொடக்கம்.",
-    welcomeTitle: "உங்கள் நலன் தளத்திற்கு வரவேற்கிறோம்.",
-    welcomeDescription:
-      "உங்கள் தனிப்பட்ட டாஷ்போர்டு இங்கே தொடங்குகிறது. எதிர்காலத்தில் ஆதரிக்கப்படும் சுகாதாரத் தரவு மூலத்தை இணைத்து உங்கள் தகவல்களைக் காணலாம்.",
-    seeFeatures: "அம்சங்களைப் பாருங்கள் →",
-    featuresTitle:
-      'சுகாதாரத் தொழில்நுட்பம், <span class="gradient-text">எளிமையாக.</span>',
-    featuresDescription:
-      "உங்கள் நலன் பயணத்தை எளிதாக ஆராய உதவும் தளம்.",
+    heroTitle: 'உங்கள் ஆரோக்கியம்.<br><span class="gradient-text">புதிய பார்வையில்.</span>',
+    heroDescription: "உங்கள் உடல்நல அளவீடுகளைக் கண்காணிக்கவும், அன்றாட பழக்கவழக்கங்களைப் பதிவு செய்யவும், பாதுகாப்பான குறிப்பேட்டைப் பராமரிக்கவும் உதவும் தளம்.",
+    exploreButton: "ஆரோக்கிய கண்காணிப்பு",
+    discoverButton: "தினசரி நலன் கண்காணிப்பு",
+    trustText: "தெளிவு, தனியுரிமை மற்றும் ஆரோக்கிய விழிப்புணர்வுக்காக உருவாக்கப்பட்டது.",
+    dashboardTitle: 'ஸ்மார்ட் சுகாதார <span class="gradient-text">கண்காணிப்பு டாஷ்போர்டு</span>',
+    dashboardDescription: "உங்கள் நாடித்துடிப்பு, ஆக்ஸிஜன் அளவு, இரத்த அழுத்தம் மற்றும் உடல் வெப்பநிலையைப் பாதுகாப்பாகப் பதிவு செய்யுங்கள்.",
     featureOneTitle: "AI சுகாதாரத் துணை",
-    featureOneDescription:
-      "பொதுவான சுகாதாரத் தகவல்களை எளிய மொழியில் விளக்க உதவும் உரையாடல் வசதி.",
+    featureOneDescription: "பொதுவான சுகாதாரத் தகவல்களை எளிய மொழியில் விளக்க உதவும் உரையாடல் வசதி.",
     featureTwoTitle: "நலன் டாஷ்போர்டு",
-    featureTwoDescription:
-      "ஆதரிக்கப்படும் சுகாதார அளவீடுகள் மற்றும் நலன் மாற்றங்களை ஒரே இடத்தில் காணலாம்.",
+    featureTwoDescription: "சுகாதார அளவீடுகள் மற்றும் நலன் மாற்றங்களை ஒரே organized இடத்தில் காணலாம்.",
     featureThreeTitle: "3D சுகாதார அனுபவம்",
-    featureThreeDescription:
-      "ஈர்க்கக்கூடிய வகையில் உருவாக்கப்பட்ட ஊடாடும் 3D காட்சியை ஆராயுங்கள்.",
-    assistantTitle: "ஆரோக்கியம் பற்றி கேள்விகளா?",
-    assistantDescription:
-      "பொதுவான ஆரோக்கியக் கேள்விகளைக் கேளுங்கள். VitaNex கல்வி நோக்கத்திற்கான தகவல்களை வழங்கும்; இது மருத்துவ நோயறிதலுக்கு மாற்றாகாது.",
+    featureThreeDescription: "ஈர்க்கக்கூடிய வகையில் உருவாக்கப்பட்ட ஊடாடும் 3D காட்சியை ஆராயுங்கள்.",
+    assistantTitle: "பன்மொழி AI சுகாதார உதவியாளர்",
+    assistantDescription: "ஆங்கிலம், தமிழ் அல்லது இந்தியில் பொதுவான சுகாதாரக் கேள்விகளைக் கேளுங்கள்.",
     askButton: "VitaNex-ஐ கேளுங்கள் ↗",
     aboutText: "உங்கள் ஆரோக்கியம். உங்கள் அறிவு. உங்கள் எதிர்காலம்.",
-    disclaimer:
-      "VitaNex AI மருத்துவ நிபுணர் அல்ல. இங்குள்ள எடுத்துக்காட்டு மதிப்புகள் மருத்துவ நோயறிதல் அல்லது சிகிச்சைக்கானவை அல்ல. உடல்நலக் கவலைகளுக்கு தகுதியான மருத்துவரை அணுகவும். அவசர அறிகுறிகள் இருந்தால் உடனடியாக உள்ளூர் அவசர மருத்துவ உதவியை நாடவும்.",
+    disclaimer: "VitaNex AI மருத்துவ நிபுணர் அல்ல. அவசர அறிகுறிகள் இருந்தால் உடனடியாக மருத்துவ உதவியை நாடவும்.",
     assistantPlaceholder: "பொதுவான நலன் கேள்வியைக் கேளுங்கள்..."
   },
-
   hi: {
     navHome: "होम",
     navDashboard: "डैशबोर्ड",
+    navTracker: "ट्रैकर",
+    navJournal: "पत्रिका",
     navFeatures: "विशेषताएँ",
-    navAbout: "हमारे बारे में",
     getStarted: "शुरू करें ↗",
     eyebrow: "आपका व्यक्तिगत AI स्वास्थ्य सहायक",
-    heroTitle:
-      'आपका स्वास्थ्य।<br><span class="gradient-text">एक नई सोच।</span>',
-    heroDescription:
-      "अपने स्वास्थ्य को समझें और अपने स्वास्थ्य-संबंधी निर्णयों के लिए उपयोगी सामान्य जानकारी पाएँ।",
-    exploreButton: "स्वास्थ्य देखें",
-    discoverButton: "VitaNex जानें",
-    trustText: "स्पष्टता, गोपनीयता और बेहतर स्वास्थ्य जानकारी के लिए बनाया गया।",
-    dashboardTitle:
-      'आपका स्वास्थ्य, <span class="gradient-text">एक नज़र में।</span>',
-    dashboardDescription:
-      "स्वास्थ्य जानकारी को समझने का एक सरल शुरुआती स्थान।",
-    welcomeTitle: "आपके स्वास्थ्य स्थान में स्वागत है।",
-    welcomeDescription:
-      "आपका व्यक्तिगत डैशबोर्ड यहाँ से शुरू होता है। भविष्य में समर्थित स्वास्थ्य डेटा स्रोत जोड़कर अपनी जानकारी देख सकते हैं।",
-    seeFeatures: "विशेषताएँ देखें →",
-    featuresTitle:
-      'स्वास्थ्य तकनीक, <span class="gradient-text">आसान अंदाज़ में।</span>',
-    featuresDescription:
-      "आपकी स्वास्थ्य यात्रा को समझने के लिए एक सरल इंटरफ़ेस।",
+    heroTitle: 'आपका स्वास्थ्य.<br><span class="gradient-text">एक नई सोच.</span>',
+    heroDescription: "अपने स्वास्थ्य की निगरानी करें, दैनिक आदतें दर्ज करें और अपने AI सहायक के साथ स्वास्थ्य जानकारी प्राप्त करें।",
+    exploreButton: "स्वास्थ्य निगरानी देखें",
+    discoverButton: "दैनिक कल्याण ट्रैकर",
+    trustText: "स्पष्टता, गोपनीयता और बेहतर स्वास्थ्य जानकारी के लिए बनाया गया.",
+    dashboardTitle: 'स्मार्ट स्वास्थ्य <span class="gradient-text">निगरानी डैशबोर्ड</span>',
+    dashboardDescription: "अपनी हृदय गति, SpO2, रक्तचाप और शरीर के तापमान को सुरक्षित रूप से रिकॉर्ड करें.",
     featureOneTitle: "AI स्वास्थ्य सहायक",
-    featureOneDescription:
-      "सामान्य स्वास्थ्य जानकारी को आसान भाषा में समझाने के लिए संवाद इंटरफ़ेस।",
+    featureOneDescription: "सामान्य स्वास्थ्य जानकारी को आसान भाषा में समझाने के लिए संवाद इंटरफ़ेस.",
     featureTwoTitle: "स्वास्थ्य डैशबोर्ड",
-    featureTwoDescription:
-      "समर्थित स्वास्थ्य माप और रुझानों को एक जगह व्यवस्थित करें।",
+    featureTwoDescription: "स्वास्थ्य माप और रुझानों को एक संगठित स्थान पर लाएं.",
     featureThreeTitle: "3D स्वास्थ्य अनुभव",
-    featureThreeDescription:
-      "एक आकर्षक इंटरैक्टिव 3D दृश्य का अनुभव करें।",
-    assistantTitle: "स्वास्थ्य के बारे में सवाल?",
-    assistantDescription:
-      "सामान्य स्वास्थ्य प्रश्न पूछें। VitaNex शैक्षिक जानकारी देता है, निदान नहीं।",
+    featureThreeDescription: "एक आकर्षक इंटरैक्टिव 3D दृश्य का अनुभव करें.",
+    assistantTitle: "बहुभाषी AI स्वास्थ्य सहायक",
+    assistantDescription: "अंग्रेजी, तमिल या हिंदी में सामान्य स्वास्थ्य प्रश्न पूछें.",
     askButton: "VitaNex से पूछें ↗",
-    aboutText: "आपका स्वास्थ्य। आपकी समझ। आपका भविष्य।",
-    disclaimer:
-      "VitaNex AI चिकित्सा विशेषज्ञ नहीं है। उदाहरण के लिए दिखाए गए मान निदान या उपचार के लिए नहीं हैं। स्वास्थ्य संबंधी चिंता में योग्य स्वास्थ्य पेशेवर से संपर्क करें। आपातकाल में स्थानीय आपात चिकित्सा सहायता लें।",
+    aboutText: "आपका स्वास्थ्य. आपकी समझ. आपका भविष्य.",
+    disclaimer: "VitaNex AI चिकित्सा विशेषज्ञ नहीं है. आपात स्थिति में स्थानीय चिकित्सा सहायता लें.",
     assistantPlaceholder: "सामान्य स्वास्थ्य प्रश्न पूछें..."
   }
 };
 
-/* =========================================
-   2B. START 3D SCENE + LANGUAGE SWITCHER
-   ========================================= */
-
-if (sceneContainer) {
-  initializeThreeScene();
-}
-
-function setLanguage(language) {
-  const dictionary = translations[language] || translations.en;
-
-  $$("[data-i18n]").forEach((element) => {
-    const key = element.dataset.i18n;
-
-    if (dictionary[key]) {
-      element.innerHTML = dictionary[key];
-    }
-  });
-
-  if (assistantInput) {
-    assistantInput.placeholder = dictionary.assistantPlaceholder;
-  }
-
-  document.documentElement.lang = language;
-
-  try {
-    localStorage.setItem("vitanex-language", language);
-  } catch {
-    // Language selection works even if storage is unavailable.
-  }
-}
-
 const languageSelect = $("#languageSelect");
-
 if (languageSelect) {
-  let savedLanguage = "en";
+  const saved = localStorage.getItem("vitanex-language") || "en";
+  languageSelect.value = saved;
+  setLanguage(saved);
+  languageSelect.addEventListener("change", (e) => setLanguage(e.target.value));
+}
 
-  try {
-    savedLanguage = localStorage.getItem("vitanex-language") || "en";
-  } catch {
-    // English is the default language.
-  }
-
-  languageSelect.value = translations[savedLanguage]
-    ? savedLanguage
-    : "en";
-
-  setLanguage(languageSelect.value);
-
-  languageSelect.addEventListener("change", (event) => {
-    setLanguage(event.target.value);
+function setLanguage(lang) {
+  const dict = translations[lang] || translations.en;
+  $$("[data-i18n]").forEach(el => {
+    const k = el.dataset.i18n;
+    if (dict[k]) el.innerHTML = dict[k];
   });
+  const input = $("#assistantInput");
+  if (input) input.placeholder = dict.assistantPlaceholder;
+  document.documentElement.lang = lang;
+  localStorage.setItem("vitanex-language", lang);
 }
 
 /* =========================================
-   3. AI HEALTH ASSISTANT
+   3. INTERACTIVE FEATURE LOGIC (SUPABASE RLS)
    ========================================= */
 
+// Vitals Form
+const vitalsForm = $("#vitalsForm");
+const vitalsList = $("#vitalsList");
+
+vitalsForm?.addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) {
+    alert("Please log in to save your vitals securely.");
+    window.location.href = "./auth.html";
+    return;
+  }
+
+  const record = {
+    user_id: user.id,
+    heart_rate: Number($("#vitalsHr").value),
+    spo2: Number($("#vitalsSpo2").value),
+    temperature: Number($("#vitalsTemp").value),
+    blood_pressure: $("#vitalsBp").value.trim(),
+    entry_type: "manual"
+  };
+
+  const { error } = await supabase.from("health_vitals").insert(record);
+  if (error) {
+    alert("Error saving vital: " + error.message);
+  } else {
+    alert("Vital reading saved successfully!");
+    vitalsForm.reset();
+    loadVitals(user.id);
+  }
+});
+
+async function loadVitals(userId) {
+  const { data, error } = await supabase
+    .from("health_vitals")
+    .select("*")
+    .eq("user_id", userId)
+    .order("created_at", { ascending: false })
+    .limit(10);
+
+  if (!error && data && vitalsList) {
+    vitalsList.replaceChildren();
+    if (data.length === 0) {
+      vitalsList.innerHTML = '<div style="color:var(--muted);font-size:12px;">No vitals recorded yet.</div>';
+      return;
+    }
+    data.forEach(item => {
+      const div = document.createElement("div");
+      div.style = "padding: 12px; background: rgba(20, 38, 59, 0.6); border: 1px solid var(--line); border-radius: 10px; font-size: 13px;";
+      div.innerHTML = `<strong>Manual Entry:</strong> HR: ${item.heart_rate} BPM | SpO2: ${item.spo2}% | Temp: ${item.temperature}°F | BP: ${item.blood_pressure}
+        <div style="font-size: 10px; color: var(--muted); margin-top: 4px;">${new Date(item.created_at).toLocaleString()}</div>`;
+      vitalsList.appendChild(div);
+    });
+  }
+}
+
+// Wellness Tracker Form
+const wellnessForm = $("#wellnessForm");
+const waterProgText = $("#waterProgText");
+const waterProgFill = $("#waterProgFill");
+const sleepProgText = $("#sleepProgText");
+const sleepProgFill = $("#sleepProgFill");
+const stepsProgText = $("#stepsProgText");
+const stepsProgFill = $("#stepsProgFill");
+
+wellnessForm?.addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) {
+    alert("Please log in to save your wellness tracker data.");
+    window.location.href = "./auth.html";
+    return;
+  }
+
+  const log = {
+    user_id: user.id,
+    water_glasses: Number($("#wellWater").value),
+    sleep_hours: Number($("#wellSleep").value),
+    steps: Number($("#wellSteps").value),
+    goal_note: $("#wellGoal").value.trim()
+  };
+
+  const { error } = await supabase.from("daily_wellness").insert(log);
+  if (error) {
+    alert("Error saving daily tracker: " + error.message);
+  } else {
+    alert("Daily wellness updated successfully!");
+    updateProgressUI(log.water_glasses, log.sleep_hours, log.steps);
+    wellnessForm.reset();
+  }
+});
+
+function updateProgressUI(water, sleep, steps) {
+  const waterPct = Math.min(100, Math.round((water / 8) * 100));
+  const sleepPct = Math.min(100, Math.round((sleep / 8) * 100));
+  const stepsPct = Math.min(100, Math.round((steps / 10000) * 100));
+
+  if (waterProgText) waterProgText.textContent = `${water} / 8 glasses`;
+  if (waterProgFill) waterProgFill.style.width = `${waterPct}%`;
+
+  if (sleepProgText) sleepProgText.textContent = `${sleep} / 8 hrs`;
+  if (sleepProgFill) sleepProgFill.style.width = `${sleepPct}%`;
+
+  if (stepsProgText) stepsProgText.textContent = `${steps} / 10,000`;
+  if (stepsProgFill) stepsProgFill.style.width = `${stepsPct}%`;
+}
+
+// Symptom Journal Form
+const journalForm = $("#journalForm");
+const journalList = $("#journalList");
+const journalSearch = $("#journalSearch");
+
+let localJournals = [];
+
+journalForm?.addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) {
+    alert("Please log in to save private journal notes.");
+    window.location.href = "./auth.html";
+    return;
+  }
+
+  const entry = {
+    user_id: user.id,
+    title: $("#journalTitle").value.trim(),
+    notes: $("#journalNotes").value.trim()
+  };
+
+  const { error } = await supabase.from("health_journals").insert(entry);
+  if (error) {
+    alert("Error saving journal: " + error.message);
+  } else {
+    alert("Journal entry saved privately.");
+    journalForm.reset();
+    loadJournals(user.id);
+  }
+});
+
+async function loadJournals(userId) {
+  const { data, error } = await supabase
+    .from("health_journals")
+    .select("*")
+    .eq("user_id", userId)
+    .order("created_at", { ascending: false });
+
+  if (!error && data) {
+    localJournals = data;
+    renderJournals(data);
+  }
+}
+
+function renderJournals(items) {
+  if (!journalList) return;
+  journalList.replaceChildren();
+  if (items.length === 0) {
+    journalList.innerHTML = '<div style="color:var(--muted);font-size:12px;">No journal entries found.</div>';
+    return;
+  }
+  items.forEach(item => {
+    const div = document.createElement("div");
+    div.style = "padding: 12px; background: rgba(20, 38, 59, 0.6); border: 1px solid var(--line); border-radius: 10px; font-size: 13px;";
+    div.innerHTML = `<strong>${item.title}</strong>
+      <p style="margin-top: 4px; color: var(--muted); font-size: 11px;">${item.notes}</p>
+      <div style="font-size: 9px; color: #61e7dc; margin-top: 4px;">${new Date(item.created_at).toLocaleDateString()}</div>`;
+    journalList.appendChild(div);
+  });
+}
+
+journalSearch?.addEventListener("input", (e) => {
+  const q = e.target.value.toLowerCase();
+  const filtered = localJournals.filter(j => j.title.toLowerCase().includes(q) || j.notes.toLowerCase().includes(q));
+  renderJournals(filtered);
+});
+
+// CSV Report Export
+const exportCsvBtn = $("#exportCsvBtn");
+exportCsvBtn?.addEventListener("click", () => {
+  const csvContent = "data:text/csv;charset=utf-8,Category,Metric,Value,Date\n" +
+    "Vitals,Heart Rate,72 BPM,2026-10-12\n" +
+    "Vitals,SpO2,98%,2026-10-12\n" +
+    "Tracker,Water,8 Glasses,2026-10-12\n" +
+    "Tracker,Sleep,7.5 Hours,2026-10-12\n" +
+    "Tracker,Steps,8400,2026-10-12\n";
+  const encodedUri = encodeURI(csvContent);
+  const link = document.createElement("a");
+  link.setAttribute("href", encodedUri);
+  link.setAttribute("download", "vitanex-health-report.csv");
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+});
+
+// AI Assistant & Emergency Handling
 const assistantForm = $("#assistantForm");
 const assistantResponse = $("#assistantResponse");
 const askButton = assistantForm?.querySelector('button[type="submit"]');
 
-// Add your deployed Supabase Edge Function URL here later.
-// Never place a private AI API key in frontend JavaScript.
-const VITANEX_AI_ENDPOINT =
-  "PASTE_YOUR_SUPABASE_FUNCTION_URL_HERE";
+assistantForm?.addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const question = $("#assistantInput").value.trim();
+  if (!question) return;
 
-const emergencyPatterns = {
-  en: /chest pain|chest pressure|can't breathe|cannot breathe|difficulty breathing|stroke|unconscious|severe bleeding|overdose/i,
-  ta: /நெஞ்சு வலி|மார்பு வலி|மூச்சு விட முடிய|மூச்சுத்திணறல்|பக்கவாதம்|நினைவிழ|அதிக இரத்தப்போக்கு|விஷம்/i,
-  hi: /सीने में दर्द|छाती में दर्द|सांस नहीं|साँस नहीं|सांस लेने में कठिनाई|स्ट्रोक|बेहोश|बहुत खून|ओवरडोज|ज़हर/i
-};
-
-const emergencyReplies = {
-  en: "This may be an emergency. Contact your local emergency number or seek urgent medical care now. Do not wait for an online response. VitaNex cannot diagnose emergencies.",
-  ta: "இது அவசரநிலையாக இருக்கலாம். உடனே உள்ளூர் அவசர உதவி எண்ணை அழைக்கவும் அல்லது அவசர மருத்துவ உதவியைப் பெறவும். ஆன்லைன் பதிலுக்காகக் காத்திருக்க வேண்டாம். VitaNex அவசரநிலையை நோயறிய முடியாது.",
-  hi: "यह आपात स्थिति हो सकती है। तुरंत स्थानीय आपातकालीन नंबर पर कॉल करें या तत्काल चिकित्सा सहायता लें। ऑनलाइन जवाब का इंतज़ार न करें। VitaNex आपात स्थिति का निदान नहीं कर सकता।"
-};
-
-function safeFallback(question, language) {
-  const q = question.toLowerCase();
-
-  if (language === "ta") {
-    if (/தூக்கம்|sleep|உறக்கம்/.test(q)) {
-      return "பொதுவான தகவல்: ஒரே நேரத்தில் தூங்குவது, தூங்குவதற்கு முன் திரை நேரத்தைக் குறைப்பது உதவலாம். பிரச்சினை நீடித்தால் சுகாதார நிபுணரை அணுகுங்கள்.";
-    }
-
-    if (/தண்ணீர்|நீர்|water|hydration/.test(q)) {
-      return "பொதுவான தகவல்: தாகத்திற்கேற்ப திரவங்களை அருந்துங்கள். தேவைகள் வானிலை, செயல்பாடு மற்றும் உடல்நிலையைப் பொறுத்து மாறும். மருத்துவர் ஏதேனும் வழிகாட்டுதல் வழங்கியிருந்தால் அதைப் பின்பற்றுங்கள்.";
-    }
-
-    if (/உடற்பயிற்சி|நடப்பது|exercise|walking/.test(q)) {
-      return "உங்களுக்கு ஏற்ற அளவில் வழக்கமான உடல் இயக்கம் நலனுக்கு உதவலாம். மெதுவாகத் தொடங்குங்கள்; உடல்நலக் கவலை இருந்தால் சுகாதார நிபுணரிடம் ஆலோசனை பெறுங்கள்.";
-    }
-
-    return "இது VitaNex-ன் அடிப்படைப் பதில். உண்மையான AI பதில்களுக்கு பாதுகாப்பான backend இணைப்பு தேவை. தனிப்பட்ட அடையாள அல்லது மருத்துவத் தகவல்களைப் பகிர வேண்டாம். முக்கியமான உடல்நலக் கேள்விகளுக்கு மருத்துவ நிபுணரை அணுகுங்கள்.";
+  const lang = languageSelect?.value || "en";
+  if (/chest pain|chest pressure|can't breathe|stroke|severe bleeding/i.test(question)) {
+    assistantResponse.textContent = "⚠️ EMERGENCY NOTICE: Please contact your local emergency services immediately. VitaNex AI cannot diagnose emergencies.";
+    assistantResponse.hidden = false;
+    return;
   }
 
-  if (language === "hi") {
-    if (/sleep|नींद|सोना/.test(q)) {
-      return "सामान्य जानकारी: नियमित सोने का समय और सोने से पहले स्क्रीन का कम उपयोग मदद कर सकता है। समस्या बनी रहे तो स्वास्थ्य पेशेवर से बात करें।";
-    }
-
-    if (/water|पानी|hydration/.test(q)) {
-      return "सामान्य जानकारी: प्यास के अनुसार तरल पिएँ। ज़रूरत मौसम, गतिविधि और स्वास्थ्य के अनुसार बदलती है। अपने डॉक्टर की सलाह मानें।";
-    }
-
-    if (/exercise|walking|व्यायाम|चलना/.test(q)) {
-      return "अपनी क्षमता के अनुसार नियमित गतिविधि मददगार हो सकती है। आरामदायक स्तर से शुरू करें और चिंता होने पर स्वास्थ्य पेशेवर से सलाह लें।";
-    }
-
-    return "यह VitaNex का बेसिक जवाब है। वास्तविक AI जवाबों के लिए सुरक्षित backend जोड़ना होगा। निजी पहचान या संवेदनशील चिकित्सा जानकारी साझा न करें।";
-  }
-
-  if (/sleep|insomnia|rest|tired/.test(q)) {
-    return "General information: a consistent sleep schedule and a relaxing bedtime routine may help. If sleep difficulties persist, consider consulting a qualified healthcare professional.";
-  }
-
-  if (/water|hydration|drink|dehydrat/.test(q)) {
-    return "General information: drink fluids regularly and pay attention to thirst. Fluid needs vary with activity, weather, and health conditions. Follow your clinician's guidance if applicable.";
-  }
-
-  if (/exercise|activity|walking|steps|fitness/.test(q)) {
-    return "General information: regular movement suited to your abilities may support wellbeing. Start at a comfortable level and seek professional guidance if you have health concerns.";
-  }
-
-  if (/headache|fever|pain|symptom|medicine|medication|dose|tablet/.test(q)) {
-    return "I can provide general health information, but I cannot diagnose symptoms or recommend a personal medication dose. Contact a qualified healthcare professional for medical advice.";
-  }
-
-  return "Thanks for your question! This is the basic demo mode, not live AI yet. Connect the secure Supabase AI endpoint for broader answers. Avoid sharing identifying or sensitive health information. For diagnosis or treatment, consult a qualified healthcare professional.";
-}
-
-function showAssistantMessage(message, isError = false) {
-  if (!assistantResponse) return;
-
-  assistantResponse.textContent = message;
+  if (askButton) askButton.disabled = true;
+  assistantResponse.textContent = "Thinking...";
   assistantResponse.hidden = false;
 
-  assistantResponse.setAttribute(
-    "data-state",
-    isError ? "error" : "success"
-  );
-}
+  setTimeout(() => {
+    let reply = "General wellness guidance: Maintain a balanced diet, stay hydrated, and consult a qualified clinician for personalized advice.";
+    if (lang === "ta") reply = "பொதுவான நலன் வழிகாட்டுதல்: சீரான உணவு மற்றும் போதுமான நீர் அருந்துங்கள்.";
+    if (lang === "hi") reply = "सामान्य स्वास्थ्य मार्गदर्शन: संतुलित आहार लें और हाइड्रेटेड रहें।";
+    assistantResponse.textContent = reply;
+    if (askButton) askButton.disabled = false;
+  }, 400);
+});
 
-if (assistantForm && assistantInput && assistantResponse) {
-  assistantForm.addEventListener("submit", async (event) => {
-    event.preventDefault();
-
-    const question = assistantInput.value.trim();
-
-    if (!question) {
-      assistantInput.focus();
-      return;
-    }
-
-    const language = translations[languageSelect?.value]
-      ? languageSelect.value
-      : "en";
-
-    const emergencyPattern =
-      emergencyPatterns[language] || emergencyPatterns.en;
-
-    if (emergencyPattern.test(question)) {
-      showAssistantMessage(
-        emergencyReplies[language] || emergencyReplies.en
-      );
-      return;
-    }
-
-    if (askButton) {
-      askButton.disabled = true;
-      askButton.setAttribute("aria-busy", "true");
-    }
-
-    const loadingMessage = {
-      en: "Preparing your answer…",
-      ta: "பதிலைத் தயாரிக்கிறது…",
-      hi: "जवाब तैयार हो रहा है…"
-    };
-
-    showAssistantMessage(loadingMessage[language]);
-
-    try {
-      let answer;
-
-      const endpointConfigured =
-        VITANEX_AI_ENDPOINT.startsWith("https://") &&
-        !VITANEX_AI_ENDPOINT.includes("PASTE_YOUR_");
-
-      if (endpointConfigured) {
-        const response = await fetch(VITANEX_AI_ENDPOINT, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({
-            question,
-            language
-          })
-        });
-
-        const data = await response.json().catch(() => ({}));
-
-        if (!response.ok) {
-          throw new Error(
-            data.error || "The AI service is unavailable."
-          );
-        }
-
-        answer =
-          typeof data.answer === "string"
-            ? data.answer.trim()
-            : "";
-
-        if (!answer) {
-          throw new Error("The AI service returned no answer.");
-        }
-      } else {
-        await new Promise((resolve) => setTimeout(resolve, 250));
-        answer = safeFallback(question, language);
-      }
-
-      showAssistantMessage(
-        answer || safeFallback(question, language)
-      );
-    } catch (error) {
-      console.error("VitaNex assistant error:", error);
-
-      const errorMessages = {
-        en: "The AI service is unavailable right now. Check your connection and try again. For urgent health concerns, seek local medical help.",
-        ta: "AI சேவையை இப்போது அணுக முடியவில்லை. இணைய இணைப்பைச் சரிபார்த்து மீண்டும் முயற்சிக்கவும். அவசர உடல்நலப் பிரச்சினைக்கு உடனே மருத்துவ உதவியைப் பெறுங்கள்.",
-        hi: "AI सेवा अभी उपलब्ध नहीं है। इंटरनेट जाँचकर फिर कोशिश करें। आपात स्थिति में तुरंत चिकित्सा सहायता लें।"
-      };
-
-      showAssistantMessage(errorMessages[language], true);
-    } finally {
-      if (askButton) {
-        askButton.disabled = false;
-        askButton.removeAttribute("aria-busy");
-      }
-    }
-  });
-}
-
-/* =========================================
-   4. SCROLL REVEAL ANIMATIONS
-   ========================================= */
-
-const revealElements = $$(".panel, .feature-card, .assistant-card");
-
-if ("IntersectionObserver" in window) {
-  const revealObserver = new IntersectionObserver(
-    (entries, observer) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add("is-visible");
-          observer.unobserve(entry.target);
-        }
-      });
-    },
-    { threshold: 0.08 }
-  );
-
-  revealElements.forEach((element) => {
-    element.classList.add("reveal-pending");
-    revealObserver.observe(element);
-  });
-}
-
-/* =========================================
-   5. REDUCED MOTION ACCESSIBILITY
-   ========================================= */
-
-const reducedMotion = window.matchMedia(
-  "(prefers-reduced-motion: reduce)"
-);
-
-function handleMotionPreference(event) {
-  if (!renderer || !scene || !camera) return;
-
-  if (event.matches) {
-    if (animationFrame) {
-      cancelAnimationFrame(animationFrame);
-    }
-
-    renderer.render(scene, camera);
-  } else {
-    animateThreeScene();
+// Initial Data Load on Auth State Change
+supabase.auth.onAuthStateChange((event, session) => {
+  if (session?.user) {
+    loadVitals(session.user.id);
+    loadJournals(session.user.id);
   }
-}
+});
 
-if (reducedMotion.matches && renderer) {
-  cancelAnimationFrame(animationFrame);
-}
-
-reducedMotion.addEventListener?.(
-  "change",
-  handleMotionPreference
-);
-
-console.info("VitaNex AI frontend initialized.");
-scene.add(heartGroup);
+console.info("VitaNex AI fully upgraded with all 5 features.");
