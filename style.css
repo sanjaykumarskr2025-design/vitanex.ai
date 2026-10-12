@@ -1,11 +1,11 @@
 /* =========================================
-   VITANEX.AI — PREMIUM CLEAN CLINICAL LIGHT & MODERN MEDICAL THEME
+   VITANEX.AI — HEARTBLOOM V2 CARDIOLOGY THEME
    ========================================= */
 
 :root {
   --bg: #f8fafc;
   --bg-card: #ffffff;
-  --bg-glass: rgba(255, 255, 255, 0.92);
+  --bg-glass: rgba(255, 255, 255, 0.95);
   --sidebar-bg: #0f172a;
   --sidebar-text: #94a3b8;
   --sidebar-hover: #1e293b;
@@ -197,7 +197,7 @@ body {
 
 .hero-visual-card {
   position: relative;
-  background: var(--bg-card);
+  background: #0f172a;
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-card);
@@ -215,7 +215,7 @@ body {
   gap: 10px;
   font-size: 11px;
   font-weight: 700;
-  color: var(--accent-blue);
+  color: #38bdf8;
   letter-spacing: 1px;
 }
 
@@ -234,15 +234,29 @@ body {
   100% { transform: scale(1); opacity: 1; }
 }
 
-#scene-container { width: 100%; height: 100%; }
+#scene-container { width: 100%; height: 100%; background: #0f172a; }
 
 .scene-fallback {
   position: absolute;
   inset: 0;
   display: grid;
   place-items: center;
-  font-size: 56px;
+  font-size: 72px;
   color: var(--accent-rose);
+  background: #0f172a;
+}
+
+.fallback-core {
+  animation: heartbeatPulse 1.2s ease-in-out infinite;
+}
+
+@keyframes heartbeatPulse {
+  0% { transform: scale(1); }
+  15% { transform: scale(1.25); }
+  30% { transform: scale(1); }
+  45% { transform: scale(1.15); }
+  60% { transform: scale(1); }
+  100% { transform: scale(1); }
 }
 
 .visual-caption {
@@ -252,7 +266,7 @@ body {
   font-size: 10px;
   font-weight: 700;
   letter-spacing: 1.5px;
-  color: var(--text-muted);
+  color: #94a3b8;
 }
 
 /* Dashboard Panels & Health Risk Cards */
@@ -334,6 +348,7 @@ body {
   cursor: pointer;
   box-shadow: 0 4px 14px rgba(37, 99, 235, 0.3);
   transition: all 0.2s ease;
+  text-decoration: none;
 }
 
 .button:hover {

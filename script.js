@@ -1,5 +1,10 @@
+// =========================================
+// VITANEX.AI — HEARTBLOOM V2 & CLINICAL SUITE SCRIPT
+// =========================================
+
 import { supabase } from "./supabase.js";
 import * as THREE from "three";
+import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 
 const $ = (s) => document.querySelector(s);
 const $$ = (s) => document.querySelectorAll(s);
@@ -130,7 +135,7 @@ function initCardiologyScene() {
     const geo = createAnatomicalHeartGeometry();
 
     const mat = new THREE.MeshPhysicalMaterial({
-      color: 0xef4444,
+      color: 0xf43f5e,
       roughness: 0.2,
       metalness: 0.1,
       clearcoat: 1.0,
