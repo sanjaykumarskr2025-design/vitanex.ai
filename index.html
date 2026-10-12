@@ -28,7 +28,8 @@
       <!-- Top Reference Navigation Tabs Bar -->
       <header class="topbar-ref">
         <div class="topbar-ref-tabs">
-          <a href="#dashboard" class="ref-tab active" data-switch="dashboard">📊 Dashboard</a>
+          <a href="#home" class="ref-tab active" data-switch="home">🏠 Home & Body Map</a>
+          <a href="#dashboard" class="ref-tab" data-switch="dashboard">📊 Dashboard</a>
           <a href="#vitals" class="ref-tab" data-switch="vitals">🩺 Health Monitoring</a>
           <a href="#tracker" class="ref-tab" data-switch="tracker">🎯 Fitness & Goals</a>
           <a href="#diet" class="ref-tab" data-switch="diet">🥗 Diet Plan</a>
@@ -49,8 +50,8 @@
         </div>
       </header>
 
-      <!-- VIEW 1: DASHBOARD (Personal Health Dashboard with 3D Organ & Biometric Body Map) -->
-      <section id="view-dashboard" class="view-section active">
+      <!-- VIEW 0: HOME (Personal Health Dashboard with Interactive Body Map & Organ Biometrics) -->
+      <section id="view-home" class="view-section active">
         <div class="patient-metric-bar">
           <div class="metric-pill">
             <span class="label">MRN / Patient ID</span>
@@ -79,10 +80,11 @@
           <div class="panel" style="display: flex; flex-direction: column; justify-content: space-between; background: linear-gradient(135deg, rgba(11,19,41,0.9), rgba(3,7,18,0.95)); border: 1px solid rgba(56,189,248,0.2);">
             <div>
               <div class="panel-topline">
-                <span class="panel-label">BIOMETRIC BODY MAP & ORGANS</span>
+                <span class="panel-label">PERSONAL HEALTH BODY MAP & ORGANS</span>
                 <span class="demo-badge">Active Scan</span>
               </div>
-              <h2 style="font-family: var(--font-display); font-size: 22px; margin-bottom: 16px; color: #fff;">Interactive Organ Telemetry</h2>
+              <h2 style="font-family: var(--font-display); font-size: 22px; margin-bottom: 16px; color: #fff;">Interactive Organ Biometrics</h2>
+              <p class="muted" style="margin-bottom: 20px;">Select any anatomical region or organ telemetry metric for instant clinical diagnostics and trend analysis.</p>
 
               <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 20px;">
                 <div style="padding: 14px; background: rgba(56,189,248,0.05); border: 1px solid rgba(56,189,248,0.2); border-radius: var(--radius-sm); cursor: pointer; transition: 0.2s;" onclick="alert('❤️ Cardiovascular System: Heart Rate 75 BPM, BP 120/80 mmHg. Optimal status.')">
@@ -105,8 +107,8 @@
             </div>
 
             <div class="hero-btns" style="display: flex; gap: 12px;">
-              <a href="#reports" class="button" data-switch="reports" style="flex: 1;">Health Reports ↗</a>
-              <a href="#vitals" class="button button-outline" data-switch="vitals" style="flex: 1;">Record Vitals →</a>
+              <a href="#dashboard" class="button" data-switch="dashboard" style="flex: 1;">Open Dashboard ↗</a>
+              <a href="#reports" class="button button-outline" data-switch="reports" style="flex: 1;">Health Reports →</a>
             </div>
           </div>
 
@@ -120,8 +122,45 @@
                 <div class="fallback-core">♥</div>
               </div>
             </div>
-            <div class="visual-caption">VITANEX.AI BIOMETRIC SUITE</div>
+            <div class="visual-caption">vitanex.ai PERSONAL HEALTH BODY MAP</div>
           </div>
+        </div>
+      </section>
+
+      <!-- VIEW 1: DASHBOARD -->
+      <section id="view-dashboard" class="view-section">
+        <div class="section-heading">
+          <div>
+            <div class="eyebrow"><span class="status-dot"></span> ANALYTICS</div>
+            <h2>Cardiology & Heart Health <span class="gradient-text">Dashboard</span></h2>
+            <p>Real-time cardiology situational awareness & patient care suite.</p>
+          </div>
+          <span class="demo-badge">CLINICAL SUITE</span>
+        </div>
+
+        <div class="dashboard-grid">
+          <article class="panel">
+            <div class="panel-topline">
+              <span class="panel-label">HEALTH REPORTS & LABS HUB</span>
+              <span class="panel-icon">📋</span>
+            </div>
+            <h3>Organize & Explain Medical Terminology</h3>
+            <p class="muted" style="margin-bottom: 15px;">Unified clinical archive for lipid panels, blood chemistry, and imaging results.</p>
+            <div style="display: flex; gap: 12px;">
+              <a href="#reports" class="button" data-switch="reports">Open Health Reports Tab ↗</a>
+              <a href="#assistant" class="button button-outline" data-switch="assistant">Ask AI Terminology →</a>
+            </div>
+          </article>
+
+          <article class="panel">
+            <div class="panel-topline">
+              <span class="panel-label">VITAL SIGNS SUMMARY</span>
+              <span class="panel-icon">🩺</span>
+            </div>
+            <h3>Real-time Biometric Overview</h3>
+            <p class="muted" style="margin-bottom: 15px;">Heart Rate: 75 BPM | SpO2: 98% | BP: 120/80 mmHg | Temp: 98.6°F</p>
+            <a href="#vitals" class="button button-outline" data-switch="vitals">Open Health Monitoring →</a>
+          </article>
         </div>
       </section>
 
