@@ -14,59 +14,50 @@ if (yearEl) yearEl.textContent = new Date().getFullYear();
 // =========================================
 // NAVIGATION & VIEW ROUTING (ROBUST TAB SWITCHING)
 // =========================================
-const navItems = $$(".ref-tab, .sidebar-nav .nav-item");
-const viewSections = $$(".view-section");
+document.addEventListener("DOMContentLoaded", () => {
+  const navItems = $$(".ref-tab, [data-switch], [data-target]");
+  const viewSections = $$(".view-section");
 
-const titles = {
-  home: { title: "vitanex.ai Personal Health Dashboard", sub: "Interactive biometric body map and organ telemetry overview." },
-  dashboard: { title: "Cardiology & Heart Health Dashboard", sub: "Real-time cardiology situational awareness & patient care suite." },
-  vitals: { title: "Health Monitoring & Vitals", sub: "Record heart rate, SpO2, blood pressure, and temperature." },
-  tracker: { title: "Fitness Tracking & Wellness Goals", sub: "Monitor water intake, sleep quality, daily steps, and physical activity." },
-  diet: { title: "Personalized Diet & Nutrition Plan", sub: "Tailored meal ideas based on user preferences and clinical safety limits." },
-  reports: { title: "Health Reports & Medical Terminology Hub", sub: "Organize lab reports, explain medical jargon, and display trends." },
-  meds: { title: "Medication Reminders & Prescriptions", sub: "Enter schedules and track acknowledgments without changing doses." },
-  journal: { title: "Symptom & Health Journal", sub: "Private encrypted logs for symptoms, palpitations, or chest discomfort notes." },
-  assistant: { title: "vitanex.ai Clinical AI Assistant", sub: "Ask healthcare questions with Google Answer grounding and chat history." }
-};
+  function switchView(target) {
+    if (!target) return;
 
-function switchView(target) {
-  if (!target) return;
+    navItems.forEach(item => {
+      const t = item.dataset.switch || item.dataset.target || item.getAttribute("href")?.replace("#", "");
+      if (t === target) {
+        item.classList.add("active");
+        if (item.classList.contains("ref-tab")) {
+          item.classList.add("active-pill");
+        }
+      } else {
+        item.classList.remove("active", "active-pill");
+      }
+    });
+
+    viewSections.forEach(sec => {
+      if (sec.id === `view-${target}`) {
+        sec.classList.add("active");
+      } else {
+        sec.classList.remove("active");
+      }
+    });
+
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
 
   navItems.forEach(item => {
-    const t = item.dataset.switch || item.dataset.target || item.getAttribute("href")?.replace("#", "");
-    if (t === target) {
-      item.classList.add("active");
-    } else {
-      item.classList.remove("active");
-    }
+    item.addEventListener("click", (e) => {
+      e.preventDefault();
+      const target = item.dataset.switch || item.dataset.target || item.getAttribute("href")?.replace("#", "");
+      if (target) {
+        switchView(target);
+        window.location.hash = target;
+      }
+    });
   });
 
-  viewSections.forEach(sec => {
-    if (sec.id === `view-${target}`) {
-      sec.classList.add("active");
-    } else {
-      sec.classList.remove("active");
-    }
-  });
-
-  window.scrollTo({ top: 0, behavior: "smooth" });
-}
-
-navItems.forEach(item => {
-  item.addEventListener("click", (e) => {
-    e.preventDefault();
-    const target = item.dataset.switch || item.dataset.target || item.getAttribute("href")?.replace("#", "");
-    if (target) {
-      switchView(target);
-      window.location.hash = target;
-    }
-  });
-});
-
-window.addEventListener("DOMContentLoaded", () => {
-  const hash = window.location.hash.replace("#", "");
-  if (titles[hash]) {
-    switchView(hash);
+  const initialHash = window.location.hash.replace("#", "");
+  if (initialHash && document.getElementById(`view-${initialHash}`)) {
+    switchView(initialHash);
   } else {
     switchView("home");
   }
