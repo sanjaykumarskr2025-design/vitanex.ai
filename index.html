@@ -3,13 +3,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#f4f8fb">
+  <meta name="theme-color" content="#f8fafc">
   <meta name="description" content="VitaNex AI — HeartBloom Cardiology & Health Intelligence Dashboard.">
   <title>VitaNex AI | HeartBloom Cardiology Suite</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 
   <script type="importmap">
@@ -78,11 +78,35 @@
 
       <!-- VIEW 1: DASHBOARD (Home) -->
       <section id="view-dashboard" class="view-section active">
+        <!-- Patient Top Metric Bar (Reference UI style) -->
+        <div class="patient-metric-bar">
+          <div class="metric-pill">
+            <span class="label">MRN / Patient ID</span>
+            <span class="val" style="font-size: 15px;"># 20345678</span>
+          </div>
+          <div class="metric-pill">
+            <span class="label">Biological Age</span>
+            <span class="val">47 <span style="font-size: 12px; font-weight: normal; color:var(--text-muted);">yrs</span></span>
+          </div>
+          <div class="metric-pill">
+            <span class="label">Biological Sex</span>
+            <span class="val" style="font-size: 15px;">Male ♂</span>
+          </div>
+          <div class="metric-pill">
+            <span class="label">Weight</span>
+            <span class="val">97.5 <span style="font-size: 12px; font-weight: normal; color:var(--text-muted);">kg</span> <span class="tag-delta">+1.5 kg</span></span>
+          </div>
+          <div class="metric-pill">
+            <span class="label">Recent Actions</span>
+            <span class="val" style="font-size: 12px; font-weight: 500;">CoQ10, Omega-3</span>
+          </div>
+        </div>
+
         <div class="hero-card-grid">
           <div class="hero-banner">
-            <div class="eyebrow"><span class="status-dot"></span> HEARTBLOOM V2 CARDIOLOGY SUITE</div>
+            <div class="eyebrow"><span class="status-dot"></span> REAL-TIME DATA MONITORING</div>
             <h2>Comprehensive <span class="gradient-text">Heart Health</span> Intelligence.</h2>
-            <p>Every widget is structured to give cardiologists and care teams instant situational awareness with live telemetry and ECG analytics.</p>
+            <p>Live telemetry from Apple Watch, clinical ECG sensors, and biomarker risk assessments providing instant cardiology situational awareness.</p>
             <div class="hero-btns">
               <a href="#vitals" class="button" data-switch="vitals">Open Heart Monitor ↗</a>
               <a href="#tracker" class="button button-outline" data-switch="tracker">View Daily Tracker →</a>
@@ -92,37 +116,58 @@
           <!-- HeartBloom 3D Realistic Cardiology Organ Visualization -->
           <div class="hero-visual-card">
             <div class="visual-label">
-              <span class="live-dot"></span> HEARTBLOOM 3D ECG ENGINE
+              <span class="live-dot"></span> 3D CARDIOVASCULAR ANATOMY & ECG ENGINE
             </div>
             <div id="scene-container">
               <div class="scene-fallback" id="sceneFallback">
                 <div class="fallback-core">♥</div>
               </div>
             </div>
-            <div class="visual-caption">3D CARDIAC ANATOMY & LIVE RHYTHM</div>
+            <div class="visual-caption">LIVE 3D ORGAN TELEMETRY</div>
           </div>
         </div>
 
-        <!-- Quick Summary Widgets -->
+        <!-- Health Risks & Biomarker Panels (Reference UI style) -->
         <div class="dashboard-grid" style="margin-top: 30px;">
           <article class="panel">
             <div class="panel-topline">
-              <span class="panel-label">MEAN ARTERIAL PRESSURE</span>
-              <span class="panel-icon">📈</span>
+              <span class="panel-label">HEALTH RISKS & CONDITIONS</span>
+              <span class="panel-icon">⚠️</span>
             </div>
-            <h3>98 mmHg</h3>
-            <p class="muted">Stable systemic vascular resistance.</p>
-            <div class="progress-track" style="margin-top:15px;"><div class="progress-fill" style="width:75%"></div></div>
+            <h3>Cardiovascular Health Report</h3>
+            <p class="muted" style="margin-bottom: 12px;">Score: <strong>47 / 100</strong> (Moderate risk requiring lifestyle management)</p>
+            <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 20px;">
+              <span style="font-size: 11px; padding: 4px 10px; background: #fee2e2; color: #991b1b; border-radius: 6px; font-weight:600;">■ Hypertension</span>
+              <span style="font-size: 11px; padding: 4px 10px; background: #fef3c7; color: #92400e; border-radius: 6px; font-weight:600;">■ Coronary Artery Disease</span>
+              <span style="font-size: 11px; padding: 4px 10px; background: #fef3c7; color: #92400e; border-radius: 6px; font-weight:600;">■ Heart Failure Risk</span>
+            </div>
+            <div class="progress-track"><div class="progress-fill" style="width:47%; background: linear-gradient(90deg, #f59e0b, #ef4444);"></div></div>
           </article>
 
           <article class="panel">
             <div class="panel-topline">
-              <span class="panel-label">CARDIAC OUTPUT</span>
-              <span class="panel-icon">🫀</span>
+              <span class="panel-label">BIOMARKERS & METRICS</span>
+              <span class="panel-icon">🩸</span>
             </div>
-            <h3>5.2 L / min</h3>
-            <p class="muted">Optimal left ventricular ejection flow.</p>
-            <div class="progress-track" style="margin-top:15px;"><div class="progress-fill" style="width:88%"></div></div>
+            <h3>Blood Panel & Lipids</h3>
+            <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-top: 15px;">
+              <div style="padding: 12px; background: #f8fafc; border: 1px solid var(--border); border-radius: var(--radius-sm);">
+                <span style="font-size: 11px; color: var(--text-muted);">HbA1c</span>
+                <div style="font-family: var(--font-display); font-size: 16px; font-weight: 700; margin-top: 2px;">3.1 % <span style="font-size: 10px; color: #16a34a; float: right;">Optimal</span></div>
+              </div>
+              <div style="padding: 12px; background: #f8fafc; border: 1px solid var(--border); border-radius: var(--radius-sm);">
+                <span style="font-size: 11px; color: var(--text-muted);">APOB</span>
+                <div style="font-family: var(--font-display); font-size: 16px; font-weight: 700; margin-top: 2px;">Detected <span style="font-size: 10px; color: #d97706; float: right;">rs934197</span></div>
+              </div>
+              <div style="padding: 12px; background: #f8fafc; border: 1px solid var(--border); border-radius: var(--radius-sm);">
+                <span style="font-size: 11px; color: var(--text-muted);">VLDL</span>
+                <div style="font-family: var(--font-display); font-size: 16px; font-weight: 700; margin-top: 2px;">27 mg/dL <span style="font-size: 10px; color: #d97706; float: right;">Suboptimal</span></div>
+              </div>
+              <div style="padding: 12px; background: #f8fafc; border: 1px solid var(--border); border-radius: var(--radius-sm);">
+                <span style="font-size: 11px; color: var(--text-muted);">MCH</span>
+                <div style="font-family: var(--font-display); font-size: 16px; font-weight: 700; margin-top: 2px;">12.3 pg/cell <span style="font-size: 10px; color: #d97706; float: right;">Suboptimal</span></div>
+              </div>
+            </div>
           </article>
         </div>
       </section>
@@ -308,8 +353,8 @@
       <section id="view-assistant" class="view-section">
         <div class="assistant-card" style="margin-top: 20px;">
           <div class="eyebrow"><span class="status-dot"></span> FEATURE 4 & 5</div>
-          <h2>HeartBloom AI Cardiology Assistant</h2>
-          <p>Ask cardiology and wellness questions in English, Tamil (தமிழ்), or Hindi (हिन्दी). Download CSV health reports for your care team.</p>
+          <h2>HeartBloom Gemini AI Cardiology Assistant</h2>
+          <p>Ask cardiology and wellness questions in English, Tamil (தமிழ்), or Hindi (हिन्दी). Powered by Google Gemini AI.</p>
 
           <form id="assistantForm" class="assistant-form" style="margin-top: 25px;">
             <input id="assistantInput" type="text" placeholder="Ask a cardiology or health question..." required>
