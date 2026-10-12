@@ -671,4 +671,28 @@ reducedMotion.addEventListener?.(
   handleMotionPreference
 );
 
-console.info("VitaNex AI frontend initialized.");
+console.info("VitaNex AI frontend initialized.");                                                                                                        
+
+/* VitaNex feature-card click support */
+document.querySelectorAll(".feature-card").forEach((card) => {
+  const link = card.querySelector(".feature-link");
+
+  if (!link) return;
+
+  card.style.cursor = "pointer";
+
+  card.addEventListener("click", (event) => {
+    if (event.target.closest("a")) return;
+    window.location.hash = link.getAttribute("href");
+  });
+
+  card.setAttribute("tabindex", "0");
+  card.setAttribute("role", "link");
+
+  card.addEventListener("keydown", (event) => {
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      link.click();
+    }
+  });
+});
