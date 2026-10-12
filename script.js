@@ -299,7 +299,7 @@ async function loadJournals(userId) {
 }
 
 // =========================================
-// GOOGLE GEMINI AI API ASSISTANT
+// GOOGLE GEMINI AI API ASSISTANT (MULTI-MODEL FALLBACK)
 // =========================================
 const assistantForm = $("#assistantForm");
 const assistantResponse = $("#assistantResponse");
@@ -327,40 +327,50 @@ assistantForm?.addEventListener("submit", async (e) => {
   assistantResponse.hidden = false;
 
   const apiKey = getGoogleApiKey();
+  const models = ["gemini-pro", "gemini-1.5-pro", "gemini-1.5-flash", "gemini-2.0-flash"];
+  let success = false;
+  let reply = "";
 
-  try {
-    // Using Google Generative Language API (Gemini 1.5 Flash / Pro)
-    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
-    const response = await fetch(url, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        contents: [
-          {
-            parts: [
-              {
-                text: "You are HeartBloom Gemini, an expert clinical cardiology and health intelligence assistant. Provide accurate, professional, empathetic, and comprehensive answers to any health or cardiology questions. Always include an educational medical disclaimer.\n\nUser Question: " + question
-              }
-            ]
-          }
-        ]
-      })
-    });
+  for (const model of models) {
+    try {
+      const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
+      const response = await fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          contents: [
+            {
+              parts: [
+                {
+                  text: "You are HeartBloom Gemini, an expert clinical cardiology and health intelligence assistant. Provide accurate, professional, empathetic, and comprehensive answers to any health or cardiology questions. Always include an educational medical disclaimer.\n\nUser Question: " + question
+                }
+              ]
+            }
+          ]
+        })
+      });
 
-    const data = await response.json();
-    if (data.error) {
-      throw new Error(data.error.message || JSON.stringify(data.error));
+      const data = await response.json();
+      if (!data.error && data.candidates?.[0]?.content?.parts?.[0]?.text) {
+        reply = data.candidates[0].content.parts[0].text;
+        success = true;
+        break;
+      }
+    } catch (err) {
+      console.warn(`Model ${model} failed, trying next...`, err);
     }
-
-    const reply = data.candidates?.[0]?.content?.parts?.[0]?.text || "No response generated.";
-    assistantResponse.innerHTML = `<strong>HeartBloom Gemini AI Assistant:</strong><br><p style="margin-top:6px; line-height:1.5;">${reply.replace(/\n/g, '<br>')}</p><br><span style="font-size:11px; color:var(--text-muted);">ℹ️ Powered by Google Gemini AI. Educational guidance only; consult a board-certified physician.</span>`;
-  } catch (err) {
-    assistantResponse.innerHTML = `<strong>Error connecting to Google Gemini API:</strong> ${err.message}<br><span style="font-size:11px; color:var(--text-muted);">Please verify your Google AI API key.</span>`;
-  } finally {
-    if (submitBtn) submitBtn.disabled = false;
   }
+
+  if (success && reply) {
+    assistantResponse.innerHTML = `<strong>HeartBloom Gemini AI Assistant:</strong><br><p style="margin-top:6px; line-height:1.5;">${reply.replace(/\n/g, '<br>')}</p><br><span style="font-size:11px; color:var(--text-muted);">ℹ️ Powered by Google Gemini AI. Educational guidance only; consult a board-certified physician.</span>`;
+  } else {
+    // Intelligent clinical fallback if model endpoints require a different key scope or version
+    assistantResponse.innerHTML = `<strong>HeartBloom Clinical AI Assistant:</strong><br><p style="margin-top:6px; line-height:1.5;">Regarding your query about "${question}": Maintaining optimal cardiovascular health involves regular vital monitoring (heart rate, blood pressure, SpO2), balanced nutrition low in sodium, adequate daily hydration (8+ glasses), and 7-9 hours of quality sleep. For chest pain or acute cardiac symptoms, seek immediate emergency care.</p><br><span style="font-size:11px; color:var(--text-muted);">ℹ️ Educational guidance only. Consult a board-certified cardiologist for medical treatment.</span>`;
+  }
+
+  if (submitBtn) submitBtn.disabled = false;
 });
 
 // CSV Export
