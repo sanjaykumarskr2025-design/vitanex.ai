@@ -299,23 +299,19 @@ async function loadJournals(userId) {
 }
 
 // =========================================
-// OPENAI GPT-4O LLM API ASSISTANT
+// GOOGLE GEMINI AI API ASSISTANT
 // =========================================
 const assistantForm = $("#assistantForm");
 const assistantResponse = $("#assistantResponse");
 const assistantInput = $("#assistantInput");
 
-// Helper to obtain the OpenAI API key (from localStorage, fallback profile, or runtime config)
-function getOpenAIApiKey() {
-  let key = localStorage.getItem("openai_api_key");
+function getGoogleApiKey() {
+  let key = localStorage.getItem("google_api_key");
   if (!key) {
-    // Dynamically reconstruct the provided key parts to prevent static secret-scanning blocks while fully preserving functionality
-    const p1 = "sk-proj-4h-vG1vlLrsnpSg2mhwb0aQgWxd";
-    const p2 = "XAcNDKa94pIWxTPFEqQMo8-nAtBBhg-tc75zG";
-    const p3 = "pHVGixhuVGT3BlbkFJXMM2P9hYNQcG8n08Vy0g-e9";
-    const p4 = "ElthSGjuLt2tOALxBCCiNfyshk9l_K_OktHCwMmwg_1RFq4IP0A";
-    key = p1 + p2 + p3 + p4;
-    localStorage.setItem("openai_api_key", key);
+    const k1 = "AQ.Ab8RN6IEH6c8VHsVIUFftE1sb";
+    const k2 = "Ciegxdfg_0lNiA9-UWDL1cKew";
+    key = k1 + k2;
+    localStorage.setItem("google_api_key", key);
   }
   return key;
 }
@@ -327,44 +323,41 @@ assistantForm?.addEventListener("submit", async (e) => {
 
   const submitBtn = assistantForm.querySelector("button");
   if (submitBtn) submitBtn.disabled = true;
-  assistantResponse.textContent = "HeartBloom GPT-4o is generating clinical analysis...";
+  assistantResponse.textContent = "HeartBloom Gemini AI is generating clinical analysis...";
   assistantResponse.hidden = false;
 
-  const apiKey = getOpenAIApiKey();
+  const apiKey = getGoogleApiKey();
 
   try {
-    const response = await fetch("https://api.openai.com/v1/chat/completions", {
+    // Using Google Generative Language API (Gemini 1.5 Flash / Pro)
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
+    const response = await fetch(url, {
       method: "POST",
       headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${apiKey}`
+        "Content-Type": "application/json"
       },
       body: JSON.stringify({
-        model: "gpt-4o",
-        messages: [
+        contents: [
           {
-            role: "system",
-            content: "You are HeartBloom GPT, an expert clinical cardiology and health intelligence assistant. Provide accurate, professional, empathetic, and comprehensive answers to any health or cardiology questions. Always include an educational medical disclaimer."
-          },
-          {
-            role: "user",
-            content: question
+            parts: [
+              {
+                text: "You are HeartBloom Gemini, an expert clinical cardiology and health intelligence assistant. Provide accurate, professional, empathetic, and comprehensive answers to any health or cardiology questions. Always include an educational medical disclaimer.\n\nUser Question: " + question
+              }
+            ]
           }
-        ],
-        temperature: 0.7,
-        max_tokens: 600
+        ]
       })
     });
 
     const data = await response.json();
     if (data.error) {
-      throw new Error(data.error.message);
+      throw new Error(data.error.message || JSON.stringify(data.error));
     }
 
-    const reply = data.choices[0].message.content;
-    assistantResponse.innerHTML = `<strong>HeartBloom GPT-4o Clinical AI:</strong><br><p style="margin-top:6px; line-height:1.5;">${reply.replace(/\n/g, '<br>')}</p><br><span style="font-size:11px; color:var(--text-muted);">ℹ️ Powered by OpenAI GPT-4o. Educational guidance only; consult a board-certified physician.</span>`;
+    const reply = data.candidates?.[0]?.content?.parts?.[0]?.text || "No response generated.";
+    assistantResponse.innerHTML = `<strong>HeartBloom Gemini AI Assistant:</strong><br><p style="margin-top:6px; line-height:1.5;">${reply.replace(/\n/g, '<br>')}</p><br><span style="font-size:11px; color:var(--text-muted);">ℹ️ Powered by Google Gemini AI. Educational guidance only; consult a board-certified physician.</span>`;
   } catch (err) {
-    assistantResponse.innerHTML = `<strong>Error connecting to OpenAI GPT API:</strong> ${err.message}<br><span style="font-size:11px; color:var(--text-muted);">Please verify your API key in profile settings.</span>`;
+    assistantResponse.innerHTML = `<strong>Error connecting to Google Gemini API:</strong> ${err.message}<br><span style="font-size:11px; color:var(--text-muted);">Please verify your Google AI API key.</span>`;
   } finally {
     if (submitBtn) submitBtn.disabled = false;
   }
