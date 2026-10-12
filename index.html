@@ -3,9 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#07111f">
-  <meta name="description" content="VitaNex AI — your personal health copilot. Explore health insights through an interactive 3D experience and advanced health tracking.">
-  <title>VitaNex AI — Health Monitoring, Tracking & Copilot</title>
+  <meta name="theme-color" content="#f4f8fb">
+  <meta name="description" content="VitaNex AI — HeartBloom Cardiology & Health Intelligence Dashboard.">
+  <title>VitaNex AI | HeartBloom Cardiology Suite</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -23,375 +23,312 @@
 </head>
 
 <body>
-  <div class="background-glow glow-one"></div>
-  <div class="background-glow glow-two"></div>
-
-  <header class="navbar">
-    <a class="brand" href="#home" aria-label="VitaNex AI home">
-      <span class="brand-icon">✳</span>
-      <span>VitaNex<span class="brand-ai"> AI</span></span>
-    </a>
-
-    <nav class="nav-links" aria-label="Main navigation">
-      <a href="#home" data-i18n="navHome">Home</a>
-      <a href="#dashboard" data-i18n="navDashboard">Dashboard</a>
-      <a href="#tracker" data-i18n="navTracker">Tracker</a>
-      <a href="#journal" data-i18n="navJournal">Journal</a>
-      <a href="#features" data-i18n="navFeatures">Features</a>
-
-      <div class="auth-controls">
-        <a id="loginLink" href="./auth.html">Login</a>
-        <span id="userLabel"></span>
-        <button id="logoutButton" type="button" hidden>Logout</button>
-      </div>
-    </nav>
-
-    <div class="nav-actions">
-      <label class="language-label" for="languageSelect">🌐</label>
-      <select id="languageSelect" aria-label="Choose language">
-        <option value="en">English</option>
-        <option value="ta">தமிழ்</option>
-        <option value="hi">हिन्दी</option>
-      </select>
-      <a class="button button-small" href="#dashboard" data-i18n="getStarted">Get started ↗</a>
-    </div>
-  </header>
-
-  <main>
-    <section class="hero section-shell" id="home">
-      <div class="hero-copy">
-        <div class="eyebrow">
-          <span class="status-dot"></span>
-          <span data-i18n="eyebrow">YOUR PERSONAL AI HEALTH COPILOT</span>
-        </div>
-
-        <h1 data-i18n="heroTitle">
-          Your health.<br>
-          <span class="gradient-text">Reimagined.</span>
-        </h1>
-
-        <p class="hero-description" data-i18n="heroDescription">
-          Track your vitals, log daily wellness habits, keep a private symptom journal, and explore health insights with your intelligent AI copilot.
-        </p>
-
-        <div class="hero-actions">
-          <a class="button" href="#dashboard" data-i18n="exploreButton">
-            Explore health monitoring <span>↗</span>
-          </a>
-          <a class="text-link" href="#tracker" data-i18n="discoverButton">
-            Daily wellness tracker <span>→</span>
-          </a>
-        </div>
-
-        <div class="trust-row">
-          <div class="trust-symbol">✦</div>
-          <p data-i18n="trustText">Designed for clarity, privacy, and informed wellness.</p>
-        </div>
+  <div class="app-layout">
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar">
+      <div class="sidebar-brand">
+        <span class="brand-icon">♥</span>
+        <span>HeartBloom<span class="brand-ai"> v2</span></span>
       </div>
 
-      <div class="hero-visual" aria-label="Interactive 3D health visualization">
-        <div class="visual-label visual-label-top">
-          <span class="live-dot"></span>
-          VITANEX VISUAL ENGINE
+      <nav class="sidebar-nav">
+        <a href="#dashboard" class="nav-item active" data-target="dashboard">
+          <span>📊</span> Cardiology Dashboard
+        </a>
+        <a href="#vitals" class="nav-item" data-target="vitals">
+          <span>🩺</span> Vitals & Heart Monitor
+        </a>
+        <a href="#tracker" class="nav-item" data-target="tracker">
+          <span>💧</span> Wellness Tracker
+        </a>
+        <a href="#journal" class="nav-item" data-target="journal">
+          <span>📝</span> Symptom Journal
+        </a>
+        <a href="#assistant" class="nav-item" data-target="assistant">
+          <span>🤖</span> AI Health Assistant
+        </a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="auth-controls">
+          <a id="loginLink" href="./auth.html" class="button button-outline button-small" style="width:100%; margin-bottom:8px;">Login / Sign Up</a>
+          <span id="userLabel" style="font-size:11px; color:var(--accent-cyan); display:block; text-align:center; margin-bottom:6px;"></span>
+          <button id="logoutButton" type="button" class="button button-outline button-small" style="width:100%; color:#f43f5e; border-color:rgba(244,63,94,0.3);" hidden>Logout</button>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="main-content">
+      <header class="topbar">
+        <div class="topbar-title">
+          <h1 id="pageTitle">Cardiology & Heart Health Dashboard</h1>
+          <p id="pageSubtitle">Real-time cardiology situational awareness & patient care suite.</p>
         </div>
 
-        <div id="scene-container">
-          <div class="scene-fallback" id="sceneFallback">
-            <div class="fallback-orbit orbit-a"></div>
-            <div class="fallback-orbit orbit-b"></div>
-            <div class="fallback-core">✦</div>
+        <div class="topbar-actions">
+          <select id="languageSelect" aria-label="Choose language">
+            <option value="en">English</option>
+            <option value="ta">தமிழ்</option>
+            <option value="hi">हिन्दी</option>
+          </select>
+          <a class="button button-small" href="./profile.html">My Profile 👤</a>
+        </div>
+      </header>
+
+      <!-- VIEW 1: DASHBOARD (Home) -->
+      <section id="view-dashboard" class="view-section active">
+        <div class="hero-card-grid">
+          <div class="hero-banner">
+            <div class="eyebrow"><span class="status-dot"></span> HEARTBLOOM V2 CARDIOLOGY SUITE</div>
+            <h2>Comprehensive <span class="gradient-text">Heart Health</span> Intelligence.</h2>
+            <p>Every widget is structured to give cardiologists and care teams instant situational awareness with live telemetry and ECG analytics.</p>
+            <div class="hero-btns">
+              <a href="#vitals" class="button" data-switch="vitals">Open Heart Monitor ↗</a>
+              <a href="#tracker" class="button button-outline" data-switch="tracker">View Daily Tracker →</a>
+            </div>
+          </div>
+
+          <!-- HeartBloom 3D Realistic Cardiology Organ Visualization -->
+          <div class="hero-visual-card">
+            <div class="visual-label">
+              <span class="live-dot"></span> HEARTBLOOM 3D ECG ENGINE
+            </div>
+            <div id="scene-container">
+              <div class="scene-fallback" id="sceneFallback">
+                <div class="fallback-core">♥</div>
+              </div>
+            </div>
+            <div class="visual-caption">3D CARDIAC ANATOMY & LIVE RHYTHM</div>
           </div>
         </div>
 
-        <div class="floating-card floating-card-top">
-          <span class="mini-icon">✧</span>
+        <!-- Quick Summary Widgets -->
+        <div class="dashboard-grid" style="margin-top: 30px;">
+          <article class="panel">
+            <div class="panel-topline">
+              <span class="panel-label">MEAN ARTERIAL PRESSURE</span>
+              <span class="panel-icon">📈</span>
+            </div>
+            <h3>98 mmHg</h3>
+            <p class="muted">Stable systemic vascular resistance.</p>
+            <div class="progress-track" style="margin-top:15px;"><div class="progress-fill" style="width:75%"></div></div>
+          </article>
+
+          <article class="panel">
+            <div class="panel-topline">
+              <span class="panel-label">CARDIAC OUTPUT</span>
+              <span class="panel-icon">🫀</span>
+            </div>
+            <h3>5.2 L / min</h3>
+            <p class="muted">Optimal left ventricular ejection flow.</p>
+            <div class="progress-track" style="margin-top:15px;"><div class="progress-fill" style="width:88%"></div></div>
+          </article>
+        </div>
+      </section>
+
+      <!-- VIEW 2: VITALS & HEART MONITOR -->
+      <section id="view-vitals" class="view-section">
+        <div class="section-heading">
           <div>
-            <strong>Smart Vitals</strong>
-            <small>HR, SpO2 & Temp Logs</small>
+            <div class="eyebrow"><span class="status-dot"></span> FEATURE 1</div>
+            <h2>Vitals & Heart <span class="gradient-text">Monitor</span></h2>
+            <p>Record heart rate, blood pressure, SpO2, and ECG rhythm notes securely.</p>
           </div>
+          <span class="demo-badge">CLINICAL SUITE</span>
         </div>
 
-        <div class="floating-card floating-card-bottom">
-          <span class="heart-symbol">♡</span>
+        <div class="dashboard-grid">
+          <article class="panel">
+            <div class="panel-topline">
+              <span class="panel-label">RECORD CARDIAC VITALS</span>
+              <span class="panel-icon">♥</span>
+            </div>
+            <h3>Manual Vitals Entry</h3>
+
+            <form id="vitalsForm" style="margin-top: 15px; display: flex; flex-direction: column; gap: 14px;">
+              <div>
+                <label style="font-size: 11px; color: var(--text-muted);">Heart Rate (BPM)</label>
+                <input type="number" id="vitalsHr" placeholder="e.g. 74" required>
+              </div>
+              <div>
+                <label style="font-size: 11px; color: var(--text-muted);">Blood Oxygen SpO₂ (%)</label>
+                <input type="number" id="vitalsSpo2" placeholder="e.g. 98" required>
+              </div>
+              <div>
+                <label style="font-size: 11px; color: var(--text-muted);">Blood Pressure (mmHg)</label>
+                <input type="text" id="vitalsBp" placeholder="e.g. 120/80" required>
+              </div>
+              <div>
+                <label style="font-size: 11px; color: var(--text-muted);">ECG Rhythm Note</label>
+                <input type="text" id="vitalsEcg" placeholder="e.g. Normal Sinus Rhythm">
+              </div>
+              <button type="submit" class="button" style="margin-top: 6px;">Save Cardiology Reading ↗</button>
+            </form>
+          </article>
+
+          <article class="panel">
+            <div class="panel-topline">
+              <span class="panel-label">PATIENT HISTORY</span>
+              <span class="panel-icon">📊</span>
+            </div>
+            <h3>Recorded Cardiac Logs</h3>
+            <div id="vitalsList" style="margin-top: 15px; max-height: 350px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px;">
+              <div style="padding: 14px; background: #f8fafc; border: 1px solid var(--border); border-radius: var(--radius-sm);">
+                <strong>Sample Reading:</strong> HR: 72 BPM | SpO2: 99% | BP: 118/78 (Normal Sinus)
+                <div style="font-size: 10px; color: var(--text-muted); margin-top: 4px;">2026-10-12 14:00</div>
+              </div>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <!-- VIEW 3: WELLNESS TRACKER -->
+      <section id="view-tracker" class="view-section">
+        <div class="section-heading">
           <div>
-            <strong>Symptom Journal</strong>
-            <small>Private encrypted logs</small>
+            <div class="eyebrow"><span class="status-dot"></span> FEATURE 2</div>
+            <h2>Daily Wellness <span class="gradient-text">Tracker</span></h2>
+            <p>Monitor water intake, sleep quality, daily steps, and cardiac fitness goals.</p>
           </div>
+          <span class="demo-badge">HABITS</span>
         </div>
 
-        <div class="visual-caption">A NEW PERSPECTIVE ON PERSONAL WELLNESS</div>
-      </div>
-    </section>
-
-    <!-- FEATURE 1: SMART HEALTH MONITORING DASHBOARD -->
-    <section class="dashboard-section section-shell" id="dashboard">
-      <div class="section-heading">
-        <div>
-          <div class="eyebrow"><span class="status-dot"></span> FEATURE 1</div>
-          <h2 data-i18n="dashboardTitle">Smart Health <span class="gradient-text">Monitoring Dashboard</span></h2>
-          <p data-i18n="dashboardDescription">Log and monitor your heart rate, SpO2, blood pressure, and body temperature securely.</p>
-        </div>
-        <span class="demo-badge">LIVE TRACKING</span>
-      </div>
-
-      <div class="dashboard-grid" style="grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));">
-        <article class="panel" style="grid-column: span 1;">
-          <div class="panel-topline">
-            <span class="panel-label">RECORD VITALS</span>
-            <span class="panel-icon">♥</span>
-          </div>
-          <h3>Manual Vitals Entry</h3>
-          <p class="muted">Enter your recent measurements clearly.</p>
-
-          <form id="vitalsForm" style="margin-top: 15px; display: flex; flex-direction: column; gap: 12px;">
-            <div>
-              <label style="font-size: 11px; color: var(--muted);">Heart Rate (BPM)</label>
-              <input type="number" id="vitalsHr" placeholder="e.g. 72" min="30" max="220" style="width:100%; padding:10px; background:#091d23; border:1px solid #34555b; border-radius:8px; color:#fff;" required>
+        <div class="dashboard-grid">
+          <article class="panel">
+            <div class="panel-topline">
+              <span class="panel-label">DAILY HABITS</span>
+              <span class="panel-icon">💧</span>
             </div>
-            <div>
-              <label style="font-size: 11px; color: var(--muted);">Blood Oxygen SpO₂ (%)</label>
-              <input type="number" id="vitalsSpo2" placeholder="e.g. 98" min="70" max="100" style="width:100%; padding:10px; background:#091d23; border:1px solid #34555b; border-radius:8px; color:#fff;" required>
-            </div>
-            <div>
-              <label style="font-size: 11px; color: var(--muted);">Temperature (°F)</label>
-              <input type="number" id="vitalsTemp" step="0.1" placeholder="e.g. 98.6" min="94" max="108" style="width:100%; padding:10px; background:#091d23; border:1px solid #34555b; border-radius:8px; color:#fff;" required>
-            </div>
-            <div>
-              <label style="font-size: 11px; color: var(--muted);">Blood Pressure (mmHg)</label>
-              <input type="text" id="vitalsBp" placeholder="e.g. 120/80" style="width:100%; padding:10px; background:#091d23; border:1px solid #34555b; border-radius:8px; color:#fff;" required>
-            </div>
-            <button type="submit" class="button" style="margin-top: 8px; width: 100%;">Save Vital Reading ↗</button>
-          </form>
-          <p class="panel-footnote">Clearly labeled as manually entered readings.</p>
-        </article>
+            <h3>Log Activity</h3>
 
-        <article class="panel" style="grid-column: span 2;">
-          <div class="panel-topline">
-            <span class="panel-label">LATEST READINGS & HISTORY</span>
-            <span class="panel-icon">📊</span>
-          </div>
-          <h3>Your Health Records</h3>
-          <div id="vitalsList" style="margin-top: 15px; max-height: 320px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px;">
-            <div style="padding: 12px; background: rgba(20, 38, 59, 0.6); border: 1px solid var(--line); border-radius: 10px; font-size: 13px;">
-              <strong>Sample Reading:</strong> HR: 72 BPM | SpO2: 98% | Temp: 98.6°F | BP: 120/80 (Manual Entry)
-              <div style="font-size: 10px; color: var(--muted); margin-top: 4px;">2026-10-12 12:00 PM</div>
-            </div>
-          </div>
-          <p class="panel-footnote">Stored securely in your Supabase database with Row Level Security.</p>
-        </article>
-      </div>
-    </section>
-
-    <!-- FEATURE 2: DAILY WELLNESS TRACKER -->
-    <section class="dashboard-section section-shell" id="tracker">
-      <div class="section-heading">
-        <div>
-          <div class="eyebrow"><span class="status-dot"></span> FEATURE 2</div>
-          <h2>Daily Wellness <span class="gradient-text">Tracker</span></h2>
-          <p>Record your water intake, sleep duration, daily steps, and wellness goals.</p>
-        </div>
-        <span class="demo-badge">HABITS</span>
-      </div>
-
-      <div class="dashboard-grid" style="grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));">
-        <article class="panel">
-          <div class="panel-topline">
-            <span class="panel-label">LOG HABITS</span>
-            <span class="panel-icon">💧</span>
-          </div>
-          <h3>Daily Log</h3>
-
-          <form id="wellnessForm" style="margin-top: 15px; display: flex; flex-direction: column; gap: 12px;">
-            <div>
-              <label style="font-size: 11px; color: var(--muted);">Water Intake (Glasses / Liters)</label>
-              <input type="number" id="wellWater" placeholder="e.g. 8" min="0" max="30" style="width:100%; padding:10px; background:#091d23; border:1px solid #34555b; border-radius:8px; color:#fff;" required>
-            </div>
-            <div>
-              <label style="font-size: 11px; color: var(--muted);">Sleep Duration (Hours)</label>
-              <input type="number" step="0.5" id="wellSleep" placeholder="e.g. 7.5" min="0" max="24" style="width:100%; padding:10px; background:#091d23; border:1px solid #34555b; border-radius:8px; color:#fff;" required>
-            </div>
-            <div>
-              <label style="font-size: 11px; color: var(--muted);">Daily Steps</label>
-              <input type="number" id="wellSteps" placeholder="e.g. 8000" min="0" max="100000" style="width:100%; padding:10px; background:#091d23; border:1px solid #34555b; border-radius:8px; color:#fff;" required>
-            </div>
-            <div>
-              <label style="font-size: 11px; color: var(--muted);">Wellness Goal Note</label>
-              <input type="text" id="wellGoal" placeholder="e.g. Walk 30 mins, meditate" style="width:100%; padding:10px; background:#091d23; border:1px solid #34555b; border-radius:8px; color:#fff;">
-            </div>
-            <button type="submit" class="button" style="margin-top: 8px; width: 100%;">Save Daily Progress ↗</button>
-          </form>
-        </article>
-
-        <article class="panel">
-          <div class="panel-topline">
-            <span class="panel-label">GOAL PROGRESS</span>
-            <span class="panel-icon">🎯</span>
-          </div>
-          <h3>Summary & Progress</h3>
-
-          <div style="margin-top: 18px; display: flex; flex-direction: column; gap: 16px;">
-            <div>
-              <div style="display:flex; justify-content:space-between; font-size:12px; margin-bottom:5px;">
-                <span>Water Goal (8 glasses)</span>
-                <span id="waterProgText">0 / 8</span>
+            <form id="wellnessForm" style="margin-top: 15px; display: flex; flex-direction: column; gap: 14px;">
+              <div>
+                <label style="font-size: 11px; color: var(--text-muted);">Water Intake (Glasses)</label>
+                <input type="number" id="wellWater" placeholder="e.g. 8" required>
               </div>
-              <div class="progress-track"><div id="waterProgFill" class="progress-fill" style="width:0%"></div></div>
-            </div>
-
-            <div>
-              <div style="display:flex; justify-content:space-between; font-size:12px; margin-bottom:5px;">
-                <span>Sleep Goal (8 hours)</span>
-                <span id="sleepProgText">0 / 8 hrs</span>
+              <div>
+                <label style="font-size: 11px; color: var(--text-muted);">Sleep Duration (Hours)</label>
+                <input type="number" step="0.5" id="wellSleep" placeholder="e.g. 7.5" required>
               </div>
-              <div class="progress-track"><div id="sleepProgFill" class="progress-fill" style="width:0%"></div></div>
-            </div>
-
-            <div>
-              <div style="display:flex; justify-content:space-between; font-size:12px; margin-bottom:5px;">
-                <span>Steps Goal (10,000 steps)</span>
-                <span id="stepsProgText">0 / 10,000</span>
+              <div>
+                <label style="font-size: 11px; color: var(--text-muted);">Daily Steps</label>
+                <input type="number" id="wellSteps" placeholder="e.g. 8500" required>
               </div>
-              <div class="progress-track"><div id="stepsProgFill" class="progress-fill" style="width:0%"></div></div>
-            </div>
-          </div>
-          <p class="panel-footnote" style="margin-top: 25px;">Data is synced to your Supabase account automatically.</p>
-        </article>
-      </div>
-    </section>
+              <button type="submit" class="button" style="margin-top: 6px;">Save Wellness Log ↗</button>
+            </form>
+          </article>
 
-    <!-- FEATURE 3: SYMPTOM AND HEALTH JOURNAL -->
-    <section class="dashboard-section section-shell" id="journal">
-      <div class="section-heading">
-        <div>
-          <div class="eyebrow"><span class="status-dot"></span> FEATURE 3</div>
-          <h2>Symptom & Health <span class="gradient-text">Journal</span></h2>
-          <p>Record symptoms, notes, and dates privately with RLS protection.</p>
+          <article class="panel">
+            <div class="panel-topline">
+              <span class="panel-label">GOALS & TARGETS</span>
+              <span class="panel-icon">🎯</span>
+            </div>
+            <h3>Progress Summary</h3>
+
+            <div style="margin-top: 20px; display: flex; flex-direction: column; gap: 18px;">
+              <div>
+                <div style="display:flex; justify-content:space-between; font-size:13px; margin-bottom:6px;">
+                  <span>Water (8 glasses)</span>
+                  <span id="waterProgText">0 / 8</span>
+                </div>
+                <div class="progress-track"><div id="waterProgFill" class="progress-fill" style="width:0%"></div></div>
+              </div>
+
+              <div>
+                <div style="display:flex; justify-content:space-between; font-size:13px; margin-bottom:6px;">
+                  <span>Sleep (8 hours)</span>
+                  <span id="sleepProgText">0 / 8 hrs</span>
+                </div>
+                <div class="progress-track"><div id="sleepProgFill" class="progress-fill" style="width:0%"></div></div>
+              </div>
+
+              <div>
+                <div style="display:flex; justify-content:space-between; font-size:13px; margin-bottom:6px;">
+                  <span>Steps (10,000 steps)</span>
+                  <span id="stepsProgText">0 / 10,000</span>
+                </div>
+                <div class="progress-track"><div id="stepsProgFill" class="progress-fill" style="width:0%"></div></div>
+              </div>
+            </div>
+          </article>
         </div>
-        <span class="demo-badge">PRIVATE</span>
-      </div>
+      </section>
 
-      <div class="dashboard-grid" style="grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));">
-        <article class="panel">
-          <div class="panel-topline">
-            <span class="panel-label">NEW JOURNAL ENTRY</span>
-            <span class="panel-icon">📝</span>
+      <!-- VIEW 4: SYMPTOM JOURNAL -->
+      <section id="view-journal" class="view-section">
+        <div class="section-heading">
+          <div>
+            <div class="eyebrow"><span class="status-dot"></span> FEATURE 3</div>
+            <h2>Symptom & Health <span class="gradient-text">Journal</span></h2>
+            <p>Private encrypted logs for symptoms, palpitations, or chest discomfort notes.</p>
           </div>
-          <h3>Record Note</h3>
+          <span class="demo-badge">SECURE</span>
+        </div>
 
-          <form id="journalForm" style="margin-top: 15px; display: flex; flex-direction: column; gap: 12px;">
-            <div>
-              <label style="font-size: 11px; color: var(--muted);">Entry Title / Symptom</label>
-              <input type="text" id="journalTitle" placeholder="e.g. Mild headache after work" style="width:100%; padding:10px; background:#091d23; border:1px solid #34555b; border-radius:8px; color:#fff;" required>
+        <div class="dashboard-grid">
+          <article class="panel">
+            <div class="panel-topline">
+              <span class="panel-label">NEW JOURNAL ENTRY</span>
+              <span class="panel-icon">📝</span>
             </div>
-            <div>
-              <label style="font-size: 11px; color: var(--muted);">Detailed Notes</label>
-              <textarea id="journalNotes" rows="4" placeholder="Describe how you feel, duration, potential triggers..." style="width:100%; padding:10px; background:#091d23; border:1px solid #34555b; border-radius:8px; color:#fff; font-family:inherit;" required></textarea>
+            <h3>Record Observation</h3>
+
+            <form id="journalForm" style="margin-top: 15px; display: flex; flex-direction: column; gap: 14px;">
+              <div>
+                <label style="font-size: 11px; color: var(--text-muted);">Symptom / Title</label>
+                <input type="text" id="journalTitle" placeholder="e.g. Mild palpitations after coffee" required>
+              </div>
+              <div>
+                <label style="font-size: 11px; color: var(--text-muted);">Detailed Notes</label>
+                <textarea id="journalNotes" rows="4" placeholder="Duration, triggers, associated feelings..." required style="width:100%; padding:13px 18px; border:1px solid var(--border); border-radius:var(--radius-sm); background:#f8fafc; color:var(--text-main); font-family:inherit;"></textarea>
+              </div>
+              <button type="submit" class="button" style="margin-top: 6px;">Save Journal Entry ↗</button>
+            </form>
+          </article>
+
+          <article class="panel">
+            <div class="panel-topline">
+              <span class="panel-label">JOURNAL ARCHIVE</span>
+              <span class="panel-icon">🔒</span>
             </div>
-            <button type="submit" class="button" style="margin-top: 8px; width: 100%;">Save Journal Entry ↗</button>
+            <h3>Past Notes</h3>
+            <input type="text" id="journalSearch" placeholder="Search journal..." style="margin: 15px 0;">
+            <div id="journalList" style="max-height: 270px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px;">
+              <div style="padding: 12px; background: #f8fafc; border: 1px solid var(--border); border-radius: var(--radius-sm);">
+                <strong>Sample Note:</strong> Slight shortness of breath during stairs.
+                <p style="margin-top:4px; font-size:11px; color:var(--text-muted);">Resolved after 5 mins rest. (2026-10-12)</p>
+              </div>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <!-- VIEW 5: AI HEALTH ASSISTANT -->
+      <section id="view-assistant" class="view-section">
+        <div class="assistant-card" style="margin-top: 20px;">
+          <div class="eyebrow"><span class="status-dot"></span> FEATURE 4 & 5</div>
+          <h2>HeartBloom AI Cardiology Assistant</h2>
+          <p>Ask cardiology and wellness questions in English, Tamil (தமிழ்), or Hindi (हिन्दी). Download CSV health reports for your care team.</p>
+
+          <form id="assistantForm" class="assistant-form" style="margin-top: 25px;">
+            <input id="assistantInput" type="text" placeholder="Ask a cardiology or health question..." required>
+            <button class="button" type="submit">Ask Assistant ↗</button>
           </form>
-        </article>
+          <div id="assistantResponse" class="assistant-response" hidden></div>
 
-        <article class="panel">
-          <div class="panel-topline">
-            <span class="panel-label">JOURNAL HISTORY</span>
-            <span class="panel-icon">🔒</span>
-          </div>
-          <h3>Your Past Entries</h3>
-
-          <div style="margin-top: 15px; display: flex; gap: 10px;">
-            <input type="text" id="journalSearch" placeholder="Search entries..." style="width:100%; padding:8px; background:#091d23; border:1px solid #34555b; border-radius:8px; color:#fff; font-size:12px;">
-          </div>
-
-          <div id="journalList" style="margin-top: 15px; max-height: 270px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px;">
-            <div style="padding: 12px; background: rgba(20, 38, 59, 0.6); border: 1px solid var(--line); border-radius: 10px; font-size: 13px;">
-              <strong>Sample Entry:</strong> Mild fatigue
-              <p style="margin-top: 4px; color: var(--muted); font-size: 11px;">Rest helped after 1 hour. (2026-10-12)</p>
+          <div style="margin-top: 30px; border-top: 1px solid var(--border); padding-top: 25px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:15px;">
+            <div>
+              <strong>Feature 5: Patient Reports</strong>
+              <p style="font-size:12px; color:var(--text-muted);">Export all vitals and wellness logs as a CSV file.</p>
             </div>
+            <button id="exportCsvBtn" class="button button-outline">Download CSV Report ↗</button>
           </div>
-          <p class="panel-footnote">Protected with strict user RLS security policies.</p>
-        </article>
-      </div>
-    </section>
-
-    <!-- FEATURE 4: MULTILINGUAL AI HEALTH ASSISTANT -->
-    <section class="assistant-section section-shell" id="assistant">
-      <div class="assistant-card">
-        <div class="assistant-copy">
-          <div class="eyebrow"><span class="status-dot"></span> FEATURE 4</div>
-          <h2 data-i18n="assistantTitle">Multilingual AI Health Assistant</h2>
-          <p data-i18n="assistantDescription">Ask general health questions in English, Tamil (தமிழ்), or Hindi (हिन्दी). Get reliable educational guidance instantly.</p>
         </div>
-        <form id="assistantForm" class="assistant-form">
-          <label for="assistantInput" class="sr-only">Ask a general wellness question</label>
-          <input id="assistantInput" type="text" maxlength="500" placeholder="Ask a general wellness question..." autocomplete="off" required>
-          <button class="button" type="submit" data-i18n="askButton">Ask VitaNex ↗</button>
-        </form>
-        <div id="assistantResponse" class="assistant-response" role="status" aria-live="polite" hidden></div>
-      </div>
-    </section>
-
-    <!-- FEATURE 5: PERSONALIZED WELLNESS REPORTS -->
-    <section class="dashboard-section section-shell" id="reports">
-      <div class="section-heading">
-        <div>
-          <div class="eyebrow"><span class="status-dot"></span> FEATURE 5</div>
-          <h2>Wellness Reports & <span class="gradient-text">Insights</span></h2>
-          <p>Export your health summaries or download CSV reports for your care team.</p>
-        </div>
-        <button id="exportCsvBtn" class="button button-outline">Download CSV Report ↗</button>
-      </div>
-    </section>
-
-    <section class="features-section section-shell" id="features">
-      <div class="section-heading centered-heading">
-        <div class="eyebrow"><span class="status-dot"></span> BUILT AROUND YOU</div>
-        <h2 data-i18n="featuresTitle">Health technology, <span class="gradient-text">made human.</span></h2>
-        <p data-i18n="featuresDescription">An approachable interface for exploring your wellness journey.</p>
-      </div>
-
-      <div class="features-grid">
-        <article class="feature-card">
-          <div class="feature-icon">✧</div>
-          <h3 data-i18n="featureOneTitle">AI health companion</h3>
-          <p data-i18n="featureOneDescription">A conversational interface designed to explain general health information in accessible language.</p>
-          <a href="#assistant" class="feature-link">Explore assistant →</a>
-        </article>
-        <article class="feature-card">
-          <div class="feature-icon">◉</div>
-          <h3 data-i18n="featureTwoTitle">Wellness dashboard</h3>
-          <p data-i18n="featureTwoDescription">Bring supported health measurements and wellness trends into one organized space.</p>
-          <a href="#dashboard" class="feature-link">View dashboard →</a>
-        </article>
-        <article class="feature-card">
-          <div class="feature-icon">◎</div>
-          <h3 data-i18n="featureThreeTitle">3D health experience</h3>
-          <p data-i18n="featureThreeDescription">Explore an interactive visual environment designed to make the experience engaging.</p>
-          <a href="#home" class="feature-link">Back to 3D world ↑</a>
-        </article>
-      </div>
-    </section>
-
-    <section class="about-section section-shell" id="about">
-      <div class="about-mark">✳</div>
-      <h2>VitaNex AI</h2>
-      <p data-i18n="aboutText">Your Health. Your Intelligence. Your Future.</p>
-      <p class="medical-disclaimer" data-i18n="disclaimer">VitaNex AI is a wellness information interface, not a medical professional. Demo values are illustrative and must not be used for diagnosis or treatment. For health concerns, consult a qualified healthcare professional. For urgent symptoms, seek local emergency care.</p>
-    </section>
-  </main>
-
-  <footer class="footer">
-    <a class="brand" href="#home"><span class="brand-icon">✳</span><span>VitaNex<span class="brand-ai"> AI</span></span></a>
-    <span>© <span id="currentYear"></span> VitaNex AI</span>
-    <a href="#home">Back to top ↑</a>
-  </footer>
+      </section>
+    </main>
+  </div>
 
   <script type="module" src="script.js"></script>
-  <script type="module" src="./session.js"></script>
-
-  <div style="position:fixed;right:18px;top:18px;z-index:9999;display:flex;gap:10px;align-items:center;padding:12px;background:#102b32;border:1px solid #61e7dc;border-radius:12px;box-shadow:0 10px 30px #0008;">
-    <a href="./auth.html" style="color:#61e7dc;text-decoration:none;font-weight:600;">Login</a>
-    <span style="color:#61e7dc;">|</span>
-    <a href="./profile.html" style="color:white;text-decoration:none;font-weight:600;">Profile</a>
-  </div>
 </body>
 </html>
