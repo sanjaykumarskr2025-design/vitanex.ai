@@ -206,7 +206,7 @@ vitalsForm?.addEventListener("submit", async (e) => {
     heart_rate: Number($("#vitalsHr").value),
     spo2: Number($("#vitalsSpo2").value),
     blood_pressure: $("#vitalsBp").value.trim(),
-    temperature: 98.6,
+    temperature: Number($("#vitalsTemp")?.value || 98.6),
     entry_type: "manual"
   };
 
@@ -230,9 +230,10 @@ async function loadVitals(userId) {
     }
     data.forEach(item => {
       const div = document.createElement("div");
-      div.style = "padding:12px; background:#f8fafc; border:1px solid var(--border); border-radius:var(--radius-sm); font-size:13px;";
-      div.innerHTML = `<strong>HR:</strong> ${item.heart_rate} BPM | <strong>SpO2:</strong> ${item.spo2}% | <strong>BP:</strong> ${item.blood_pressure}
-        <div style="font-size:10px; color:var(--text-muted); margin-top:4px;">${new Date(item.created_at).toLocaleString()}</div>`;
+      div.style = "padding:12px; background:#f8fafc; border:1px solid var(--border); border-radius:var(--radius-sm); font-size:13px; display:flex; justify-content:space-between; align-items:center;";
+      div.innerHTML = `<div><strong>HR:</strong> ${item.heart_rate} BPM | <strong>SpO2:</strong> ${item.spo2}% | <strong>BP:</strong> ${item.blood_pressure} | <strong>Temp:</strong> ${item.temperature || 98.6}°F
+        <div style="font-size:10px; color:var(--text-muted); margin-top:4px;">${new Date(item.created_at).toLocaleString()}</div></div>
+        <span class="demo-badge" style="background:#f0fdf4; color:#16a34a;">Recorded</span>`;
       vitalsList.appendChild(div);
     });
   }
