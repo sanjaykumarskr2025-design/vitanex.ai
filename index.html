@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="theme-color" content="#f0f4f8">
   <meta name="description" content="VitaNex AI — HeartBloom Cardiology & Health Intelligence Dashboard.">
-  <title>VitaNex AI | Health Monitoring & Cardiology Suite</title>
+  <title>VitaNex AI | Fitness Tracking & Wellness Goals</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -30,7 +30,7 @@
         <div class="topbar-ref-tabs">
           <a href="#dashboard" class="ref-tab active" data-switch="dashboard">📊 Dashboard</a>
           <a href="#vitals" class="ref-tab" data-switch="vitals">🩺 Health Monitoring</a>
-          <a href="#tracker" class="ref-tab" data-switch="tracker">🎯 Goals</a>
+          <a href="#tracker" class="ref-tab" data-switch="tracker">🎯 Fitness & Goals</a>
           <a href="#journal" class="ref-tab" data-switch="journal">📝 Journal</a>
           <a href="#assistant" class="ref-tab" data-switch="assistant">📋 Report & AI</a>
         </div>
@@ -75,26 +75,26 @@
           <div class="panel" style="background: linear-gradient(135deg, #ffffff, #f8fafc); display: flex; flex-direction: column; justify-content: space-between;">
             <div>
               <div class="panel-topline">
-                <span class="panel-label">HEALTH MONITORING TELEMETRY</span>
+                <span class="panel-label">FITNESS & WELLNESS GOALS</span>
                 <span class="demo-badge">Active Sync</span>
               </div>
-              <h2 style="font-family: var(--font-display); font-size: 24px; margin-bottom: 20px;">Consistent Vital Tracking</h2>
+              <h2 style="font-family: var(--font-display); font-size: 24px; margin-bottom: 20px;">Daily Habit & Fitness Hub</h2>
 
               <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin-bottom: 20px;">
                 <div style="padding: 16px; background: #fff; border: 1px solid var(--border); border-radius: var(--radius-sm);">
-                  <span style="font-size: 11px; color: var(--text-muted); font-weight: 700;">BLOOD PRESSURE</span>
-                  <div style="font-family: var(--font-display); font-size: 22px; font-weight: 700; color: #f43f5e; margin-top: 4px;">120/80 <span style="font-size: 11px; color: var(--text-muted);">mmHg</span></div>
+                  <span style="font-size: 11px; color: var(--text-muted); font-weight: 700;">DAILY STEPS GOAL</span>
+                  <div style="font-family: var(--font-display); font-size: 22px; font-weight: 700; color: #2563eb; margin-top: 4px;">8,500 <span style="font-size: 11px; color: var(--text-muted);">/ 10k</span></div>
                 </div>
                 <div style="padding: 16px; background: #fff; border: 1px solid var(--border); border-radius: var(--radius-sm);">
-                  <span style="font-size: 11px; color: var(--text-muted); font-weight: 700;">HEART RATE</span>
-                  <div style="font-family: var(--font-display); font-size: 22px; font-weight: 700; color: #2563eb; margin-top: 4px;">75 <span style="font-size: 11px; color: var(--text-muted);">bpm</span></div>
+                  <span style="font-size: 11px; color: var(--text-muted); font-weight: 700;">HYDRATION & SLEEP</span>
+                  <div style="font-family: var(--font-display); font-size: 22px; font-weight: 700; color: #10b981; margin-top: 4px;">8 Gl | 7.5h</div>
                 </div>
               </div>
             </div>
 
             <div class="hero-btns" style="margin-top: 15px;">
-              <a href="#vitals" class="button" data-switch="vitals">Open Health Monitoring Tab ↗</a>
-              <a href="#tracker" class="button button-outline" data-switch="tracker">View Goals →</a>
+              <a href="#tracker" class="button" data-switch="tracker">Open Fitness Tracking Tab ↗</a>
+              <a href="#vitals" class="button button-outline" data-switch="vitals">View Vitals →</a>
             </div>
           </div>
 
@@ -112,13 +112,13 @@
         </div>
       </section>
 
-      <!-- VIEW 2: HEALTH MONITORING (Feature 1: 3D + Functional + Historical Charts) -->
+      <!-- VIEW 2: HEALTH MONITORING -->
       <section id="view-vitals" class="view-section">
         <div class="section-heading">
           <div>
             <div class="eyebrow"><span class="status-dot"></span> FEATURE 1</div>
             <h2>Health <span class="gradient-text">Monitoring</span></h2>
-            <p>Record heart rate, blood pressure, oxygen saturation, and temperature. Solves inconsistent health tracking with real-time 3D feedback and historical logs.</p>
+            <p>Record heart rate, blood pressure, oxygen saturation, and temperature.</p>
           </div>
           <span class="demo-badge">CLINICAL SUITE</span>
         </div>
@@ -130,15 +130,13 @@
               <span class="panel-icon">🩺</span>
             </div>
             <h3>Input New Reading</h3>
-            <p class="muted" style="margin-bottom: 16px;">Consistently track your core biometrics to maintain optimal heart health.</p>
-
-            <form id="vitalsForm" style="display: flex; flex-direction: column; gap: 14px;">
+            <form id="vitalsForm" style="margin-top:15px; display: flex; flex-direction: column; gap: 14px;">
               <div>
                 <label style="font-size: 11px; color: var(--text-muted); font-weight:700;">HEART RATE (BPM)</label>
                 <input type="number" id="vitalsHr" placeholder="e.g. 75" required style="margin-top:4px;">
               </div>
               <div>
-                <label style="font-size: 11px; color: var(--text-muted); font-weight:700;">BLOOD OXYGEN SATURATION (SPO2 %)</label>
+                <label style="font-size: 11px; color: var(--text-muted); font-weight:700;">SPO2 OXYGEN (%)</label>
                 <input type="number" id="vitalsSpo2" placeholder="e.g. 98" required style="margin-top:4px;">
               </div>
               <div>
@@ -155,87 +153,90 @@
 
           <article class="panel">
             <div class="panel-topline">
-              <span class="panel-label">HISTORICAL LOGS & 3D SYNC</span>
+              <span class="panel-label">HISTORICAL LOGS</span>
               <span class="panel-icon">📈</span>
             </div>
-            <h3>Historical Entries & Trends</h3>
-            <p class="muted" style="margin-bottom: 16px;">Latest records stored securely in Supabase.</p>
-            <div id="vitalsList" style="max-height: 380px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px;">
+            <h3>Recent Vitals History</h3>
+            <div id="vitalsList" style="margin-top:15px; max-height: 380px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px;">
               <div style="padding: 14px; background: #f8fafc; border: 1px solid var(--border); border-radius: var(--radius-sm);">
-                <strong>Heart Rate:</strong> 75 BPM | <strong>SpO2:</strong> 98% | <strong>BP:</strong> 120/80 | <strong>Temp:</strong> 98.6°F
-                <div style="font-size: 10px; color: var(--text-muted); margin-top: 4px;">2026-10-13 10:00 AM — Initial Baseline</div>
+                <strong>Heart Rate:</strong> 75 BPM | <strong>SpO2:</strong> 98% | <strong>BP:</strong> 120/80
+                <div style="font-size: 10px; color: var(--text-muted); margin-top: 4px;">2026-10-13 10:00 AM</div>
               </div>
             </div>
           </article>
         </div>
       </section>
 
-      <!-- VIEW 3: DAILY WELLNESS TRACKER -->
+      <!-- VIEW 3: FITNESS TRACKING & WELLNESS GOALS (Feature 4 Enhanced) -->
       <section id="view-tracker" class="view-section">
         <div class="section-heading">
           <div>
-            <div class="eyebrow"><span class="status-dot"></span> FEATURE 2</div>
-            <h2>Daily Wellness <span class="gradient-text">Tracker</span></h2>
-            <p>Monitor water intake, sleep quality, daily steps, and cardiac fitness goals.</p>
+            <div class="eyebrow"><span class="status-dot"></span> FEATURE 4</div>
+            <h2>Fitness Tracking & <span class="gradient-text">Wellness Goals</span></h2>
+            <p>Record steps, sleep, water intake, and physical activity. Solve inconsistent wellness habits with daily goals and weekly progress rings.</p>
           </div>
-          <span class="demo-badge">HABITS</span>
+          <span class="demo-badge">ATTRACTIVE UNIQUE THEME</span>
         </div>
 
         <div class="dashboard-grid">
-          <article class="panel">
+          <!-- Left: Attractive Fitness Logging Hub -->
+          <article class="panel" style="background: linear-gradient(135deg, #0b152d, #1e293b); color: #fff;">
             <div class="panel-topline">
-              <span class="panel-label">DAILY HABITS</span>
-              <span class="panel-icon">💧</span>
+              <span class="panel-label" style="color: #38bdf8;">LOG DAILY FITNESS & HABITS</span>
+              <span class="panel-icon">⚡</span>
             </div>
-            <h3>Log Activity</h3>
+            <h3 style="color: #fff; margin-bottom: 6px;">Record Activity</h3>
+            <p style="color: #94a3b8; font-size: 13px; margin-bottom: 20px;">Consistency builds longevity and cardiovascular resilience.</p>
 
-            <form id="wellnessForm" style="margin-top: 15px; display: flex; flex-direction: column; gap: 14px;">
+            <form id="wellnessForm" style="display: flex; flex-direction: column; gap: 16px;">
               <div>
-                <label style="font-size: 11px; color: var(--text-muted);">Water Intake (Glasses)</label>
-                <input type="number" id="wellWater" placeholder="e.g. 8" required>
+                <label style="font-size: 11px; color: #94a3b8; font-weight:700; letter-spacing:0.5px;">WATER INTAKE (GLASSES)</label>
+                <input type="number" id="wellWater" placeholder="e.g. 8" required style="background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.15); color: #fff; margin-top: 6px;">
               </div>
               <div>
-                <label style="font-size: 11px; color: var(--text-muted);">Sleep Duration (Hours)</label>
-                <input type="number" step="0.5" id="wellSleep" placeholder="e.g. 7.5" required>
+                <label style="font-size: 11px; color: #94a3b8; font-weight:700; letter-spacing:0.5px;">SLEEP DURATION (HOURS)</label>
+                <input type="number" step="0.5" id="wellSleep" placeholder="e.g. 7.5" required style="background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.15); color: #fff; margin-top: 6px;">
               </div>
               <div>
-                <label style="font-size: 11px; color: var(--text-muted);">Daily Steps</label>
-                <input type="number" id="wellSteps" placeholder="e.g. 8500" required>
+                <label style="font-size: 11px; color: #94a3b8; font-weight:700; letter-spacing:0.5px;">DAILY STEPS</label>
+                <input type="number" id="wellSteps" placeholder="e.g. 9500" required style="background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.15); color: #fff; margin-top: 6px;">
               </div>
-              <button type="submit" class="button" style="margin-top: 6px;">Save Wellness Log ↗</button>
+              <button type="submit" class="button" style="margin-top: 10px; background: #38bdf8; color: #0b152d; font-weight: 700;">Save Fitness & Goals ↗</button>
             </form>
           </article>
 
+          <!-- Right: Visual Weekly Progress Rings & Targets -->
           <article class="panel">
             <div class="panel-topline">
-              <span class="panel-label">GOALS & TARGETS</span>
+              <span class="panel-label">WEEKLY PROGRESS & GOALS</span>
               <span class="panel-icon">🎯</span>
             </div>
-            <h3>Progress Summary</h3>
+            <h3>Target Completion Dashboard</h3>
+            <p class="muted" style="margin-bottom: 20px;">Real-time sync with Supabase habit database.</p>
 
-            <div style="margin-top: 20px; display: flex; flex-direction: column; gap: 18px;">
-              <div>
-                <div style="display:flex; justify-content:space-between; font-size:13px; margin-bottom:6px;">
-                  <span>Water (8 glasses)</span>
-                  <span id="waterProgText">0 / 8</span>
+            <div style="display: flex; flex-direction: column; gap: 20px;">
+              <div style="padding: 16px; background: #f8fafc; border: 1px solid var(--border); border-radius: var(--radius-sm);">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                  <span style="font-weight: 700; font-size: 13px;">💧 Hydration Goal (8 Glasses)</span>
+                  <span id="waterProgText" style="font-weight: 700; color: #0284c7;">0 / 8</span>
                 </div>
-                <div class="progress-track"><div id="waterProgFill" class="progress-fill" style="width:0%"></div></div>
+                <div class="progress-track" style="height: 10px;"><div id="waterProgFill" class="progress-fill" style="width:0%; background: linear-gradient(90deg, #38bdf8, #2563eb);"></div></div>
               </div>
 
-              <div>
-                <div style="display:flex; justify-content:space-between; font-size:13px; margin-bottom:6px;">
-                  <span>Sleep (8 hours)</span>
-                  <span id="sleepProgText">0 / 8 hrs</span>
+              <div style="padding: 16px; background: #f8fafc; border: 1px solid var(--border); border-radius: var(--radius-sm);">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                  <span style="font-weight: 700; font-size: 13px;">💤 Sleep Target (8 Hours)</span>
+                  <span id="sleepProgText" style="font-weight: 700; color: #10b981;">0 / 8 hrs</span>
                 </div>
-                <div class="progress-track"><div id="sleepProgFill" class="progress-fill" style="width:0%"></div></div>
+                <div class="progress-track" style="height: 10px;"><div id="sleepProgFill" class="progress-fill" style="width:0%; background: linear-gradient(90deg, #34d399, #059669);"></div></div>
               </div>
 
-              <div>
-                <div style="display:flex; justify-content:space-between; font-size:13px; margin-bottom:6px;">
-                  <span>Steps (10,000 steps)</span>
-                  <span id="stepsProgText">0 / 10,000</span>
+              <div style="padding: 16px; background: #f8fafc; border: 1px solid var(--border); border-radius: var(--radius-sm);">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                  <span style="font-weight: 700; font-size: 13px;">👟 Daily Step Goal (10,000 Steps)</span>
+                  <span id="stepsProgText" style="font-weight: 700; color: #f43f5e;">0 / 10,000</span>
                 </div>
-                <div class="progress-track"><div id="stepsProgFill" class="progress-fill" style="width:0%"></div></div>
+                <div class="progress-track" style="height: 10px;"><div id="stepsProgFill" class="progress-fill" style="width:0%; background: linear-gradient(90deg, #f43f5e, #be123c);"></div></div>
               </div>
             </div>
           </article>
