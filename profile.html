@@ -1,0 +1,70 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>My Profile | VitaNex AI</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 24px;
+      font-family: Arial, sans-serif;
+      background: #07151b;
+      color: #edfdfb;
+    }
+    main {
+      max-width: 440px;
+      margin: 50px auto;
+      padding: 28px;
+      border: 1px solid #285158;
+      border-radius: 20px;
+      background: #0c1f26;
+    }
+    label { display: block; margin-top: 20px; }
+    input, select, button {
+      box-sizing: border-box;
+      width: 100%;
+      padding: 12px;
+      margin-top: 8px;
+      border-radius: 9px;
+    }
+    input, select {
+      color: white;
+      background: #091d23;
+      border: 1px solid #34555b;
+    }
+    button {
+      margin-top: 24px;
+      background: #6be5d1;
+      border: 0;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    a { color: #6be5d1; }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>My VitaNex Profile</h1>
+    <p>Manage your personal preferences.</p>
+
+    <label for="profileName">Your name</label>
+    <input id="profileName" maxlength="80" placeholder="Enter your name">
+
+    <label for="profileLanguage">Preferred language</label>
+    <select id="profileLanguage">
+      <option value="en">English</option>
+      <option value="ta">தமிழ்</option>
+      <option value="hi">हिन्दी</option>
+    </select>
+
+    <button id="saveProfile" type="button">Save Profile</button>
+    <p id="profileStatus" role="status"></p>
+
+    <a href="./index.html">← Back to home</a>
+  </main>
+
+  <script type="module" src="./profile.js"></script>
+</body>
+</html>
