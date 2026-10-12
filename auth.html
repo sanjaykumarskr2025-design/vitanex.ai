@@ -1,0 +1,171 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#07151b">
+  <title>Login / Sign Up | VitaNex AI</title>
+
+  <style>
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      padding: 24px;
+      font-family: Inter, Arial, sans-serif;
+      color: #edfdfb;
+      background:
+        radial-gradient(ellipse at top, #123b42 0%, transparent 55%),
+        #07151b;
+    }
+
+    .card {
+      width: 100%;
+      max-width: 420px;
+      padding: 32px;
+      border: 1px solid #285158;
+      border-radius: 24px;
+      background: rgba(12, 31, 38, 0.94);
+      box-shadow: 0 24px 80px #0006;
+    }
+
+    .brand {
+      text-align: center;
+      color: #6be5d1;
+      font-size: 25px;
+      font-weight: 800;
+      letter-spacing: -1px;
+    }
+
+    h1 { text-align: center; font-size: 25px; }
+    .sub { text-align: center; color: #a5c2c5; font-size: 14px; }
+
+    .tabs {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin: 25px 0;
+      padding: 5px;
+      border-radius: 12px;
+      background: #081b20;
+    }
+
+    button, input { font: inherit; }
+
+    .tab {
+      padding: 12px;
+      border: 0;
+      border-radius: 9px;
+      color: #aac5c8;
+      background: transparent;
+      cursor: pointer;
+    }
+
+    .tab.active {
+      color: #071b1c;
+      background: #6be5d1;
+      font-weight: 700;
+    }
+
+    label {
+      display: block;
+      margin: 16px 0 7px;
+      color: #c4d9da;
+      font-size: 13px;
+    }
+
+    input {
+      width: 100%;
+      padding: 13px;
+      color: white;
+      background: #091d23;
+      border: 1px solid #34555b;
+      border-radius: 10px;
+      outline: none;
+    }
+
+    input:focus { border-color: #6be5d1; }
+
+    .submit {
+      width: 100%;
+      margin-top: 22px;
+      padding: 14px;
+      border: 0;
+      border-radius: 10px;
+      background: #6be5d1;
+      color: #071b1c;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .submit:disabled { opacity: 0.6; cursor: wait; }
+
+    #message {
+      min-height: 20px;
+      margin-top: 16px;
+      font-size: 13px;
+      line-height: 1.6;
+      overflow-wrap: anywhere;
+    }
+
+    .back {
+      display: block;
+      margin-top: 22px;
+      color: #6be5d1;
+      text-align: center;
+      text-decoration: none;
+      font-size: 14px;
+    }
+
+    .hidden { display: none; }
+  </style>
+</head>
+
+<body>
+  <main class="card">
+    <div class="brand">VitaNex AI</div>
+    <h1 id="heading">Welcome back</h1>
+    <p class="sub" id="subtitle">Sign in to your personal health copilot</p>
+
+    <div class="tabs">
+      <button class="tab active" id="loginTab" type="button">
+        Login
+      </button>
+      <button class="tab" id="signupTab" type="button">
+        Sign Up
+      </button>
+    </div>
+
+    <form id="authForm">
+      <div id="nameGroup" class="hidden">
+        <label for="name">Your name</label>
+        <input id="name" type="text" autocomplete="name"
+               maxlength="80" placeholder="Enter your name">
+      </div>
+
+      <label for="email">Email address</label>
+      <input id="email" type="email" required
+             autocomplete="email" placeholder="you@example.com">
+
+      <label for="password">Password</label>
+      <input id="password" type="password" required
+             minlength="8" autocomplete="current-password"
+             placeholder="At least 8 characters">
+
+      <button class="submit" id="submitBtn" type="submit">
+        Login securely
+      </button>
+    </form>
+
+    <p id="message" role="status" aria-live="polite"></p>
+
+    <a class="back" href="./index.html">← Back to homepage</a>
+  </main>
+
+  <script type="module" src="./auth.js"></script>
+</body>
+</html>
