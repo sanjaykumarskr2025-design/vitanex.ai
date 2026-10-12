@@ -17,6 +17,7 @@ const pageTitle = $("#pageTitle");
 const pageSubtitle = $("#pageSubtitle");
 
 const titles = {
+  home: { title: "vitanex.ai Personal Health Dashboard", sub: "Interactive biometric body map and organ telemetry overview." },
   dashboard: { title: "Cardiology & Heart Health Dashboard", sub: "Real-time cardiology situational awareness & patient care suite." },
   vitals: { title: "Health Monitoring & Vitals", sub: "Record heart rate, SpO2, blood pressure, and temperature." },
   tracker: { title: "Fitness Tracking & Wellness Goals", sub: "Monitor water intake, sleep quality, daily steps, and physical activity." },
@@ -24,7 +25,7 @@ const titles = {
   reports: { title: "Health Reports & Medical Terminology Hub", sub: "Organize lab reports, explain medical jargon, and display trends." },
   meds: { title: "Medication Reminders & Prescriptions", sub: "Enter schedules and track acknowledgments without changing doses." },
   journal: { title: "Symptom & Health Journal", sub: "Private encrypted logs for symptoms, palpitations, or chest discomfort notes." },
-  assistant: { title: "Gemini & ChatGPT AI Clinical Assistant", sub: "Ask healthcare questions with Google Answer grounding and chat history." }
+  assistant: { title: "vitanex.ai Clinical AI Assistant", sub: "Ask healthcare questions with Google Answer grounding and chat history." }
 };
 
 function switchView(target) {
@@ -71,25 +72,26 @@ window.addEventListener("DOMContentLoaded", () => {
 });
 
 // =========================================
-// THREE.JS 3D CARDIOLOGY HEART VISUALIZATION
+// REAL 3D ANATOMICAL HEART BEATING SCENE (THREE.JS)
 // =========================================
 const sceneContainer = $("#scene-container");
 let scene, camera, renderer, heartGroup, animationFrame;
 
-function createRealisticHeartGeometry() {
+function createAnatomicalHeartGeometry() {
   const points = [];
   const indices = [];
-  const uSegments = 80;
-  const vSegments = 60;
+  const uSegments = 90;
+  const vSegments = 70;
 
   for (let i = 0; i <= uSegments; i++) {
     const u = (i / uSegments) * Math.PI * 2;
     for (let j = 0; j <= vSegments; j++) {
       const v = (j / vSegments) * Math.PI * 2;
+      // Parametric cardioid heart equation with superior vena cava / aorta contour
       const x = 16 * Math.pow(Math.sin(u), 3);
-      const y = 13 * Math.cos(u) - 5 * Math.cos(2 * u) - 2 * Math.cos(3 * u) - Math.cos(4 * u);
-      const z = Math.sin(v) * 2;
-      points.push((x / 16) * 1.5, (y / 16) * 1.5, z * 0.7);
+      const y = 13 * Math.cos(u) - 5 * Math.cos(2 * u) - 2 * Math.cos(3 * u) - Math.cos(4 * u) + (v > Math.PI ? 2 : 0);
+      const z = Math.sin(v) * 2.5;
+      points.push((x / 16) * 1.6, (y / 16) * 1.6, z * 0.75);
     }
   }
 
@@ -113,47 +115,52 @@ function initCardiologyScene() {
   if (!sceneContainer) return;
   try {
     const width = sceneContainer.clientWidth || 400;
-    const height = sceneContainer.clientHeight || 350;
+    const height = sceneContainer.clientHeight || 380;
 
     scene = new THREE.Scene();
     camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 100);
-    camera.position.set(0, 0, 7);
+    camera.position.set(0, 0, 7.5);
 
     renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
     renderer.setSize(width, height);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     sceneContainer.appendChild(renderer.domElement);
 
     heartGroup = new THREE.Group();
-    const geo = createRealisticHeartGeometry();
+    const geo = createAnatomicalHeartGeometry();
 
     const mat = new THREE.MeshPhysicalMaterial({
-      color: 0xf43f5e,
-      roughness: 0.25,
-      metalness: 0.2,
+      color: 0xef4444,
+      roughness: 0.2,
+      metalness: 0.1,
       clearcoat: 1.0,
       clearcoatRoughness: 0.1,
-      emissive: 0x881337,
-      emissiveIntensity: 0.4,
+      emissive: 0x991b1b,
+      emissiveIntensity: 0.5,
       side: THREE.DoubleSide
     });
 
     const heartMesh = new THREE.Mesh(geo, mat);
-    heartMesh.scale.set(0.6, 0.6, 0.6);
+    heartMesh.scale.set(0.65, 0.65, 0.65);
     heartMesh.rotation.z = Math.PI;
     heartGroup.add(heartMesh);
 
-    const wire = new THREE.Mesh(geo, new THREE.MeshBasicMaterial({ color: 0xff88a2, wireframe: true, transparent: true, opacity: 0.15 }));
-    wire.scale.set(0.62, 0.62, 0.62);
+    // Inner wireframe glow
+    const wire = new THREE.Mesh(geo, new THREE.MeshBasicMaterial({ color: 0xfca5a5, wireframe: true, transparent: true, opacity: 0.25 }));
+    wire.scale.set(0.67, 0.67, 0.67);
     wire.rotation.copy(heartMesh.rotation);
     heartGroup.add(wire);
 
     scene.add(heartGroup);
 
-    scene.add(new THREE.AmbientLight(0xffffff, 1.5));
-    const pLight = new THREE.PointLight(0xff6b8b, 25, 20);
-    pLight.position.set(2, 3, 4);
-    scene.add(pLight);
+    scene.add(new THREE.AmbientLight(0xffffff, 1.8));
+    const pLight1 = new THREE.PointLight(0xff3366, 30, 20);
+    pLight1.position.set(3, 4, 4);
+    scene.add(pLight1);
+
+    const pLight2 = new THREE.PointLight(0x38bdf8, 20, 20);
+    pLight2.position.set(-3, -2, 3);
+    scene.add(pLight2);
 
     const fallback = $("#sceneFallback");
     if (fallback) fallback.style.display = "none";
@@ -169,9 +176,11 @@ function animateHeart() {
   const time = performance.now() * 0.001;
 
   if (heartGroup) {
-    heartGroup.rotation.y = time * 0.5;
-    const beat = Math.sin(time * 6) * 0.08 + Math.sin(time * 12) * 0.03;
-    heartGroup.scale.setScalar(1 + beat);
+    heartGroup.rotation.y = time * 0.4;
+    // Realistic dual-phase systole/diastole heartbeat pulse curve
+    const beat = Math.sin(time * 7) * 0.09 + Math.sin(time * 14) * 0.04;
+    const scaleVal = 1 + Math.max(0, beat);
+    heartGroup.scale.setScalar(scaleVal);
   }
   renderer.render(scene, camera);
 }
@@ -228,7 +237,7 @@ async function loadVitals(userId) {
       const div = document.createElement("div");
       div.style = "padding:12px; background:#f8fafc; border:1px solid var(--border); border-radius:var(--radius-sm); font-size:13px; display:flex; justify-content:space-between; align-items:center;";
       div.innerHTML = `<div><strong>HR:</strong> ${item.heart_rate} BPM | <strong>SpO2:</strong> ${item.spo2}% | <strong>BP:</strong> ${item.blood_pressure} | <strong>Temp:</strong> ${item.temperature || 98.6}°F
-        <div style="font-size:10px; color:var(--text-muted); menu-top:4px;">${new Date(item.created_at).toLocaleString()}</div></div>
+        <div style="font-size:10px; color:var(--text-muted); margin-top:4px;">${new Date(item.created_at).toLocaleString()}</div></div>
         <span class="demo-badge" style="background:#f0fdf4; color:#16a34a;">Recorded</span>`;
       vitalsList.appendChild(div);
     });
@@ -441,7 +450,7 @@ function renderChatHistory() {
   chatSessions.forEach(session => {
     const div = document.createElement("div");
     div.className = `chat-session-item ${session.id === activeSessionId ? 'active' : ''}`;
-    div.style = `padding: 10px 12px; background: ${session.id === activeSessionId ? 'var(--sidebar-active)' : 'rgba(255,255,255,0.04)'}; color: ${session.id === activeSessionId ? '#fff' : '#94a3b8'}; border-radius: var(--radius-sm); font-size: 13px; cursor: pointer; font-weight: ${session.id === activeSessionId ? '600' : '400'}; transition: 0.2s; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;`;
+    div.style = `padding: 10px 12px; background: ${session.id === activeSessionId ? '#0f172a' : '#f8fafc'}; color: ${session.id === activeSessionId ? '#fff' : '#64748b'}; border-radius: var(--radius-sm); font-size: 13px; cursor: pointer; font-weight: ${session.id === activeSessionId ? '600' : '400'}; transition: 0.2s; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;`;
     div.textContent = session.title;
     div.addEventListener("click", () => {
       activeSessionId = session.id;
@@ -462,7 +471,7 @@ function renderActiveChatMessages() {
   welcomeDiv.innerHTML = `
     <div style="width: 32px; height: 32px; border-radius: 50%; background: linear-gradient(135deg, #2563eb, #06b6d4); color: #fff; display: grid; place-items: center; font-weight: bold; font-size: 14px; flex-shrink: 0;">AI</div>
     <div style="background: #f1f5f9; padding: 14px 18px; border-radius: 16px; max-width: 80%; font-size: 14px; color: var(--text-main); line-height: 1.5; border-top-left-radius: 4px;">
-      👋 Hello! I am your advanced clinical healthcare assistant powered by Google Gemini and ChatGPT intelligence with Google Answer grounding. You can ask me any medical, cardiology, diet, or symptom questions in English, Tamil, or Hindi. How can I support your health today?
+      👋 Hello! I am your advanced clinical healthcare assistant on vitanex.ai. You can ask me any medical, cardiology, diet, or symptom questions in English, Tamil, or Hindi. How can I support your health today?
     </div>
   `;
   chatMessages.appendChild(welcomeDiv);
@@ -527,7 +536,7 @@ assistantForm?.addEventListener("submit", async (e) => {
             {
               parts: [
                 {
-                  text: "You are HeartBloom Gemini & ChatGPT AI, an expert clinical healthcare intelligence assistant with Google Answer grounding. Provide comprehensive, accurate, empathetic answers to health questions, complete with Google Search answer summaries and clinical safety disclaimers.\n\nUser Question: " + question
+                  text: "You are vitanex.ai Gemini & ChatGPT AI, an expert clinical healthcare intelligence assistant with Google Answer grounding. Provide comprehensive, accurate, empathetic answers to health questions, complete with Google Search answer summaries and clinical safety disclaimers.\n\nUser Question: " + question
                 }
               ]
             }
@@ -547,7 +556,7 @@ assistantForm?.addEventListener("submit", async (e) => {
   }
 
   if (!success || !reply) {
-    reply = `Regarding your health query about "${question}": Maintaining cardiovascular and general health requires consistent vital tracking (blood pressure, heart rate, SpO2), balanced nutrition low in sodium, proper hydration, and 7-9 hours of sleep. For acute symptoms, seek immediate professional medical attention.\n\nℹ️ Educational guidance powered by Google Gemini & ChatGPT clinical intelligence.`;
+    reply = `Regarding your health query about "${question}": Maintaining cardiovascular and general health requires consistent vital tracking (blood pressure, heart rate, SpO2), balanced nutrition low in sodium, proper hydration, and 7-9 hours of sleep. For acute symptoms, seek immediate professional medical attention.\n\nℹ️ Educational guidance powered by vitanex.ai clinical intelligence.`;
   }
 
   if (currentSession) {
@@ -561,7 +570,7 @@ $("#exportCsvBtn")?.addEventListener("click", () => {
   const csv = "data:text/csv;charset=utf-8,Category,Detail,Date\nVitals,Heart Rate 75 BPM,2026-10-13\nFitness,Steps 9500,2026-10-13\nDiet,Heart-Healthy Plan,2026-10-13\nReports,Lipid Panel Organized,2026-10-13\nMedication,CoQ10 Acknowledged,2026-10-13\n";
   const link = document.createElement("a");
   link.href = encodeURI(csv);
-  link.download = "heartbloom-cardiology-report.csv";
+  link.download = "vitanex-ai-cardiology-report.csv";
   document.body.appendChild(link);
   link.click();
   document.body.removeChild(link);
