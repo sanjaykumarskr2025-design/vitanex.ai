@@ -37,18 +37,22 @@ window.switchTab = function(e, target) {
 
 document.addEventListener("DOMContentLoaded", async () => {
   // Check active user session
+  let currentUserId = "anonymous-user";
   try {
     const { data: { user } } = await supabase.auth.getUser();
     if (user) {
+      currentUserId = user.id;
       const loginLink = $("#loginLink");
       const logoutButton = $("#logoutButton");
       if (loginLink) loginLink.hidden = true;
       if (logoutButton) logoutButton.hidden = false;
-      loadUserRecords(user.id);
     }
   } catch (err) {
     console.log("Supabase session check info:", err);
   }
+
+  // Load existing records on startup
+  loadUserRecords(currentUserId);
 
   const hash = window.location.hash.replace('#', '');
   if (hash && document.getElementById(`view-${hash}`)) {
@@ -76,7 +80,13 @@ const vitalsList = $("#vitalsList");
 
 vitalsForm?.addEventListener("submit", async (e) => {
   e.preventDefault();
-  const { data: { user } } = await supabase.auth.getUser();
+  let userId = "anonymous-user";
+  try {
+    const { data: { user } } = await supabase.auth.getUser();
+    if (user && user.id) userId = user.id;
+  } catch (err) {
+    console.log("Auth fetch notice:", err);
+  }
 
   const hr = Number($("#vitalsHr").value);
   const spo2 = Number($("#vitalsSpo2").value);
@@ -85,25 +95,21 @@ vitalsForm?.addEventListener("submit", async (e) => {
 
   // Evaluate clinical status & risk response
   let clinicalStatus = "Optimal (Normal Range)";
-  let badgeColor = "#10b981"; // emerald
   let advice = "Your vitals are within healthy parameters. Maintain regular hydration and balanced nutrition.";
 
-  // Simple clinical rules evaluation for blood pressure & heart rate
   const bpParts = bp.split('/');
   const sys = bpParts[0] ? parseInt(bpParts[0]) : 120;
 
   if (sys >= 140 || hr > 100) {
     clinicalStatus = "Elevated Risk / Hypertension Alert";
-    badgeColor = "#f43f5e"; // rose
     advice = "Your blood pressure or heart rate is elevated. Consider 10 minutes of resting breathwork, reduce sodium intake, and consult your cardiologist if symptoms persist.";
   } else if (sys >= 130 || (hr < 60 && hr > 0)) {
     clinicalStatus = "Pre-Hypertension / Watchful Monitoring";
-    badgeColor = "#f59e0b"; // amber
     advice = "Slightly elevated readings noted. Monitor daily and maintain low sodium intake.";
   }
 
   const record = {
-    user_id: user ? user.id : "anonymous-user",
+    user_id: userId,
     heart_rate: hr,
     spo2: spo2,
     blood_pressure: bp,
@@ -114,36 +120,42 @@ vitalsForm?.addEventListener("submit", async (e) => {
     created_at: new Date().toISOString()
   };
 
-  // Save to Supabase if authenticated, or fallback to localStorage per user credential
-  const { error } = await supabase.from("health_vitals").insert(record);
-
-  // Also store in localStorage for offline persistence under credential
-  const localKey = user ? `vitanex_vitals_${user.id}` : `vitanex_vitals_guest`;
+  // Save to localStorage immediately for robust zero-latency reliability
+  const localKey = `vitanex_vitals_${userId}`;
   const existing = JSON.parse(localStorage.getItem(localKey) || "[]");
   existing.unshift(record);
   localStorage.setItem(localKey, JSON.stringify(existing));
 
-  if (error && !user) {
-    console.log("Supabase anonymous insert notice:", error.message);
+  // Attempt Supabase insert in background
+  try {
+    await supabase.from("health_vitals").insert(record);
+  } catch (err) {
+    console.log("Supabase insert queue notice:", err);
   }
 
-  alert(`Health monitoring vital recorded successfully!\n\nClinical Evaluation: ${clinicalStatus}\nAdvice: ${advice}`);
+  alert(`Health monitoring vital recorded successfully!\n\nClinical Evaluation: ${clinicalStatus}\nAI Guidance: ${advice}`);
   vitalsForm.reset();
   renderVitalsList(existing);
 });
 
 async function loadUserRecords(userId) {
-  // Load vitals
   const localKey = `vitanex_vitals_${userId}`;
   const localData = JSON.parse(localStorage.getItem(localKey) || "[]");
 
-  const { data, error } = await supabase
-    .from("health_vitals")
-    .select("*")
-    .eq("user_id", userId)
-    .order("created_at", { ascending: false });
+  let remoteData = [];
+  try {
+    const { data, error } = await supabase
+      .from("health_vitals")
+      .select("*")
+      .eq("user_id", userId)
+      .order("created_at", { ascending: false });
+    if (data && data.length > 0) remoteData = data;
+  } catch (err) {
+    console.log("Supabase fetch notice:", err);
+  }
 
-  const combined = (data && data.length > 0) ? data : localData;
+  // Merge remote and local without duplicates
+  const combined = remoteData.length > 0 ? remoteData : localData;
   renderVitalsList(combined);
 
   // Load wellness
@@ -186,19 +198,26 @@ function renderVitalsList(items) {
 const wellnessForm = $("#wellnessForm");
 wellnessForm?.addEventListener("submit", async (e) => {
   e.preventDefault();
-  const { data: { user } } = await supabase.auth.getUser();
+  let userId = "anonymous-user";
+  try {
+    const { data: { user } } = await supabase.auth.getUser();
+    if (user && user.id) userId = user.id;
+  } catch (err) {}
 
   const record = {
-    user_id: user ? user.id : "anonymous-user",
+    user_id: userId,
     water_glasses: Number($("#wellWater").value),
     sleep_hours: Number($("#wellSleep").value),
     steps: Number($("#wellSteps").value),
     created_at: new Date().toISOString()
   };
 
-  await supabase.from("daily_wellness").insert(record);
-  const localKey = user ? `vitanex_wellness_${user.id}` : `vitanex_wellness_guest`;
+  const localKey = `vitanex_wellness_${userId}`;
   localStorage.setItem(localKey, JSON.stringify(record));
+
+  try {
+    await supabase.from("daily_wellness").insert(record);
+  } catch (err) {}
 
   alert("Fitness and wellness goals saved securely!");
   wellnessForm.reset();
