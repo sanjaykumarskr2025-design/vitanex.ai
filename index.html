@@ -95,13 +95,15 @@
             </div>
           </div>
 
-          <!-- Right: Realistic 3D Human Anatomy Holographic Image Card -->
-          <div class="hero-visual-card" style="height: 100%; min-height: 380px; background: #0f172a; position: relative; overflow: hidden; display: grid; place-items: center; border-radius: var(--radius-lg);">
-            <div class="visual-label" style="position: absolute; top: 20px; left: 24px; z-index: 10;">
-              <span class="live-dot"></span> 3D HUMAN ANATOMY TELEMETRY
+          <!-- Right: Interactive 3D Movable Human Anatomy Card -->
+          <div class="hero-visual-card" id="anatomy3DCard" style="height: 100%; min-height: 380px; background: #0f172a; position: relative; overflow: hidden; display: grid; place-items: center; border-radius: var(--radius-lg); perspective: 1000px; cursor: grab;">
+            <div class="visual-label" style="position: absolute; top: 20px; left: 24px; z-index: 10; pointer-events: none;">
+              <span class="live-dot"></span> 3D MOVABLE ANATOMY MODEL
             </div>
-            <img src="./download (1).jpg" alt="3D Realistic Human Anatomy" style="width: 100%; height: 100%; object-fit: cover; opacity: 0.92; mix-blend-mode: luminosity; transition: transform 0.5s ease;" onmouseover="this.style.transform='scale(1.04)'" onmouseout="this.style.transform='scale(1)'">
-            <div class="visual-caption" style="position: absolute; bottom: 16px; right: 24px; color: #38bdf8; font-weight: 700; letter-spacing: 1px; font-size: 11px;">VITANEX.AI 3D BODY MAPPING</div>
+            <div id="anatomyModelContainer" style="width: 220px; height: 300px; transition: transform 0.1s ease-out; transform-style: preserve-3d; display: grid; place-items: center;">
+              <img src="./download (1).jpg" alt="3D Movable Human Anatomy" style="width: 100%; height: 100%; object-fit: contain; border-radius: 16px; box-shadow: 0 20px 40px rgba(0,0,0,0.5); pointer-events: none; filter: drop-shadow(0 10px 20px rgba(37,99,235,0.3));">
+            </div>
+            <div class="visual-caption" style="position: absolute; bottom: 16px; right: 24px; color: #38bdf8; font-weight: 700; letter-spacing: 1px; font-size: 11px; pointer-events: none;">DRAG TO ROTATE IN 3D</div>
           </div>
         </div>
       </section>
@@ -558,6 +560,69 @@
     </main>
   </div>
 
-  <script type="module" src="script.js"></script>
+  <script>
+    // Interactive 3D Movable Anatomy Card Script (Mouse / Touch Rotation)
+    const card = document.getElementById('anatomy3DCard');
+    const model = document.getElementById('anatomyModelContainer');
+
+    if (card && model) {
+      let isDragging = false;
+      let startX = 0, startY = 0;
+      let rotX = 0, rotY = 0;
+
+      card.addEventListener('mousedown', (e) => {
+        isDragging = true;
+        startX = e.clientX;
+        startY = e.clientY;
+        card.style.cursor = 'grabbing';
+      });
+
+      window.addEventListener('mousemove', (e) => {
+        if (!isDragging) return;
+        const deltaX = e.clientX - startX;
+        const deltaY = e.clientY - startY;
+
+        rotY += deltaX * 0.5;
+        rotX -= deltaY * 0.5;
+
+        startX = e.clientX;
+        startY = e.clientY;
+
+        model.style.transform = `rotateX(${rotX}deg) rotateY(${rotY}deg) scale(1.05)`;
+      });
+
+      window.addEventListener('mouseup', () => {
+        isDragging = false;
+        card.style.cursor = 'grab';
+        model.style.transform = `rotateX(0deg) rotateY(0deg) scale(1)`;
+      });
+
+      // Touch support for mobile/tablet
+      card.addEventListener('touchstart', (e) => {
+        isDragging = true;
+        startX = e.touches[0].clientX;
+        startY = e.touches[0].clientY;
+      });
+
+      window.addEventListener('touchmove', (e) => {
+        if (!isDragging) return;
+        const deltaX = e.touches[0].clientX - startX;
+        const deltaY = e.touches[0].clientY - startY;
+
+        rotY += deltaX * 0.5;
+        rotX -= deltaY * 0.5;
+
+        startX = e.touches[0].clientX;
+        startY = e.touches[0].clientY;
+
+        model.style.transform = `rotateX(${rotX}deg) rotateY(${rotY}deg) scale(1.05)`;
+      });
+
+      window.addEventListener('touchend', () => {
+        isDragging = false;
+        model.style.transform = `rotateX(0deg) rotateY(0deg) scale(1)`;
+      });
+    }
+  </script>
 </body>
 </html>
