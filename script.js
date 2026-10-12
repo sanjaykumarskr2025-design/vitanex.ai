@@ -21,6 +21,7 @@ const titles = {
   vitals: { title: "Health Monitoring & Vitals", sub: "Record heart rate, SpO2, blood pressure, and temperature." },
   tracker: { title: "Fitness Tracking & Wellness Goals", sub: "Monitor water intake, sleep quality, daily steps, and physical activity." },
   diet: { title: "Personalized Diet & Nutrition Plan", sub: "Tailored meal ideas based on user preferences and clinical safety limits." },
+  reports: { title: "Health Reports & Medical Terminology Hub", sub: "Organize lab reports, explain medical jargon, and display trends." },
   meds: { title: "Medication Reminders & Prescriptions", sub: "Enter schedules and track acknowledgments without changing doses." },
   journal: { title: "Symptom & Health Journal", sub: "Private encrypted logs for symptoms, palpitations, or chest discomfort notes." },
   assistant: { title: "AI Cardiology Assistant & Reports", sub: "Ask cardiology questions and export patient health summaries." }
@@ -311,6 +312,35 @@ dietForm?.addEventListener("submit", (e) => {
   alert("Personalized diet plan generated successfully!");
 });
 
+// Health Reports & Terminology Explainer Form
+const reportForm = $("#reportForm");
+const reportList = $("#reportList");
+reportForm?.addEventListener("submit", (e) => {
+  e.preventDefault();
+  const title = $("#reportTitle").value.trim();
+  const term = $("#reportTerm").value.trim();
+  const notes = $("#reportNotes").value.trim();
+  if (!title || !notes) return;
+
+  const explanation = term ? `📖 <strong>${term} Explanation:</strong> Clinical medical term denoting specific biometric findings in laboratory blood or imaging results.` : `📄 Verified laboratory report successfully organized and archived.`;
+
+  const div = document.createElement("div");
+  div.style = "padding: 14px; background: #f8fafc; border: 1px solid var(--border); border-radius: var(--radius-sm);";
+  div.innerHTML = `
+    <div style="display:flex; justify-content:space-between; align-items:center;">
+      <strong>${title}</strong>
+      <span class="demo-badge" style="background:#e0f2fe; color:#0369a1;">Organized</span>
+    </div>
+    <p style="font-size: 12px; color: var(--text-muted); margin-top: 4px;">${notes}</p>
+    <div style="margin-top: 8px; padding: 8px; background: #e0f2fe; border-radius: 6px; font-size: 11px; color: #0369a1;">
+      ${explanation}
+    </div>
+  `;
+  reportList?.prepend(div);
+  alert("Health report organized and terminology explained!");
+  reportForm.reset();
+});
+
 // Medication Reminders Form
 const medForm = $("#medForm");
 const medList = $("#medList");
@@ -444,7 +474,7 @@ assistantForm?.addEventListener("submit", async (e) => {
 
 // CSV Export
 $("#exportCsvBtn")?.addEventListener("click", () => {
-  const csv = "data:text/csv;charset=utf-8,Category,Detail,Date\nVitals,Heart Rate 75 BPM,2026-10-13\nFitness,Steps 9500,2026-10-13\nDiet,Heart-Healthy Plan,2026-10-13\nMedication,CoQ10 Acknowledged,2026-10-13\n";
+  const csv = "data:text/csv;charset=utf-8,Category,Detail,Date\nVitals,Heart Rate 75 BPM,2026-10-13\nFitness,Steps 9500,2026-10-13\nDiet,Heart-Healthy Plan,2026-10-13\nReports,Lipid Panel Organized,2026-10-13\nMedication,CoQ10 Acknowledged,2026-10-13\n";
   const link = document.createElement("a");
   link.href = encodeURI(csv);
   link.download = "heartbloom-cardiology-report.csv";

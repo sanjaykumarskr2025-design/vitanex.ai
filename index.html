@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="theme-color" content="#f0f4f8">
   <meta name="description" content="VitaNex AI — HeartBloom Cardiology & Health Intelligence Dashboard.">
-  <title>VitaNex AI | Personalized Diet Plan & Clinical Suite</title>
+  <title>VitaNex AI | Health Reports & Clinical Suite</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -32,9 +32,10 @@
           <a href="#vitals" class="ref-tab" data-switch="vitals">🩺 Health Monitoring</a>
           <a href="#tracker" class="ref-tab" data-switch="tracker">🎯 Fitness & Goals</a>
           <a href="#diet" class="ref-tab" data-switch="diet">🥗 Diet Plan</a>
+          <a href="#reports" class="ref-tab" data-switch="reports">📋 Health Reports</a>
           <a href="#meds" class="ref-tab" data-switch="meds">💊 Medications</a>
           <a href="#journal" class="ref-tab" data-switch="journal">📝 Journal</a>
-          <a href="#assistant" class="ref-tab" data-switch="assistant">📋 AI & Reports</a>
+          <a href="#assistant" class="ref-tab" data-switch="assistant">🤖 AI Assistant</a>
         </div>
         <div class="topbar-actions">
           <select id="languageSelect" aria-label="Choose language">
@@ -68,8 +69,8 @@
             <span class="val">97.5 <span style="font-size: 12px; font-weight: normal; color:var(--text-muted);">kg</span> <span class="tag-delta">+1.5 kg</span></span>
           </div>
           <div class="metric-pill">
-            <span class="label">Active Diet Plan</span>
-            <span class="val" style="font-size: 12px; font-weight: 500;">Low Sodium Heart-Healthy</span>
+            <span class="label">Health Records</span>
+            <span class="val" style="font-size: 12px; font-weight: 500;">4 Reports Organized</span>
           </div>
         </div>
 
@@ -77,26 +78,26 @@
           <div class="panel" style="background: linear-gradient(135deg, #ffffff, #f8fafc); display: flex; flex-direction: column; justify-content: space-between;">
             <div>
               <div class="panel-topline">
-                <span class="panel-label">PERSONALIZED DIET & NUTRITION</span>
-                <span class="demo-badge">AI Recommendations</span>
+                <span class="panel-label">HEALTH REPORTS & LABS HUB</span>
+                <span class="demo-badge">Unified Archive</span>
               </div>
-              <h2 style="font-family: var(--font-display); font-size: 24px; margin-bottom: 20px;">Cardio-Protective Meal Planning</h2>
+              <h2 style="font-family: var(--font-display); font-size: 24px; margin-bottom: 20px;">Organize & Explain Medical Terminology</h2>
 
               <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin-bottom: 20px;">
                 <div style="padding: 16px; background: #fff; border: 1px solid var(--border); border-radius: var(--radius-sm);">
-                  <span style="font-size: 11px; color: var(--text-muted); font-weight: 700;">DAILY SODIUM LIMIT</span>
-                  <div style="font-family: var(--font-display); font-size: 20px; font-weight: 700; color: #16a34a; margin-top: 4px;">&lt; 2,000 mg</div>
+                  <span style="font-size: 11px; color: var(--text-muted); font-weight: 700;">LATEST UPLOAD</span>
+                  <div style="font-family: var(--font-display); font-size: 18px; font-weight: 700; color: #2563eb; margin-top: 4px;">Lipid Panel (Oct 2026)</div>
                 </div>
                 <div style="padding: 16px; background: #fff; border: 1px solid var(--border); border-radius: var(--radius-sm);">
-                  <span style="font-size: 11px; color: var(--text-muted); font-weight: 700;">RECOMMENDED OMEGA-3</span>
-                  <div style="font-family: var(--font-display); font-size: 20px; font-weight: 700; color: #2563eb; margin-top: 4px;">Salmon / Walnuts</div>
+                  <span style="font-size: 11px; color: var(--text-muted); font-weight: 700;">STATUS</span>
+                  <div style="font-family: var(--font-display); font-size: 18px; font-weight: 700; color: #16a34a; margin-top: 4px;">AI Analyzed ✓</div>
                 </div>
               </div>
             </div>
 
             <div class="hero-btns" style="margin-top: 15px;">
-              <a href="#diet" class="button" data-switch="diet">Open Diet Plan Tab ↗</a>
-              <a href="#assistant" class="button button-outline" data-switch="assistant">Ask AI Nutritionist →</a>
+              <a href="#reports" class="button" data-switch="reports">Open Health Reports Tab ↗</a>
+              <a href="#assistant" class="button button-outline" data-switch="assistant">Ask AI Terminology →</a>
             </div>
           </div>
 
@@ -239,28 +240,25 @@
         </div>
       </section>
 
-      <!-- VIEW 4: PERSONALIZED DIET PLAN (Feature 3: Attractive Unique Theme) -->
+      <!-- VIEW 4: PERSONALIZED DIET PLAN -->
       <section id="view-diet" class="view-section">
         <div class="section-heading">
           <div>
             <div class="eyebrow"><span class="status-dot"></span> FEATURE 3</div>
             <h2>Personalized Diet & <span class="gradient-text">Nutrition Plan</span></h2>
-            <p>Tailored meal recommendations based on user preferences, dietary restrictions, and wellness goals with built-in clinical safety limitations.</p>
+            <p>Tailored meal recommendations based on user preferences and wellness goals.</p>
           </div>
-          <span class="demo-badge" style="background:#fef3c7; color:#92400e;">NUTRITION INTELLIGENCE</span>
+          <span class="demo-badge">NUTRITION</span>
         </div>
 
         <div class="dashboard-grid">
-          <!-- Left: Diet Preference Form -->
           <article class="panel" style="background: linear-gradient(135deg, #065f46, #047857); color: #fff;">
             <div class="panel-topline">
               <span class="panel-label" style="color: #6ee7b7;">GENERATE CUSTOM MEAL PLAN</span>
               <span class="panel-icon">🥗</span>
             </div>
             <h3 style="color: #fff; margin-bottom: 6px;">Dietary Preferences</h3>
-            <p style="color: #a7f3d0; font-size: 13px; margin-bottom: 20px;">Organize your everyday food choices with cardiologist-approved safety limits.</p>
-
-            <form id="dietForm" style="display: flex; flex-direction: column; gap: 14px;">
+            <form id="dietForm" style="margin-top:15px; display: flex; flex-direction: column; gap: 14px;">
               <div>
                 <label style="font-size: 11px; color: #a7f3d0; font-weight:700;">DIETARY RESTRICTION / PREFERENCE</label>
                 <select id="dietPref" style="background: rgba(255,255,255,0.15); border-color: rgba(255,255,255,0.3); color: #fff; margin-top: 6px; width:100%; padding:12px 16px; border-radius:var(--radius-sm);">
@@ -272,7 +270,7 @@
               </div>
               <div>
                 <label style="font-size: 11px; color: #a7f3d0; font-weight:700;">PRIMARY HEALTH GOAL</label>
-                <input type="text" id="dietGoal" placeholder="e.g. Reduce blood pressure & cholesterol" value="Reduce blood pressure & support cardiovascular health" required style="background: rgba(255,255,255,0.15); border-color: rgba(255,255,255,0.3); color: #fff; margin-top: 6px;">
+                <input type="text" id="dietGoal" placeholder="e.g. Reduce blood pressure" value="Reduce blood pressure & support cardiovascular health" required style="background: rgba(255,255,255,0.15); border-color: rgba(255,255,255,0.3); color: #fff; margin-top: 6px;">
               </div>
               <div>
                 <label style="font-size: 11px; color: #a7f3d0; font-weight:700;">ALLERGIES / RESTRICTIONS</label>
@@ -282,41 +280,90 @@
             </form>
           </article>
 
-          <!-- Right: Meal Plan Output & Safety Limitations -->
           <article class="panel">
             <div class="panel-topline">
               <span class="panel-label">RECOMMENDED MEALS & SAFETY</span>
               <span class="panel-icon">🥑</span>
             </div>
             <h3>Today's Tailored Menu</h3>
-            <p class="muted" style="margin-bottom: 16px;">Curated for optimal nutrient absorption with built-in medical disclaimers.</p>
-
-            <div id="dietOutput" style="display: flex; flex-direction: column; gap: 12px; max-height: 340px; overflow-y: auto;">
+            <div id="dietOutput" style="margin-top:15px; display: flex; flex-direction: column; gap: 12px; max-height: 340px; overflow-y: auto;">
               <div style="padding: 14px; background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: var(--radius-sm);">
                 <strong style="color:#166534;">🌅 Breakfast: Oatmeal & Berries</strong>
-                <p style="font-size: 12px; color: #15803d; margin-top: 4px;">Steel-cut oats with fresh blueberries, walnuts, and cinnamon. Rich in soluble fiber & omega-3.</p>
-              </div>
-              <div style="padding: 14px; background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: var(--radius-sm);">
-                <strong style="color:#166534;">☀️ Lunch: Quinoa & Grilled Salmon Salad</strong>
-                <p style="font-size: 12px; color: #15803d; margin-top: 4px;">Wild salmon fillet over organic quinoa, baby spinach, avocado, and extra virgin olive oil dressing.</p>
-              </div>
-              <div style="padding: 14px; background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: var(--radius-sm);">
-                <strong style="color:#166534;">🌙 Dinner: Baked Chicken & Steamed Asparagus</strong>
-                <p style="font-size: 12px; color: #15803d; margin-top: 4px;">Herb-roasted chicken breast with steamed asparagus and roasted sweet potato wedges. Low sodium.</p>
-              </div>
-              <div style="padding: 12px; background: #fefce8; border: 1px solid #fef08a; border-radius: var(--radius-sm); font-size: 11px; color: #854d0e;">
-                ⚠️ <strong>Safety Limitation:</strong> General nutritional guidance. Consult a registered dietitian or cardiologist for specific clinical dietary restrictions.
+                <p style="font-size: 12px; color: #15803d; margin-top: 4px;">Steel-cut oats with fresh blueberries, walnuts, and cinnamon.</p>
               </div>
             </div>
           </article>
         </div>
       </section>
 
-      <!-- VIEW 5: MEDICATION REMINDERS -->
+      <!-- VIEW 5: HEALTH REPORTS (Feature 6: Organize uploaded reports, explain terminology, trends) -->
+      <section id="view-reports" class="view-section">
+        <div class="section-heading">
+          <div>
+            <div class="eyebrow"><span class="status-dot"></span> FEATURE 6</div>
+            <h2>Health Reports & <span class="gradient-text">Medical Terminology Hub</span></h2>
+            <p>Organize uploaded lab reports or manually entered results, explain medical terminology clearly, and display health history trends.</p>
+          </div>
+          <span class="demo-badge" style="background:#e0f2fe; color:#0369a1;">UNIFIED ARCHIVE</span>
+        </div>
+
+        <div class="dashboard-grid">
+          <!-- Left: Report Upload & Terminology Lookup Form -->
+          <article class="panel" style="background: linear-gradient(135deg, #1e293b, #0f172a); color: #fff;">
+            <div class="panel-topline">
+              <span class="panel-label" style="color: #38bdf8;">ADD OR EXPLAIN LAB REPORT</span>
+              <span class="panel-icon">📂</span>
+            </div>
+            <h3 style="color: #fff; margin-bottom: 6px;">Upload & Terminology Explainer</h3>
+            <p style="color: #94a3b8; font-size: 13px; margin-bottom: 20px;">Eliminate scattered health records and decipher complex medical jargon instantly.</p>
+
+            <form id="reportForm" style="display: flex; flex-direction: column; gap: 14px;">
+              <div>
+                <label style="font-size: 11px; color: #94a3b8; font-weight:700;">REPORT TITLE / LAB CATEGORY</label>
+                <input type="text" id="reportTitle" placeholder="e.g. Comprehensive Lipid Panel" required style="background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.15); color: #fff; margin-top: 6px;">
+              </div>
+              <div>
+                <label style="font-size: 11px; color: #94a3b8; font-weight:700;">MEDICAL TERM / RESULT TO EXPLAIN</label>
+                <input type="text" id="reportTerm" placeholder="e.g. Hyperlipidemia, Triglycerides, HbA1c" style="background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.15); color: #fff; margin-top: 6px;">
+              </div>
+              <div>
+                <label style="font-size: 11px; color: #94a3b8; font-weight:700;">FINDINGS / NOTES</label>
+                <textarea id="reportNotes" rows="3" placeholder="Paste lab results or summary notes..." required style="width:100%; padding:12px 16px; border-radius:var(--radius-sm); background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15); color: #fff; font-family:inherit; margin-top:6px;"></textarea>
+              </div>
+              <button type="submit" class="button" style="margin-top: 10px; background: #38bdf8; color: #0b152d; font-weight: 700;">Organize & Explain Report ↗</button>
+            </form>
+          </article>
+
+          <!-- Right: Organized Reports Archive & Terminology Explanations -->
+          <article class="panel">
+            <div class="panel-topline">
+              <span class="panel-label">ORGANIZED ARCHIVE & TRENDS</span>
+              <span class="panel-icon">📊</span>
+            </div>
+            <h3>Unified Health Records</h3>
+            <p class="muted" style="margin-bottom: 16px;">Browse organized reports and clear medical definitions.</p>
+
+            <div id="reportList" style="display: flex; flex-direction: column; gap: 12px; max-height: 380px; overflow-y: auto;">
+              <div style="padding: 14px; background: #f8fafc; border: 1px solid var(--border); border-radius: var(--radius-sm);">
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                  <strong>Comprehensive Lipid Panel</strong>
+                  <span class="demo-badge" style="background:#e0f2fe; color:#0369a1;">Verified</span>
+                </div>
+                <p style="font-size: 12px; color: var(--text-muted); margin-top: 4px;">Total Cholesterol: 195 mg/dL | HDL: 55 mg/dL | LDL: 120 mg/dL</p>
+                <div style="margin-top: 8px; padding: 8px; background: #e0f2fe; border-radius: 6px; font-size: 11px; color: #0369a1;">
+                  📖 <strong>Hyperlipidemia Terminology:</strong> Elevated levels of lipids (fats/cholesterol) in the blood stream.
+                </div>
+              </div>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <!-- VIEW 6: MEDICATION REMINDERS -->
       <section id="view-meds" class="view-section">
         <div class="section-heading">
           <div>
-            <div class="eyebrow"><span class="status-dot"></span> FEATURE 5</div>
+            <div class="eyebrow"><span class="status-dot"></span> FEATURE 7</div>
             <h2>Medication <span class="gradient-text">Reminders</span></h2>
             <p>Enter prescription schedules, set timed reminders, and track acknowledgments.</p>
           </div>
@@ -366,11 +413,11 @@
         </div>
       </section>
 
-      <!-- VIEW 6: SYMPTOM JOURNAL -->
+      <!-- VIEW 7: SYMPTOM JOURNAL -->
       <section id="view-journal" class="view-section">
         <div class="section-heading">
           <div>
-            <div class="eyebrow"><span class="status-dot"></span> FEATURE 6</div>
+            <div class="eyebrow"><span class="status-dot"></span> FEATURE 8</div>
             <h2>Symptom & Health <span class="gradient-text">Journal</span></h2>
             <p>Private encrypted logs for symptoms, palpitations, or chest discomfort notes.</p>
           </div>
@@ -413,10 +460,10 @@
         </div>
       </section>
 
-      <!-- VIEW 7: AI ASSISTANT & REPORTS -->
+      <!-- VIEW 8: AI ASSISTANT & REPORTS -->
       <section id="view-assistant" class="view-section">
         <div class="assistant-card" style="margin-top: 20px;">
-          <div class="eyebrow"><span class="status-dot"></span> AI & REPORTS</div>
+          <div class="eyebrow"><span class="status-dot"></span> AI ASSISTANT</div>
           <h2>HeartBloom Google Gemini AI Assistant</h2>
           <p>Ask cardiology and wellness questions in English, Tamil (தமிழ்), or Hindi (हिन्दी).</p>
 
