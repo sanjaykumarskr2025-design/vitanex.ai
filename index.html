@@ -3,13 +3,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#f8fafc">
+  <meta name="theme-color" content="#f1f5f9">
   <meta name="description" content="VitaNex AI — HeartBloom Cardiology & Health Intelligence Dashboard.">
   <title>VitaNex AI | HeartBloom Cardiology Suite</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 
   <script type="importmap">
@@ -33,19 +33,19 @@
 
       <nav class="sidebar-nav">
         <a href="#dashboard" class="nav-item active" data-target="dashboard">
-          <span>📊</span> Cardiology Dashboard
+          <span>📊</span> Dashboard
         </a>
         <a href="#vitals" class="nav-item" data-target="vitals">
-          <span>🩺</span> Vitals & Heart Monitor
+          <span>🩺</span> Vitals & Monitor
         </a>
         <a href="#tracker" class="nav-item" data-target="tracker">
-          <span>💧</span> Wellness Tracker
+          <span>💧</span> Wellness Goals
         </a>
         <a href="#journal" class="nav-item" data-target="journal">
           <span>📝</span> Symptom Journal
         </a>
         <a href="#assistant" class="nav-item" data-target="assistant">
-          <span>🤖</span> AI Health Assistant
+          <span>🤖</span> AI Assistant
         </a>
       </nav>
 
@@ -60,12 +60,14 @@
 
     <!-- Main Content Area -->
     <main class="main-content">
-      <header class="topbar">
-        <div class="topbar-title">
-          <h1 id="pageTitle">Cardiology & Heart Health Dashboard</h1>
-          <p id="pageSubtitle">Real-time cardiology situational awareness & patient care suite.</p>
+      <!-- Top Reference Navigation Tabs Bar (Exact match to reference image) -->
+      <header class="topbar-ref">
+        <div class="topbar-ref-tabs">
+          <a href="#dashboard" class="ref-tab active" data-switch="dashboard">📊 Dashboard</a>
+          <a href="#tracker" class="ref-tab" data-switch="tracker">🎯 Goals</a>
+          <a href="#assistant" class="ref-tab active-pill" data-switch="assistant">📋 Report</a>
+          <a href="#vitals" class="ref-tab" data-switch="vitals">🩺 Vitals Data</a>
         </div>
-
         <div class="topbar-actions">
           <select id="languageSelect" aria-label="Choose language">
             <option value="en">English</option>
@@ -75,6 +77,13 @@
           <a class="button button-small" href="./profile.html">My Profile 👤</a>
         </div>
       </header>
+
+      <div class="topbar" style="margin-top: 15px;">
+        <div class="topbar-title">
+          <h1 id="pageTitle">Cardiology & Heart Health Dashboard</h1>
+          <p id="pageSubtitle">Real-time cardiology situational awareness & patient care suite.</p>
+        </div>
+      </div>
 
       <!-- VIEW 1: DASHBOARD (Home) -->
       <section id="view-dashboard" class="view-section active">
@@ -353,8 +362,8 @@
       <section id="view-assistant" class="view-section">
         <div class="assistant-card" style="margin-top: 20px;">
           <div class="eyebrow"><span class="status-dot"></span> FEATURE 4 & 5</div>
-          <h2>HeartBloom Gemini AI Cardiology Assistant</h2>
-          <p>Ask cardiology and wellness questions in English, Tamil (தமிழ்), or Hindi (हिन्दी). Powered by Google Gemini AI.</p>
+          <h2>HeartBloom Google Gemini AI Assistant</h2>
+          <p>Ask cardiology and wellness questions in English, Tamil (தமிழ்), or Hindi (हिन्दी).</p>
 
           <form id="assistantForm" class="assistant-form" style="margin-top: 25px;">
             <input id="assistantInput" type="text" placeholder="Ask a cardiology or health question..." required>

@@ -3,7 +3,7 @@
    ========================================= */
 
 :root {
-  --bg: #f8fafc;
+  --bg: #f1f5f9;
   --bg-card: #ffffff;
   --sidebar-bg: #0b152d;
   --sidebar-text: #94a3b8;
@@ -18,8 +18,8 @@
   --radius-lg: 24px;
   --radius-sm: 12px;
   --shadow-card: 0 12px 35px rgba(15, 23, 42, 0.06);
-  --font-sans: "Inter", "DM Sans", system-ui, -apple-system, sans-serif;
-  --font-display: "Space Grotesk", system-ui, -apple-system, sans-serif;
+  --font-sans: "Plus Jakarta Sans", "Inter", sans-serif;
+  --font-display: "Space Grotesk", sans-serif;
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -119,22 +119,63 @@ body {
 .main-content {
   margin-left: 260px;
   flex: 1;
-  padding: 30px 40px;
+  padding: 24px 36px;
   max-width: calc(100vw - 260px);
+}
+
+/* Top Reference Navigation Tabs Bar (Exact match to reference image) */
+.topbar-ref {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--bg-card);
+  padding: 12px 20px;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border);
+  box-shadow: 0 4px 20px rgba(15, 23, 42, 0.03);
+  margin-bottom: 20px;
+}
+
+.topbar-ref-tabs {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.ref-tab {
+  padding: 8px 16px;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-muted);
+  background: #f8fafc;
+  border: 1px solid var(--border);
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.ref-tab:hover {
+  background: #f1f5f9;
+  color: var(--text-main);
+}
+
+.ref-tab.active, .ref-tab.active-pill {
+  background: var(--sidebar-bg);
+  color: #ffffff;
+  border-color: var(--sidebar-bg);
 }
 
 .topbar {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 30px;
-  padding-bottom: 20px;
-  border-bottom: 1px solid var(--border);
+  margin-bottom: 24px;
 }
 
 .topbar-title h1 {
   font-family: var(--font-display);
-  font-size: 24px;
+  font-size: 22px;
   font-weight: 700;
   color: var(--text-main);
 }
@@ -172,7 +213,7 @@ body {
 /* Top Patient Metric Bar (Inspired by Reference UI) */
 .patient-metric-bar {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
   gap: 16px;
   margin-bottom: 24px;
 }
@@ -224,7 +265,7 @@ body {
 }
 
 .hero-banner {
-  padding: 40px;
+  padding: 36px;
   background: linear-gradient(135deg, #0b152d, #1e293b);
   color: #ffffff;
   border-radius: var(--radius-lg);
@@ -236,7 +277,7 @@ body {
 
 .hero-banner h2 {
   font-family: var(--font-display);
-  font-size: clamp(26px, 2.8vw, 36px);
+  font-size: clamp(24px, 2.6vw, 34px);
   font-weight: 700;
   margin-bottom: 12px;
   line-height: 1.25;
@@ -267,7 +308,7 @@ body {
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-card);
   overflow: hidden;
-  height: 420px;
+  height: 400px;
 }
 
 .visual-label {
@@ -320,7 +361,7 @@ body {
 }
 
 .panel {
-  padding: 30px;
+  padding: 28px;
   background: var(--bg-card);
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
@@ -345,7 +386,7 @@ body {
 
 .panel h3 {
   font-family: var(--font-display);
-  font-size: 20px;
+  font-size: 19px;
   font-weight: 600;
   margin-bottom: 8px;
 }
