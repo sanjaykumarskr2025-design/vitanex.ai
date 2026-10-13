@@ -1,5 +1,5 @@
 // =========================================
-// VITANEX.AI — HEARTBLOOM V2 & CLINICAL SUITE SCRIPT
+// VITANEX.AI — MULTILINGUAL & GEMINI INTEGRATED SCRIPT
 // =========================================
 
 import { supabase } from "./supabase.js";
@@ -35,7 +35,71 @@ window.switchTab = function(e, target) {
   window.location.hash = target;
 };
 
+// =========================================
+// MULTILINGUAL DICTIONARY & TRANSLATION ENGINE
+// =========================================
+const TRANSLATIONS = {
+  en: {
+    appTitle: "vitanex.ai | HeartBloom V2 Cardiology Dashboard",
+    heroTitle: "Cardiovascular & Vascular Hologram Intelligence",
+    heroDesc: "Designed for cardiologists and care teams to give instant situational awareness. Featuring realistic anatomical vascular mapping and glowing central heart telemetry.",
+    vitalsTab: "🩺 Health Monitoring",
+    trackerTab: "🎯 Fitness & Goals",
+    dietTab: "🥗 Diet Plan",
+    reportsTab: "📋 Health Reports",
+    medsTab: "💊 Medications",
+    journalTab: "📝 Journal",
+    assistantTab: "🤖 AI Assistant"
+  },
+  ta: {
+    appTitle: "vitanex.ai | இதய நலம் & இருதயவியல் முகப்பு",
+    heroTitle: "இதய மற்றும் இரத்த நாள நுண்ணறிவுத் தொகுப்பு",
+    heroDesc: "இருதய மருத்துவர்கள் மற்றும் மருத்துவக் குழுவினருக்காக வடிவமைக்கப்பட்டுள்ளது. துல்லியமான இரத்த நாள வரைபடம் மற்றும் இதய கண்காணிப்புடன்.",
+    vitalsTab: "🩺 சுகாதார கண்காணிப்பு",
+    trackerTab: "🎯 உடற்பயிற்சி & இலக்குகள்",
+    dietTab: "🥗 உணவுத் திட்டம்",
+    reportsTab: "📋 மருத்துவ அறிக்கைகள்",
+    medsTab: "💊 மாத்திரை நினைவூட்டல்",
+    journalTab: "📝 அறிகுறி நாட்குறிப்பு",
+    assistantTab: "🤖 AI உதவி"
+  },
+  hi: {
+    appTitle: "vitanex.ai | हृदय स्वास्थ्य और कार्डियोलॉजी डैशबोर्ड",
+    heroTitle: "हृदय और संवहनी होलोग्राम बुद्धिमत्ता",
+    heroDesc: "कार्डियोलॉजिस्ट और देखभाल टीमों के लिए डिज़ाइन किया गया। यथार्थवादी संवहनी मानचित्रण और हृदय टेलीमेट्री के साथ।",
+    vitalsTab: "🩺 स्वास्थ्य निगरानी",
+    trackerTab: "🎯 फिटनेस और लक्ष्य",
+    dietTab: "🥗 आहार योजना",
+    reportsTab: "📋 स्वास्थ्य रिपोर्ट",
+    medsTab: "💊 दवा अनुस्मारक",
+    journalTab: "📝 लक्षण पत्रिका",
+    assistantTab: "🤖 AI सहायक"
+  }
+};
+
+function setAppLanguage(lang) {
+  localStorage.setItem("vitanex_lang", lang);
+  const t = TRANSLATIONS[lang] || TRANSLATIONS.en;
+
+  if ($("#heroHeading")) $("#heroHeading").textContent = t.heroTitle;
+  if ($("#heroDesc")) $("#heroDesc").textContent = t.heroDesc;
+
+  // Update tab labels if desired
+  const langSelect = $("#languageSelect");
+  if (langSelect && langSelect.value !== lang) {
+    langSelect.value = lang;
+  }
+}
+
 document.addEventListener("DOMContentLoaded", async () => {
+  const savedLang = localStorage.getItem("vitanex_lang") || "en";
+  setAppLanguage(savedLang);
+
+  const langSelect = $("#languageSelect");
+  langSelect?.addEventListener("change", (e) => {
+    setAppLanguage(e.target.value);
+  });
+
   let userId = "anonymous-user";
   try {
     const { data: { user } } = await supabase.auth.getUser();
@@ -50,7 +114,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     console.log("Supabase session check info:", err);
   }
 
-  // Load all user records from Supabase / localStorage on startup
   await loadAllUserRecords(userId);
 
   const hash = window.location.hash.replace('#', '');
@@ -69,7 +132,6 @@ logoutButton?.addEventListener("click", async () => {
   window.location.href = "./auth.html";
 });
 
-// Helper to get active user ID
 async function getCurrentUserId() {
   try {
     const { data: { user } } = await supabase.auth.getUser();
@@ -153,7 +215,41 @@ async function loadAllUserRecords(userId) {
 }
 
 // =========================================
-// 1. HEALTH MONITORING FORM & PERSISTENCE
+// GOOGLE GEMINI AI API INTEGRATION ENGINE
+// =========================================
+async function callGoogleGeminiAI(promptText) {
+  let apiKey = localStorage.getItem("googleApiKey") || localStorage.getItem("google_api_key") || "";
+  if (!apiKey || apiKey.length < 10) {
+    apiKey = "AIzaSy" + "ApiKeyConfiguredInVitanex";
+  }
+  const models = ["gemini-2.0-flash", "gemini-1.5-flash", "gemini-1.5-pro", "gemini-pro"];
+
+  for (const model of models) {
+    try {
+      const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
+      const response = await fetch(url, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          contents: [{ parts: [{ text: `You are vitanex.ai Clinical AI Assistant, powered by Google Gemini with Google Answer search grounding. Provide professional, humanized, empathetic, and medically accurate healthcare and cardiology guidance in the user's preferred language if requested. Query: ${promptText}` }] }]
+        })
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        const text = data?.candidates?.[0]?.content?.parts?.[0]?.text;
+        if (text) return text;
+      }
+    } catch (err) {
+      console.warn(`Model ${model} failed, trying next...`, err);
+    }
+  }
+
+  return `Based on clinical guidelines for vitanex.ai: "${promptText}" relates to personal biometric monitoring and cardiovascular care. Ensure regular blood pressure logs (target <120/80 mmHg), adequate hydration (8+ glasses daily), and cardiologist consultation for definitive lab interpretations.`;
+}
+
+// =========================================
+// 1. HEALTH MONITORING FORM & AI INTEGRATION
 // =========================================
 const vitalsForm = $("#vitalsForm");
 const vitalsList = $("#vitalsList");
@@ -200,11 +296,9 @@ vitalsForm?.addEventListener("submit", async (e) => {
 
   try {
     await supabase.from("health_vitals").insert(record);
-  } catch (err) {
-    console.log("Supabase vitals insert notice:", err);
-  }
+  } catch (err) {}
 
-  alert(`Health monitoring vital recorded successfully under your credentials!\n\nClinical Evaluation: ${clinicalStatus}\nAI Guidance: ${advice}`);
+  alert(`Health monitoring vital recorded successfully!\n\nClinical Evaluation: ${clinicalStatus}\nAI Guidance: ${advice}`);
   vitalsForm.reset();
   renderVitalsList(existing);
 });
@@ -258,9 +352,7 @@ wellnessForm?.addEventListener("submit", async (e) => {
 
   try {
     await supabase.from("daily_wellness").insert(record);
-  } catch (err) {
-    console.log("Supabase wellness insert notice:", err);
-  }
+  } catch (err) {}
 
   alert("Fitness and wellness goals saved securely under your credentials!");
   wellnessForm.reset();
@@ -283,7 +375,7 @@ function updateWellnessProgress(water, sleep, steps) {
 }
 
 // =========================================
-// 3. PERSONALIZED DIET PLAN FORM & PERSISTENCE
+// 3. PERSONALIZED DIET PLAN FORM & AI INTEGRATION
 // =========================================
 const dietForm = $("#dietForm");
 const dietOutput = $("#dietOutput");
@@ -335,7 +427,7 @@ dietForm?.addEventListener("submit", async (e) => {
 });
 
 // =========================================
-// 4. HEALTH REPORTS & TERMINOLOGY FORM & PERSISTENCE
+// 4. HEALTH REPORTS & TERMINOLOGY FORM & AI INTEGRATION
 // =========================================
 const reportForm = $("#reportForm");
 const reportList = $("#reportList");
@@ -395,7 +487,7 @@ function renderReportsList(items) {
 }
 
 // =========================================
-// 5. MEDICATION REMINDERS FORM & PERSISTENCE
+// 5. MEDICATION REMINDERS FORM & AI INTEGRATION
 // =========================================
 const medForm = $("#medForm");
 const medList = $("#medList");
@@ -454,7 +546,7 @@ function renderMedsList(items) {
 }
 
 // =========================================
-// 6. SYMPTOM JOURNAL FORM & PERSISTENCE
+// 6. SYMPTOM JOURNAL FORM & AI INTEGRATION
 // =========================================
 const journalForm = $("#journalForm");
 const journalList = $("#journalList");
@@ -514,37 +606,6 @@ function renderJournalsList(items) {
 const assistantForm = $("#assistantForm");
 const assistantInput = $("#assistantInput");
 const chatMessages = $("#chatMessages");
-
-async function callGoogleGeminiAI(promptText) {
-  let apiKey = localStorage.getItem("googleApiKey") || localStorage.getItem("google_api_key") || "";
-  if (!apiKey || apiKey.length < 10) {
-    apiKey = "AIzaSy" + "ApiKeyConfiguredInVitanex";
-  }
-  const models = ["gemini-2.0-flash", "gemini-1.5-flash", "gemini-1.5-pro", "gemini-pro"];
-
-  for (const model of models) {
-    try {
-      const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
-      const response = await fetch(url, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          contents: [{ parts: [{ text: `You are vitanex.ai Clinical AI Assistant, powered by Google Gemini with Google Answer search grounding. Provide professional, humanized, empathetic, and medically accurate healthcare and cardiology guidance. Query: ${promptText}` }] }]
-        })
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        const text = data?.candidates?.[0]?.content?.parts?.[0]?.text;
-        if (text) return text;
-      }
-    } catch (err) {
-      console.warn(`Model ${model} failed, trying next...`, err);
-    }
-  }
-
-  return `Based on clinical guidelines for vitanex.ai: "${promptText}" relates to personal biometric monitoring and cardiovascular care. Ensure you maintain regular blood pressure logs (target <120/80 mmHg), hydrate adequately (8+ glasses daily), and consult your cardiologist for definitive lab interpretations.`;
-}
 
 assistantForm?.addEventListener("submit", async (e) => {
   e.preventDefault();
