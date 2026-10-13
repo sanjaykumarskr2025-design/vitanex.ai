@@ -471,7 +471,11 @@ const assistantInput = $("#assistantInput");
 const chatMessages = $("#chatMessages");
 
 async function callGoogleGeminiAI(promptText) {
-  const apiKey = localStorage.getItem("googleApiKey") || localStorage.getItem("google_api_key") || "";
+  let apiKey = localStorage.getItem("googleApiKey") || localStorage.getItem("google_api_key") || "";
+  // Fallback to demo key if not set in localStorage
+  if (!apiKey || apiKey.length < 10) {
+    apiKey = "AIzaSy" + "DummyDemoKeyForVitanexAI" + "123456789";
+  }
   const models = ["gemini-2.0-flash", "gemini-1.5-flash", "gemini-1.5-pro", "gemini-pro"];
 
   for (const model of models) {
