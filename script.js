@@ -1,5 +1,5 @@
 // =========================================
-// VITANEX.AI — MULTILINGUAL & GEMINI INTEGRATED SCRIPT
+// VITANEX.AI — MULTILINGUAL & GEMINI INTEGRATED SCRIPT (Updated 2026-10-13)
 // =========================================
 
 import { supabase } from "./supabase.js";
