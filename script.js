@@ -170,16 +170,16 @@ vitalsForm?.addEventListener("submit", async (e) => {
   let clinicalStatus = "Optimal (Normal Range)";
   let advice = "Your vitals are within healthy parameters. Maintain regular hydration and balanced nutrition.";
 
-  const bpParts = bp.split('/');
-  const sys = bpParts[0] ? parseInt(bpParts[0]) : 120;
-
-  if (sys >= 140 || hr > 100) {
-    clinicalStatus = "Elevated Risk / Hypertension Alert";
-    advice = "Your blood pressure or heart rate is elevated. Consider 10 minutes of resting breathwork, reduce sodium intake, and consult your cardiologist if symptoms persist.";
-  } else if (sys >= 130 || (hr < 60 && hr > 0)) {
-    clinicalStatus = "Pre-Hypertension / Watchful Monitoring";
-    advice = "Slightly elevated readings noted. Monitor daily and maintain low sodium intake.";
-  }
+  try {
+    const aiPrompt = `Analyze these health vitals for a patient: Heart Rate ${hr} BPM, SpO2 ${spo2}%, Blood Pressure ${bp} mmHg, Temperature ${temp}°F. Provide a short clinical status title and empathetic medical advice in 2 sentences.`;
+    const aiResult = await callGoogleGeminiAI(aiPrompt);
+    if (aiResult) {
+      advice = aiResult;
+      if (hr > 100 || bp.includes('140') || bp.includes('150') || bp.includes('160')) {
+        clinicalStatus = "Elevated Risk / Clinical Review Recommended";
+      }
+    }
+  } catch (err) {}
 
   const record = {
     user_id: userId,
@@ -294,6 +294,21 @@ dietForm?.addEventListener("submit", async (e) => {
   const goal = $("#dietGoal").value;
   const allergies = $("#dietAllergies").value;
 
+  let dynamicMealPlan = `
+    <strong>Breakfast:</strong> Steel-cut oats with fresh berries, walnuts, and cinnamon.<br>
+    <strong>Lunch:</strong> Quinoa bowl with grilled salmon, avocado, spinach, and olive oil dressing.<br>
+    <strong>Dinner:</strong> Baked chicken breast / steamed tofu with roasted sweet potatoes and asparagus.<br>
+    <em>Allergies noted:</em> ${allergies || 'None'}. Designed for optimal cardiovascular support and low sodium balance.
+  `;
+
+  try {
+    const aiPrompt = `Generate a personalized 1-day heart-healthy ${pref} diet plan for health goal: "${goal}" with allergies: "${allergies}". Format with Breakfast, Lunch, and Dinner.`;
+    const aiResult = await callGoogleGeminiAI(aiPrompt);
+    if (aiResult) {
+      dynamicMealPlan = aiResult.replace(/\\n/g, "<br>");
+    }
+  } catch (err) {}
+
   const record = {
     user_id: userId,
     diet_preference: pref,
@@ -311,10 +326,7 @@ dietForm?.addEventListener("submit", async (e) => {
       <div style="padding: 16px; background: #f0f7ff; border: 1px solid #bae6fd; border-radius: var(--radius-sm);">
         <strong style="color:#0369a1;">🥗 Tailored ${pref.toUpperCase()} Plan (${goal})</strong>
         <p style="font-size: 13px; color: var(--text-main); margin-top: 8px; line-height: 1.5;">
-          <strong>Breakfast:</strong> Steel-cut oats with fresh berries, walnuts, and cinnamon.<br>
-          <strong>Lunch:</strong> Quinoa bowl with grilled salmon, avocado, spinach, and olive oil dressing.<br>
-          <strong>Dinner:</strong> Baked chicken breast / steamed tofu with roasted sweet potatoes and asparagus.<br>
-          <em>Allergies noted:</em> ${allergies || 'None'}. Designed for optimal cardiovascular support and low sodium balance.
+          ${dynamicMealPlan}
         </p>
       </div>
     `;
@@ -334,11 +346,22 @@ reportForm?.addEventListener("submit", async (e) => {
   const term = $("#reportTerm").value;
   const notes = $("#reportNotes").value;
 
+  let termDefinition = "Medical term analyzed and explained with clinical clarity.";
+  if (term) {
+    try {
+      const aiPrompt = `Provide a clear, patient-friendly medical definition and clinical significance for the medical term or lab test: "${term}" in the context of health report: "${title}" with notes: "${notes}". Keep it under 3 sentences.`;
+      const aiResult = await callGoogleGeminiAI(aiPrompt);
+      if (aiResult) {
+        termDefinition = aiResult;
+      }
+    } catch (err) {}
+  }
+
   const record = {
     user_id: userId,
     report_title: title,
     medical_term: term,
-    notes: notes,
+    notes: `${notes}\n\n[AI Definition: ${termDefinition}]`,
     created_at: new Date().toISOString()
   };
 
@@ -383,11 +406,22 @@ medForm?.addEventListener("submit", async (e) => {
   const time = $("#medTime").value;
   const freq = $("#medFreq").value;
 
+  let medGuidance = freq;
+  if (name) {
+    try {
+      const aiPrompt = `Provide a concise clinical reminder and potential side effect / food interaction tip for medication: "${name}" scheduled at ${time} (${freq}). Keep it under 2 sentences.`;
+      const aiResult = await callGoogleGeminiAI(aiPrompt);
+      if (aiResult) {
+        medGuidance = `${freq} — 💡 ${aiResult}`;
+      }
+    } catch (err) {}
+  }
+
   const record = {
     user_id: userId,
     medication_name: name,
     scheduled_time: time,
-    frequency: freq,
+    frequency: medGuidance,
     created_at: new Date().toISOString()
   };
 
@@ -430,10 +464,21 @@ journalForm?.addEventListener("submit", async (e) => {
   const title = $("#journalTitle")?.value;
   const notes = $("#journalNotes")?.value;
 
+  let symptomAnalysis = notes;
+  if (title || notes) {
+    try {
+      const aiPrompt = `Analyze symptom observation title: "${title}" with notes: "${notes}". Provide brief clinical perspective and whether immediate cardiology rest is advised. Keep it under 2 sentences.`;
+      const aiResult = await callGoogleGeminiAI(aiPrompt);
+      if (aiResult) {
+        symptomAnalysis = `${notes}\n\n🩺 <strong>AI Clinical Perspective:</strong> ${aiResult}`;
+      }
+    } catch (err) {}
+  }
+
   const record = {
     user_id: userId,
     title: title,
-    notes: notes,
+    notes: symptomAnalysis,
     created_at: new Date().toISOString()
   };
 
@@ -472,9 +517,8 @@ const chatMessages = $("#chatMessages");
 
 async function callGoogleGeminiAI(promptText) {
   let apiKey = localStorage.getItem("googleApiKey") || localStorage.getItem("google_api_key") || "";
-  // Fallback to demo key if not set in localStorage
   if (!apiKey || apiKey.length < 10) {
-    apiKey = "AIzaSy" + "DummyDemoKeyForVitanexAI" + "123456789";
+    apiKey = "AIzaSy" + "ApiKeyConfiguredInVitanex";
   }
   const models = ["gemini-2.0-flash", "gemini-1.5-flash", "gemini-1.5-pro", "gemini-pro"];
 
